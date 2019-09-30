@@ -1,3 +1,7 @@
+package org.uu.mads.simulation;
+
+import java.util.Queue;
+
 public class IntPlatform {
 
 	private double lastPassengersCalc;

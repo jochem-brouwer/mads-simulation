@@ -1,5 +1,7 @@
 package org.uu.mads.simulation;
 
+import java.util.Queue;
+
 public class EndStation {
 	private double lastPassengersCalc;
 	private double nextScheduledLeave;

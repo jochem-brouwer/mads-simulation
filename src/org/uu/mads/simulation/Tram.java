@@ -1,3 +1,5 @@
+package org.uu.mads.simulation;
+
 public class Tram {
 	private static final int CAPACITY = 400; //TODO: change
 
