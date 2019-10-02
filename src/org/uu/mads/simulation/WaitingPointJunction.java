@@ -14,8 +14,7 @@ public class WaitingPointJunction extends WaitingPoint {
 			final Tram currentTram = this.tramList.get(0);
 			if (currentTram.getId() == this.previousTram.getId()) {
 				final LocalTime time = scheduler.getCurrentTime();
-				final TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(this.nextJunction,
-						this.endStation, currentTram);
+				final TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(this.endStation, this, this.nextJunction, currentTram);
 				scheduler.scheduleEvent(junctionEvent, time);
 				this.previousTram = currentTram;
 

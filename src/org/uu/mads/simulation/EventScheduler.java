@@ -27,4 +27,8 @@ public class EventScheduler {
 	public void scheduleEventAhead(final Event event, final Duration duration) {
 		// TODO: implement
 	}
+	
+	public static void main(String[] args) {
+		System.out.println("hi");
+	}
 }

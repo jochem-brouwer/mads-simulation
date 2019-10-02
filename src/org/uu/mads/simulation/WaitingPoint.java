@@ -3,7 +3,7 @@ package org.uu.mads.simulation;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.swing.text.html.HTMLDocument.Iterator;
+import java.util.Iterator;
 
 public class WaitingPoint {
 	private final List<Tram> waitingTrams = new LinkedList<>();
@@ -19,6 +19,7 @@ public class WaitingPoint {
 				return tram;
 			}
 		}
+		return null;
 	}
 
 	public void removeTram(final Tram tram) {

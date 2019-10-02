@@ -30,9 +30,9 @@ public class Tram {
 
 	// loads/unloads passengers on a platform and returns the dwell time of the tram
 	public Duration loadPassengers(final IntPlatform platform) {
-		this.numOfPassengers = this.numOfPassengers; // TODO: WTF?
+		//this.numOfPassengers = this.numOfPassengers; // TODO: WTF?
 
-		return 12.5; // todo change this to actual dwell time (random)
+		return Duration.ZERO; // TODO change this to actual dwell time (random)
 	}
 
 }

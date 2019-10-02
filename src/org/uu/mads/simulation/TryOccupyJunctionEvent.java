@@ -9,12 +9,12 @@ public class TryOccupyJunctionEvent extends Event {
 	private final Junction junction;
 	private Tram tram;
 
-	public TryOccupyJunctionEvent(final EndStation endStation, final WaitingPointJunction waitingPointJunction,
-			final Junction junction) {
+	public TryOccupyJunctionEvent(final EndStation endStation, final WaitingPointJunction waitingPointJunction, final Junction junction, final Tram tram) {
 		super();
 		this.endStation = endStation;
 		this.waitingPointJunction = waitingPointJunction;
 		this.junction = junction;
+		this.tram = tram;
 	}
 
 	public EndStation getEndStation() {
