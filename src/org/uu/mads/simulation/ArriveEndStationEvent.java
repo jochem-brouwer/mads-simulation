@@ -1,16 +1,21 @@
 package org.uu.mads.simulation;
 
-public class ScheduledLeaveEndStationEvent extends Event {
-	private static final int PRIORITY = 1;
+public class ArriveEndStationEvent extends Event {
 	private final EndStation endStation;
+	private final Tram tram;
 
-	public ScheduledLeaveEndStationEvent(final EndStation endStation) {
-		super(PRIORITY);
+	public ArriveEndStationEvent(final EndStation endStation, final Tram tram) {
+		super();
 		this.endStation = endStation;
+		this.tram = tram;
 	}
 
 	public EndStation getEndStation() {
 		return this.endStation;
+	}
+
+	public Tram getTram() {
+		return this.tram;
 	}
 
 	@Override

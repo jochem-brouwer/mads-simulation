@@ -4,45 +4,58 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 public class TryOccupyJunctionEvent extends Event {
-	private EndStation endStation;
-	private WaitingPointJunction waitingPointJunction;
-	private Junction junction;
+	private final EndStation endStation;
+	private final WaitingPointJunction waitingPointJunction;
+	private final Junction junction;
 	private Tram tram;
 
-	public TryOccupyJunctionEvent(Junction nextJunction, EndStation x, Tram y) {
-		junction = nextJunction;
-		endStation = x;
-		tram = y;
+	public TryOccupyJunctionEvent(final EndStation endStation, final WaitingPointJunction waitingPointJunction,
+			final Junction junction) {
+		super();
+		this.endStation = endStation;
+		this.waitingPointJunction = waitingPointJunction;
+		this.junction = junction;
 	}
 
-	public static void fire(EventScheduler scheduler) {
-		if (junction.junctionUsed == false) {
+	public EndStation getEndStation() {
+		return this.endStation;
+	}
 
+	public WaitingPointJunction getWaitingPointJunction() {
+		return this.waitingPointJunction;
+	}
+
+	public Junction getJunction() {
+		return this.junction;
+	}
+
+	@Override
+	public void fire(final EventScheduler scheduler) {
+		if (this.junction.isJunctionUsed() == false) {
 
 			// If the platform B is free, we send the tram from the junction to platform B.
-			if (endStation.tramOnPlatformB == null) {
+			if (this.endStation.getTramOnPlatformB() == null) {
 
-				junction.tramOnLaneInB = tram;
+				this.junction.setTramOnLaneInB(this.tram);
 
-				LocalTime time = scheduler.getCurrentTime();
+				final LocalTime time = scheduler.getCurrentTime();
 				time.plus(1, ChronoUnit.MINUTES);
 
 				// We schedule a new event to free the junction again.
-				FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent();
+				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
 				scheduler.scheduleEvent(freeJunctionEvent, time);
 
-			// If the platform A is free, we send the tram from the junction to platform A.
-			} else if (entStation.tramOnPlatformA == null) {
+				// If the platform A is free, we send the tram from the junction to platform A.
+			} else if (this.endStation.getTramOnPlatformA() == null) {
 
-				junction.tramOnLaneInA = tram;
-				LocalTime time = scheduler.getCurrentTime();
+				this.junction.setTramOnLaneInA(this.tram);
+				final LocalTime time = scheduler.getCurrentTime();
 				time.plus(1, ChronoUnit.MINUTES);
 
 				// We schedule a new event to free the junction again.
-				FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent();
+				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
 				scheduler.scheduleEvent(freeJunctionEvent, time);
 			}
-
 
 		}
 	}
