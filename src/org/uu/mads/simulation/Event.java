@@ -1,8 +1,20 @@
 package org.uu.mads.simulation;
 
 public abstract class Event {
-	private int priority;
+	private final int priority;
 
-	// public void fire();
+	public Event() {
+		this.priority = 0;
+	}
+
+	public Event(final int priority) {
+		this.priority = priority;
+	}
+
+	public abstract void fire();
+
+	public int getPriority() {
+		return this.priority;
+	}
 
 }
