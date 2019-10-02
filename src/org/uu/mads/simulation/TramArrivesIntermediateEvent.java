@@ -1,5 +1,7 @@
 package org.uu.mads.simulation;
 
+import java.time.Duration;
+
 public class TramArrivesIntermediateEvent extends Event {
 	private static final int PRIORITY = 2;
 	private final IntPlatform intPlatform;
@@ -20,14 +22,15 @@ public class TramArrivesIntermediateEvent extends Event {
 	}
 
 	@Override
-  public void fire(EventScheduler currentEventScheduler) {
-    Passenger.calculatePassengers(this.intPlatform);
-    Duration dwellTime = Tram.loadPassengers(this.tram);
+	public void fire(final EventScheduler currentEventScheduler) {
+		Passenger.calculatePassengers(this.intPlatform);
+		final Duration dwellTime = this.tram.loadPassengers(this.intPlatform);
 
-    intPlatform.setOccupied();
+		this.intPlatform.setOccupied();
 
-    TramLeavesIntermediateEvent tramLeavesIntermediateEvent = new TramLeavesIntermediateEvent(this.intPlatform, this.tram);
+		final TramLeavesIntermediateEvent tramLeavesIntermediateEvent = new TramLeavesIntermediateStation(
+				this.intPlatform, this.tram);
 
-    currentEventScheduler.scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
-  }
+		currentEventScheduler.scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
+	}
 }

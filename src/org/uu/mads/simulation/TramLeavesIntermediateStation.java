@@ -1,5 +1,7 @@
 package org.uu.mads.simulation;
 
+import java.time.Duration;
+
 public class TramLeavesIntermediateStation extends Event {
 	private final IntPlatform intPlatform;
 	private final Tram tram;
@@ -19,21 +21,21 @@ public class TramLeavesIntermediateStation extends Event {
 	}
 
 	@Override
-  public void fire(EventScheduler currentEventScheduler) {
-    Duration platformFreeTime = Duration.ofSeconds(40);
-    Duration travelTime = this.intPlatform.getTravelTime();
-    ArriveWaitingPoint tramLeavesIntermediateEvent = new TramLeavesIntermediateEvent(this.intPlatform, this.tram);
+  public void fire(final EventScheduler currentEventScheduler) {
+    final Duration platformFreeTime = Duration.ofSeconds(40);
+    final Duration travelTime = this.intPlatform.getTravelTime();
+    final ArriveWaitingPoint tramLeavesIntermediateEvent = new TramLeavesIntermediateEvent(this.intPlatform, this.tram);
 
-    if ( (intPlatform.getNextWaitingPoint()) instanceof WaitingPointInt) {
-      ArriveWaitingPointIntermediateStationEvent arrivalEvent = new ArriveWaitingPointIntermediateStationEvent(intPlatform.getNextWp(), this.tram);
+    if ( (this.intPlatform.getNextWaitingPoint()) instanceof WaitingPointInt) {
+      final ArriveWaitingPointIntermediateStationEvent arrivalEvent = new ArriveWaitingPointIntermediateStationEvent(this.intPlatform.getNextWp(), this.tram);
       currentEventScheduler.scheduleEventAhead(arrivalEvent, travelTime)
     } else {
       // it is a WaitingPointJunction
-      ArriveWaitingPointEndStationEvent arrivalEvent = new ArriveWaitingPointEndStationEvent(intPlatform.getNextWp(), this.tram);
+      final ArriveWaitingPointEndStationEvent arrivalEvent = new ArriveWaitingPointEndStationEvent(this.intPlatform.getNextWp(), this.tram);
       currentEventScheduler.scheduleEventAhead(arrivalEvent, travelTime);
     }
 
-    PlatformFreeEvent platformFreeEvent = new PlatformFreeEvent(intPlatform)
+    final PlatformFreeEvent platformFreeEvent = new PlatformFreeEvent(this.intPlatform)
 
     currentEventScheduler.scheduleEventAhead(platformFreeEvent, platformFreeTime);
   }

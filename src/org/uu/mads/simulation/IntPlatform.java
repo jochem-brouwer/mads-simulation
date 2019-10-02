@@ -1,5 +1,7 @@
 package org.uu.mads.simulation;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Queue;
 
 public class IntPlatform {
@@ -9,39 +11,36 @@ public class IntPlatform {
 	private Tram tram;
 	private boolean isOccupied;
 	private WaitingPoint nextWp;
-	private WaitingPoint lastWp;
-  private Duration AverageTravelTime;
+	private WaitingPointInt lastWp;
+	private final Duration averageTravelTime;
 
+	public IntPlatform(final Duration aVGTravelTime) {
+		this.averageTravelTime = aVGTravelTime;
+	}
 
-  public IntPlatform(Duration AVGTravelTime) {
-    AverageTravelTime = AVGTravelTime;
-  }
+	public void setOccupied() {
+		this.isOccupied = true;
+	}
 
-	// Getters and setters are here
+	public void setUnoccupied() {
+		this.isOccupied = false;
+	}
 
-  public void setOccupied() {
-    this.isOccupied = true;
-  }
+	public boolean isPlatformOccupied() {
+		return this.isOccupied;
+	}
 
-  public void setUnoccupied() {
-    this.isOccupied = false;
-  }
+	// returns travel duration of this platform to the next platform
+	public Duration getTravelTime() {
+		// TODO logic to calculate "random" travel time
+		return this.averageTravelTime;
+	}
 
-  public boolean platformIsOccupied() {
-    return this.isOccupied;
-  }
+	public WaitingPoint getNextWp() {
+		return this.nextWp;
+	}
 
-  // returns travel duration of this platform to the next platform
-  public Duration getTravelTime() {
-    // todo logic to calculate "random" travel time
-    return AverageTravelTime;
-  }
-
-  public WaitingPoint getNextWp() {
-    return this.nextWp;
-  }
-
-  public WaitingPoint getLastWp() {
-    return this.lastWp;
-  }
+	public WaitingPointInt getLastWp() {
+		return this.lastWp;
+	}
 }

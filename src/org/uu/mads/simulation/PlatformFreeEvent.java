@@ -1,25 +1,8 @@
 package org.uu.mads.simulation;
 
+import java.time.Duration;
+
 public class PlatformFreeEvent extends Event {
-	private IntPlatform intPlatform;
-
-  public PlatformFreeEvent(IntPlatform ip) {
-    intPlatform = ip;
-  }
-
-  public void fire(EventScheduler eventScheduler) {
-    intPlatform.setUnoccupied();
-
-    WaitingPointInt wp = this.intPlatform.getLastWp();
-
-    Tram nextTram = wp.getNextTramWaiting();
-    if (nextTram != null) {
-      wp.removeTram(nextTram);
-      TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(this.intPlatform, nextTram);
-      eventScheduler.scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
-    }
-  }
-
 	private final IntPlatform intPlatform;
 
 	public PlatformFreeEvent(final IntPlatform intPlatform) {
@@ -32,16 +15,17 @@ public class PlatformFreeEvent extends Event {
 	}
 
 	@Override
-  public void fire(EventScheduler eventScheduler) {
-    intPlatform.setUnoccupied();
+	public void fire(final EventScheduler eventScheduler) {
+		this.intPlatform.setUnoccupied();
 
-    WaitingPointInt wp = this.intPlatform.getLastWp();
+		final WaitingPointInt wp = this.intPlatform.getLastWp();
 
-    Tram nextTram = wp.getNextTramWaiting();
-    if (nextTram != null) {
-      wp.removeTram(nextTram);
-      TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(this.intPlatform, nextTram);
-      eventScheduler.scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
-    }
-  }
+		final Tram nextTram = wp.getNextTramWaiting();
+		if (nextTram != null) {
+			wp.removeTram(nextTram);
+			final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(
+					this.intPlatform, nextTram);
+			eventScheduler.scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
+		}
+	}
 }

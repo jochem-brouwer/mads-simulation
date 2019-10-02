@@ -16,7 +16,7 @@ public class WaitingPointJunction extends WaitingPoint {
 				final LocalTime time = scheduler.getCurrentTime();
 				final TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(this.nextJunction,
 						this.endStation, currentTram);
-				scheduler.ScheduleEvent(junctionEvent, time);
+				scheduler.scheduleEvent(junctionEvent, time);
 				this.previousTram = currentTram;
 
 				// Delete the tram from the waiting list.
