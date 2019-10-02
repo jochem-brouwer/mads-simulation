@@ -6,6 +6,8 @@ public class Tram {
 	private int id;
 	private int numOfPassengers;
 
+	private Tram previousTram;
+
 	// Getters and setters are here
 
   // loads/unloads passengers on a platform and returns the dwell time of the tram 
@@ -14,4 +16,5 @@ public class Tram {
 
     return 12.5; // todo change this to actual dwell time (random)
   }
+
 }
