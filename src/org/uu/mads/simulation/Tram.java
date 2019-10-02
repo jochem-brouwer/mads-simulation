@@ -6,5 +6,9 @@ public class Tram {
 	private int id;
 	private int numOfPassengers;
 
+	private Tram previousTram;
+
 	// Getters and setters are here
+
+	
 }
