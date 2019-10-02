@@ -11,8 +11,11 @@ public class WaitingPointJunction extends WaitingPoint {
 	private Tram previousTram;
 
 	private void schedule(EventScheduler scheduler) {
-		while (!tramList.isEmpty()) {
-			Tram currentTram = tramList.get(0);
+
+		for (int i = 0; i < tramList.size(); i++) {
+
+			Tram currentTram = tramList.get(i);
+
 			if (currentTram.previousTram.id == previousTram.id) {
 				LocalTime time = scheduler.getCurrentTime();
 				TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(nextJunction, endStation, currentTram);
@@ -20,7 +23,8 @@ public class WaitingPointJunction extends WaitingPoint {
 				previousTram = currentTram;
 
 				// Delete the tram from the waiting list.
-				tramList.remove(0);
+				tramList.remove(i);
+				i = 0;
 			}
 		}
 	}
