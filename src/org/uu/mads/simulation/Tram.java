@@ -1,10 +1,29 @@
 package org.uu.mads.simulation;
 
 public class Tram {
-	private static final int CAPACITY = 400; //TODO: change
+	public static final int CAPACITY = 400; // TODO: change
 
-	private int id;
-	private int numOfPassengers;
+	private final int id;
+	private final int numOfPassengers;
+	private final Tram previousTram;
 
-	// Getters and setters are here
+	public Tram(final int id, final int numOfPassengers, final Tram previousTram) {
+		super();
+		this.id = id;
+		this.numOfPassengers = numOfPassengers;
+		this.previousTram = previousTram;
+	}
+
+	public int getId() {
+		return this.id;
+	}
+
+	public int getNumOfPassengers() {
+		return this.numOfPassengers;
+	}
+
+	public Tram getPreviousTram() {
+		return this.previousTram;
+	}
+
 }

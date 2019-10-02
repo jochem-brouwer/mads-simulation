@@ -14,7 +14,7 @@ public class ScheduledLeaveEndStationEvent extends Event {
 	}
 
 	@Override
-	public void fire() {
+	public void fire(final EventScheduler scheduler) {
 		// TODO Auto-generated method stub
 
 	}

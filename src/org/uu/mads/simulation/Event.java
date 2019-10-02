@@ -11,7 +11,7 @@ public abstract class Event {
 		this.priority = priority;
 	}
 
-	public abstract void fire();
+	public abstract void fire(EventScheduler scheduler);
 
 	public int getPriority() {
 		return this.priority;

@@ -6,6 +6,7 @@ public class EndStation {
 	private double lastPassengersCalc;
 	private double nextScheduledLeave;
 	private Queue<Passenger> waitingPassengers;
+
 	private Tram tramOnPlatformA;
 	private Tram tramOnPlatformB;
 
@@ -39,5 +40,4 @@ public class EndStation {
 	public double getPlatformBArrivalTime() {
 		return this.platformBArrivalTime;
 	}
-
 }
