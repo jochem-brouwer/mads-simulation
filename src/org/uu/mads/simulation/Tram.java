@@ -17,4 +17,8 @@ public class Tram {
     return 12.5; // todo change this to actual dwell time (random)
   }
 
+  public int getId() {
+    return id;
+  }
+
 }
