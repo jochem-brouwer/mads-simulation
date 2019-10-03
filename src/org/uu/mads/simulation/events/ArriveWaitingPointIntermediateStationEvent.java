@@ -1,6 +1,10 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.State.Tram;
+import org.uu.mads.simulation.State.WaitingPointInt;
 
 public class ArriveWaitingPointIntermediateStationEvent extends Event {
 	private final WaitingPointInt waitingPointInt;

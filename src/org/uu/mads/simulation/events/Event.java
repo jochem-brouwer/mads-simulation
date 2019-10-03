@@ -1,4 +1,6 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.events;
+
+import org.uu.mads.simulation.EventScheduler;
 
 public abstract class Event {
 	private final int priority;

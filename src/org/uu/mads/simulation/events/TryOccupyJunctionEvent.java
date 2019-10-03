@@ -1,7 +1,13 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.events;
 
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
+
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.State.EndStation;
+import org.uu.mads.simulation.State.Junction;
+import org.uu.mads.simulation.State.Tram;
+import org.uu.mads.simulation.State.WaitingPointJunction;
 
 public class TryOccupyJunctionEvent extends Event {
 	private final EndStation endStation;

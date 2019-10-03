@@ -1,4 +1,7 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.events;
+
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.State.Junction;
 
 public class FreeJunctionEvent extends Event {
 	private final Junction junction;

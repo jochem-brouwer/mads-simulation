@@ -1,4 +1,4 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.State;
 
 import java.util.LinkedList;
 import java.util.List;

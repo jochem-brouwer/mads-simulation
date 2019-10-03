@@ -1,6 +1,11 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.State.IntPlatform;
+import org.uu.mads.simulation.State.Passenger;
+import org.uu.mads.simulation.State.Tram;
 
 public class TramArrivesIntermediateEvent extends Event {
 	private static final int PRIORITY = 2;

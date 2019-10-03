@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
+import org.uu.mads.simulation.events.Event;
+
 public class EventScheduler {
 	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
 	private final LocalTime currentTime;
@@ -17,6 +19,10 @@ public class EventScheduler {
 
 	public LocalTime getCurrentTime() {
 		return this.currentTime;
+	}
+
+	public SortedMap<LocalTime, List<Event>> getScheduledEventsByTime() {
+		return this.scheduledEventsByTime;
 	}
 
 	public void scheduleEvent(final Event event, final LocalTime eventTime) {
@@ -52,9 +58,5 @@ public class EventScheduler {
 	public void scheduleEventAhead(final Event event, final Duration duration) {
 		final LocalTime eventTime = this.currentTime.plus(duration);
 		scheduleEvent(event, eventTime);
-	}
-
-	public static void main(final String[] args) {
-		System.out.println("hi");
 	}
 }

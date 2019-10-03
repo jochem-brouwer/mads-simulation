@@ -1,6 +1,12 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.State.IntPlatform;
+import org.uu.mads.simulation.State.Tram;
+import org.uu.mads.simulation.State.WaitingPointInt;
+import org.uu.mads.simulation.State.WaitingPointJunction;
 
 public class TramLeavesIntermediateStationEvent extends Event {
 	private final IntPlatform intPlatform;

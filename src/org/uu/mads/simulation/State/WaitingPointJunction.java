@@ -1,7 +1,10 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.State;
 
 import java.time.LocalTime;
 import java.util.List;
+
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.events.TryOccupyJunctionEvent;
 
 public class WaitingPointJunction extends WaitingPoint {
 	private Junction nextJunction;

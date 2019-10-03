@@ -1,4 +1,4 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.State;
 
 public class Junction {
 	private Tram tramOnLaneInA;
