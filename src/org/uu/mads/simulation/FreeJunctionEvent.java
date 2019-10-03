@@ -18,4 +18,9 @@ public class FreeJunctionEvent extends Event {
 
 	}
 
+	@Override
+	public String toString() {
+		return "FreeJunctionEvent [junction=" + this.junction + "]";
+	}
+
 }

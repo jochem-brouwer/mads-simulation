@@ -33,4 +33,10 @@ public class ArriveWaitingPointIntermediateStationEvent extends Event {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return "ArriveWaitingPointIntermediateStationEvent [waitingPointInt=" + this.waitingPointInt + ", tram="
+				+ this.tram + "]";
+	}
+
 }

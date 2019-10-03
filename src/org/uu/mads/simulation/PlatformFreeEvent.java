@@ -28,4 +28,9 @@ public class PlatformFreeEvent extends Event {
 			eventScheduler.scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 		}
 	}
+
+	@Override
+	public String toString() {
+		return "PlatformFreeEvent [intPlatform=" + this.intPlatform + "]";
+	}
 }

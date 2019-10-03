@@ -23,4 +23,10 @@ public class ArriveWaitingPointEndStationEvent extends Event {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public String toString() {
+		return "ArriveWaitingPointEndStationEvent [waitingPointJunction=" + this.waitingPointJunction + ", tram="
+				+ this.tram + "]";
+	}
 }

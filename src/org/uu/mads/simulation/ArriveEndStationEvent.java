@@ -24,4 +24,9 @@ public class ArriveEndStationEvent extends Event {
 
 	}
 
+	@Override
+	public String toString() {
+		return "ArriveEndStationEvent [endStation=" + this.endStation + ", tram=" + this.tram + "]";
+	}
+
 }

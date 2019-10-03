@@ -7,9 +7,10 @@ public class TryOccupyJunctionEvent extends Event {
 	private final EndStation endStation;
 	private final WaitingPointJunction waitingPointJunction;
 	private final Junction junction;
-	private Tram tram;
+	private final Tram tram;
 
-	public TryOccupyJunctionEvent(final EndStation endStation, final WaitingPointJunction waitingPointJunction, final Junction junction, final Tram tram) {
+	public TryOccupyJunctionEvent(final EndStation endStation, final WaitingPointJunction waitingPointJunction,
+			final Junction junction, final Tram tram) {
 		super();
 		this.endStation = endStation;
 		this.waitingPointJunction = waitingPointJunction;
@@ -58,5 +59,11 @@ public class TryOccupyJunctionEvent extends Event {
 			}
 
 		}
+	}
+
+	@Override
+	public String toString() {
+		return "TryOccupyJunctionEvent [endStation=" + this.endStation + ", waitingPointJunction="
+				+ this.waitingPointJunction + ", junction=" + this.junction + ", tram=" + this.tram + "]";
 	}
 }

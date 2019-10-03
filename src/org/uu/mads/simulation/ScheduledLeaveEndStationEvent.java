@@ -19,4 +19,9 @@ public class ScheduledLeaveEndStationEvent extends Event {
 
 	}
 
+	@Override
+	public String toString() {
+		return "ScheduledLeaveEndStationEvent [endStation=" + this.endStation + "]";
+	}
+
 }

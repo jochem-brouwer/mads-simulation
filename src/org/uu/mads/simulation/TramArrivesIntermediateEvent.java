@@ -28,8 +28,14 @@ public class TramArrivesIntermediateEvent extends Event {
 
 		this.intPlatform.setOccupied();
 
-		final TramLeavesIntermediateStationEvent tramLeavesIntermediateEvent = new TramLeavesIntermediateStationEvent(this.intPlatform, this.tram);
+		final TramLeavesIntermediateStationEvent tramLeavesIntermediateEvent = new TramLeavesIntermediateStationEvent(
+				this.intPlatform, this.tram);
 
 		currentEventScheduler.scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
+	}
+
+	@Override
+	public String toString() {
+		return "TramArrivesIntermediateEvent [intPlatform=" + this.intPlatform + ", tram=" + this.tram + "]";
 	}
 }
