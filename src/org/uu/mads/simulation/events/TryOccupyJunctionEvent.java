@@ -3,7 +3,7 @@ package org.uu.mads.simulation.events;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
-import org.uu.mads.simulation.EventSchedule;
+import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
 import org.uu.mads.simulation.state.Tram;
@@ -45,23 +45,23 @@ public class TryOccupyJunctionEvent extends Event {
 
 				this.junction.setTramOnLaneInB(this.tram);
 
-				final LocalTime time = EventSchedule.get().getCurrentTime();
+				final LocalTime time = EventScheduler.get().getCurrentTime();
 				time.plus(1, ChronoUnit.MINUTES);
 
 				// We schedule a new event to free the junction again.
 				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
-				EventSchedule.get().scheduleEvent(freeJunctionEvent, time);
+				EventScheduler.get().scheduleEvent(freeJunctionEvent, time);
 
 				// If the platform A is free, we send the tram from the junction to platform A.
 			} else if (this.endStation.getTramOnPlatformA() == null) {
 
 				this.junction.setTramOnLaneInA(this.tram);
-				final LocalTime time = EventSchedule.get().getCurrentTime();
+				final LocalTime time = EventScheduler.get().getCurrentTime();
 				time.plus(1, ChronoUnit.MINUTES);
 
 				// We schedule a new event to free the junction again.
 				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
-				EventSchedule.get().scheduleEvent(freeJunctionEvent, time);
+				EventScheduler.get().scheduleEvent(freeJunctionEvent, time);
 			}
 
 		}

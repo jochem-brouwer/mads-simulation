@@ -2,7 +2,7 @@ package org.uu.mads.simulation.events;
 
 import java.time.Duration;
 
-import org.uu.mads.simulation.EventSchedule;
+import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPointInt;
@@ -30,7 +30,7 @@ public class PlatformFreeEvent extends Event {
 			wp.removeTram(nextTram);
 			final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(
 					this.intPlatform, nextTram);
-			EventSchedule.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
+			EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 		}
 	}
 
