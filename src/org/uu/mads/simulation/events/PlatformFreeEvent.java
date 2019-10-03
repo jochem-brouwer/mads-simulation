@@ -20,7 +20,7 @@ public class PlatformFreeEvent extends Event {
 	}
 
 	@Override
-	public void fire(final EventScheduler eventScheduler) {
+	public void fire() {
 		this.intPlatform.setUnoccupied();
 
 		final WaitingPointInt wp = this.intPlatform.getLastWp();
@@ -30,7 +30,7 @@ public class PlatformFreeEvent extends Event {
 			wp.removeTram(nextTram);
 			final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(
 					this.intPlatform, nextTram);
-			eventScheduler.scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
+			EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 		}
 	}
 

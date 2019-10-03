@@ -1,6 +1,5 @@
 package org.uu.mads.simulation.events;
 
-import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPointJunction;
 
@@ -23,7 +22,7 @@ public class ArriveWaitingPointEndStationEvent extends Event {
 	}
 
 	@Override
-	public void fire(final EventScheduler scheduler) {
+	public void fire() {
 		// TODO Auto-generated method stub
 
 	}

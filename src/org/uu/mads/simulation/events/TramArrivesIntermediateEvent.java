@@ -27,7 +27,7 @@ public class TramArrivesIntermediateEvent extends Event {
 	}
 
 	@Override
-	public void fire(final EventScheduler currentEventScheduler) {
+	public void fire() {
 		Passenger.calculatePassengers(this.intPlatform);
 		final Duration dwellTime = this.tram.loadPassengers(this.intPlatform);
 
@@ -36,7 +36,7 @@ public class TramArrivesIntermediateEvent extends Event {
 		final TramLeavesIntermediateStationEvent tramLeavesIntermediateEvent = new TramLeavesIntermediateStationEvent(
 				this.intPlatform, this.tram);
 
-		currentEventScheduler.scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
+		EventScheduler.get().scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
 	}
 
 	@Override

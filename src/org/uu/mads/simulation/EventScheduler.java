@@ -10,11 +10,22 @@ import java.util.TreeMap;
 import org.uu.mads.simulation.events.Event;
 
 public class EventScheduler {
-	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
-	private final LocalTime currentTime;
+	private static final LocalTime START_TIME = LocalTime.of(9, 0); // TODO: change
 
-	public EventScheduler(final LocalTime currentTime) {
-		this.currentTime = currentTime;
+	private static EventScheduler instance = null;
+
+	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
+	private final LocalTime currentTime = START_TIME;
+
+	private EventScheduler() {
+		// private constructor because this is a singleton
+	}
+
+	public static EventScheduler get() {
+		if (instance == null) {
+			instance = new EventScheduler();
+		}
+		return instance;
 	}
 
 	public LocalTime getCurrentTime() {
@@ -59,4 +70,5 @@ public class EventScheduler {
 		final LocalTime eventTime = this.currentTime.plus(duration);
 		scheduleEvent(event, eventTime);
 	}
+
 }

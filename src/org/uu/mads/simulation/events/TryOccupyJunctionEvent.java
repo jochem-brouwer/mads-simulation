@@ -37,7 +37,7 @@ public class TryOccupyJunctionEvent extends Event {
 	}
 
 	@Override
-	public void fire(final EventScheduler scheduler) {
+	public void fire() {
 		if (this.junction.isJunctionUsed() == false) {
 
 			// If the platform B is free, we send the tram from the junction to platform B.
@@ -45,23 +45,23 @@ public class TryOccupyJunctionEvent extends Event {
 
 				this.junction.setTramOnLaneInB(this.tram);
 
-				final LocalTime time = scheduler.getCurrentTime();
+				final LocalTime time = EventScheduler.get().getCurrentTime();
 				time.plus(1, ChronoUnit.MINUTES);
 
 				// We schedule a new event to free the junction again.
 				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
-				scheduler.scheduleEvent(freeJunctionEvent, time);
+				EventScheduler.get().scheduleEvent(freeJunctionEvent, time);
 
 				// If the platform A is free, we send the tram from the junction to platform A.
 			} else if (this.endStation.getTramOnPlatformA() == null) {
 
 				this.junction.setTramOnLaneInA(this.tram);
-				final LocalTime time = scheduler.getCurrentTime();
+				final LocalTime time = EventScheduler.get().getCurrentTime();
 				time.plus(1, ChronoUnit.MINUTES);
 
 				// We schedule a new event to free the junction again.
 				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
-				scheduler.scheduleEvent(freeJunctionEvent, time);
+				EventScheduler.get().scheduleEvent(freeJunctionEvent, time);
 			}
 
 		}

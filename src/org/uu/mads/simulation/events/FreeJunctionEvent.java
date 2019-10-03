@@ -1,6 +1,5 @@
 package org.uu.mads.simulation.events;
 
-import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.Junction;
 
 public class FreeJunctionEvent extends Event {
@@ -16,7 +15,7 @@ public class FreeJunctionEvent extends Event {
 	}
 
 	@Override
-	public void fire(final EventScheduler scheduler) {
+	public void fire() {
 		// TODO Auto-generated method stub
 
 	}

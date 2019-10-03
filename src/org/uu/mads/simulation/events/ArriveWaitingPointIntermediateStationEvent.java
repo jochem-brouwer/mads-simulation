@@ -25,7 +25,7 @@ public class ArriveWaitingPointIntermediateStationEvent extends Event {
 	}
 
 	@Override
-	public void fire(final EventScheduler eventScheduler) {
+	public void fire() {
 		this.waitingPointInt.addTram(this.tram);
 		final Tram nextTram = this.waitingPointInt.getNextTramWaiting();
 
@@ -33,7 +33,7 @@ public class ArriveWaitingPointIntermediateStationEvent extends Event {
 			this.waitingPointInt.removeTram(nextTram);
 			final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(
 					this.waitingPointInt.getNextPlatform(), this.tram);
-			eventScheduler.scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
+			EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 		}
 	}
 
