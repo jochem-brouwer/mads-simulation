@@ -1,7 +1,7 @@
 package org.uu.mads.simulation.events;
 
 import org.uu.mads.simulation.EventScheduler;
-import org.uu.mads.simulation.State.EndStation;
+import org.uu.mads.simulation.state.EndStation;
 
 public class ScheduledLeaveEndStationEvent extends Event {
 	private static final int PRIORITY = 1;

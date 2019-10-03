@@ -4,10 +4,10 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 
 import org.uu.mads.simulation.EventScheduler;
-import org.uu.mads.simulation.State.EndStation;
-import org.uu.mads.simulation.State.Junction;
-import org.uu.mads.simulation.State.Tram;
-import org.uu.mads.simulation.State.WaitingPointJunction;
+import org.uu.mads.simulation.state.EndStation;
+import org.uu.mads.simulation.state.Junction;
+import org.uu.mads.simulation.state.Tram;
+import org.uu.mads.simulation.state.WaitingPointJunction;
 
 public class TryOccupyJunctionEvent extends Event {
 	private final EndStation endStation;
