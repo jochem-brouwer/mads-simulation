@@ -2,7 +2,7 @@ package org.uu.mads.simulation.events;
 
 import java.time.Duration;
 
-import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.EventSchedule;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPointInt;
@@ -34,17 +34,17 @@ public class TramLeavesIntermediateStationEvent extends Event {
 		if ((this.intPlatform.getNextWp()) instanceof WaitingPointInt) {
 			final ArriveWaitingPointIntermediateStationEvent arrivalEvent = new ArriveWaitingPointIntermediateStationEvent(
 					(WaitingPointInt) this.intPlatform.getNextWp(), this.tram);
-			EventScheduler.get().scheduleEventAhead(arrivalEvent, travelTime);
+			EventSchedule.get().scheduleEventAhead(arrivalEvent, travelTime);
 		} else {
 			// it is a WaitingPointJunction
 			final ArriveWaitingPointEndStationEvent arrivalEvent = new ArriveWaitingPointEndStationEvent(
 					(WaitingPointJunction) this.intPlatform.getNextWp(), this.tram);
-			EventScheduler.get().scheduleEventAhead(arrivalEvent, travelTime);
+			EventSchedule.get().scheduleEventAhead(arrivalEvent, travelTime);
 		}
 
 		final PlatformFreeEvent platformFreeEvent = new PlatformFreeEvent(this.intPlatform);
 
-		EventScheduler.get().scheduleEventAhead(platformFreeEvent, platformFreeTime);
+		EventSchedule.get().scheduleEventAhead(platformFreeEvent, platformFreeTime);
 	}
 
 	@Override

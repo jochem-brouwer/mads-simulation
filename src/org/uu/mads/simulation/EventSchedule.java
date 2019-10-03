@@ -9,21 +9,19 @@ import java.util.TreeMap;
 
 import org.uu.mads.simulation.events.Event;
 
-public class EventScheduler {
-	private static final LocalTime START_TIME = LocalTime.of(9, 0); // TODO: change
-
-	private static EventScheduler instance = null;
+public class EventSchedule {
+	private static EventSchedule instance = null;
 
 	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
-	private final LocalTime currentTime = START_TIME;
+	private final LocalTime currentTime = null;
 
-	private EventScheduler() {
+	private EventSchedule() {
 		// private constructor because this is a singleton
 	}
 
-	public static EventScheduler get() {
+	public static EventSchedule get() {
 		if (instance == null) {
-			instance = new EventScheduler();
+			instance = new EventSchedule();
 		}
 		return instance;
 	}
