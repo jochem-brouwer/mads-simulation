@@ -73,7 +73,7 @@ public class EventScheduler {
 						+ " at the end of the event list for that time.");
 			}
 		} else {
-			System.out.println("There no events yet scheduled at " + eventTime + ".");
+			System.out.println("There are no events yet scheduled at " + eventTime + " yet.");
 			scheduledEvents = new LinkedList<>();
 			scheduledEvents.add(event);
 			System.out.println(

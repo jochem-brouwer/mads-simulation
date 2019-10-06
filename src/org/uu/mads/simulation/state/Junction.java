@@ -51,4 +51,11 @@ public class Junction {
 		this.isJunctionUsed = isJunctionUsed;
 	}
 
+	@Override
+	public String toString() {
+		return "Junction [tramOnLaneInA=" + this.tramOnLaneInA + ", tramOnLaneInB=" + this.tramOnLaneInB
+				+ ", tramOnLaneOutA=" + this.tramOnLaneOutA + ", tramOnLaneOutB=" + this.tramOnLaneOutB
+				+ ", isJunctionUsed=" + this.isJunctionUsed + "]";
+	}
+
 }
