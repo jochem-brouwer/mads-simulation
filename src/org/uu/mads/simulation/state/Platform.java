@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
-class Platform {
+public class Platform {
 	private final Duration averageTravelTime;
 	private final WaitingPoint nextWaitingPoint;
 	private final WaitingPoint lastWaitingPoint;
