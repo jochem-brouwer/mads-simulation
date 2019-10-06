@@ -3,6 +3,8 @@ package org.uu.mads.simulation.state;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Queue;
 import java.util.Set;
 
@@ -46,8 +48,16 @@ public class EndStation {
 		this.nextScheduledLeave = nextScheduledLeave;
 	}
 
-	public Queue<Passenger> getWaitingPassengers() {
-		return this.waitingPassengers;
+	public Passenger popFirstWaitingPassenger() {
+		return this.waitingPassengers.poll();
+	}
+
+	public List<Passenger> popFirstWaitingPassengers(final int numberOfWaitingPassengers) {
+		final List<Passenger> passengers = new ArrayList<>();
+		for (int i = 0; i < numberOfWaitingPassengers; i++) {
+			passengers.add(this.waitingPassengers.poll());
+		}
+		return passengers;
 	}
 
 	public Queue<Passenger> addWaitingPassenger(final Passenger waitingPassenger) {
