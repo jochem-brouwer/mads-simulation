@@ -39,17 +39,15 @@ public class TryOccupyJunctionEvent extends Event {
 
 	@Override
 	public void fire() {
-		if (!this.junction.isJunctionUsed()) {
-			if (this.waitingPointJunction.getNextTramWaiting() != null) {
-				useJunctionForArrival();
-			} else {
-				useJunctionForDeparture();
-			}
+		if (this.waitingPointJunction.getNextTramWaiting() != null) {
+			useJunctionForArrival();
+		} else {
+			useJunctionForDeparture();
 		}
 	}
 
 	private void useJunctionForArrival() {
-		if (this.junction.isJunctionUsed() == false) {
+		if (!this.junction.isJunctionUsed()) {
 			// We can send our tram into the crossing.
 			if (this.endStation.getTramOnPlatformB() == null) {
 				// We send the tram from the junction to platform B.
@@ -68,7 +66,7 @@ public class TryOccupyJunctionEvent extends Event {
 	}
 
 	private void useJunctionForDeparture() {
-		if (this.junction.isJunctionUsed() == false) {
+		if (!this.junction.isJunctionUsed()) {
 			if (this.endStation.getTramOnPlatformB() == null) {
 				// We send the tram from the junction to platform B.
 				this.junction.setTramOnLaneOutB(this.tram);
