@@ -27,7 +27,7 @@ public class PlatformFreeEvent extends Event {
 
 		final Tram nextTram = wp.popNextTramWaiting();
 		if (nextTram != null) {
-			final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(
+			final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
 					this.intPlatform, nextTram);
 			EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 		}

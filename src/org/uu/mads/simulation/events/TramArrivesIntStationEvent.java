@@ -7,12 +7,12 @@ import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Passenger;
 import org.uu.mads.simulation.state.Tram;
 
-public class TramArrivesIntermediateEvent extends Event {
+public class TramArrivesIntStationEvent extends Event {
 	private static final int PRIORITY = 2;
 	private final IntPlatform intPlatform;
 	private final Tram tram;
 
-	public TramArrivesIntermediateEvent(final IntPlatform intPlatform, final Tram tram) {
+	public TramArrivesIntStationEvent(final IntPlatform intPlatform, final Tram tram) {
 		super(PRIORITY);
 		this.intPlatform = intPlatform;
 		this.tram = tram;
@@ -33,7 +33,7 @@ public class TramArrivesIntermediateEvent extends Event {
 
 		this.intPlatform.setOccupied();
 
-		final TramLeavesIntermediateStationEvent tramLeavesIntermediateEvent = new TramLeavesIntermediateStationEvent(
+		final TramLeavesIntStationEvent tramLeavesIntermediateEvent = new TramLeavesIntStationEvent(
 				this.intPlatform, this.tram);
 
 		EventScheduler.get().scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
@@ -41,6 +41,6 @@ public class TramArrivesIntermediateEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "TramArrivesIntermediateEvent [intPlatform=" + this.intPlatform + ", tram=" + this.tram + "]";
+		return "TramArrivesIntStationEvent [intPlatform=" + this.intPlatform + ", tram=" + this.tram + "]";
 	}
 }

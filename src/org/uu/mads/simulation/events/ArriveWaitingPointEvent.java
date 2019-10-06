@@ -41,7 +41,7 @@ public class ArriveWaitingPointEvent extends Event {
 				EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
 			} else {
 				// Next station is an int. station -> Schedule TramArrivesIntermediate
-				final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(
+				final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
 						(IntPlatform) this.waitingPoint.getNextPlatform(), this.tram);
 				EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 			}

@@ -6,11 +6,11 @@ import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Tram;
 
-public class TramLeavesIntermediateStationEvent extends Event {
+public class TramLeavesIntStationEvent extends Event {
 	private final IntPlatform intPlatform;
 	private final Tram tram;
 
-	public TramLeavesIntermediateStationEvent(final IntPlatform intPlatform, final Tram tram) {
+	public TramLeavesIntStationEvent(final IntPlatform intPlatform, final Tram tram) {
 		super();
 		this.intPlatform = intPlatform;
 		this.tram = tram;
@@ -39,6 +39,6 @@ public class TramLeavesIntermediateStationEvent extends Event {
 
 	@Override
 	public String toString() {
-		return "TramLeavesIntermediateStationEvent [intPlatform=" + this.intPlatform + ", tram=" + this.tram + "]";
+		return "TramLeavesIntStationEvent [intPlatform=" + this.intPlatform + ", tram=" + this.tram + "]";
 	}
 }

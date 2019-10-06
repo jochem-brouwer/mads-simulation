@@ -22,11 +22,11 @@ public class WaitingPointJunction extends WaitingPoint {
 
 			final Tram currentTram = this.tramList.get(i);
 
-			if (currentTram.previousTram.id == this.previousTram.id) {
+			if (currentTram.getId() == (this.previousTram.getId() + 1)) {
 				final LocalTime time = scheduler.getCurrentTime();
-				final TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(this.nextJunction,
-						this.endStation, currentTram);
-				scheduler.ScheduleEvent(junctionEvent, time);
+				final TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(this.endStation, this,
+						this.nextJunction);
+				scheduler.scheduleEvent(junctionEvent, time);
 				this.previousTram = currentTram;
 
 				// Delete the tram from the waiting list.
