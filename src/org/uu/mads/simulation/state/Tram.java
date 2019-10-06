@@ -1,6 +1,7 @@
 package org.uu.mads.simulation.state;
 
 import java.time.Duration;
+import java.util.Objects;
 
 public class Tram {
 	public static final int CAPACITY = 400; // TODO: change
@@ -27,6 +28,28 @@ public class Tram {
 		// this.numOfPassengers = this.numOfPassengers; // TODO: WTF?
 
 		return Duration.ZERO; // TODO change this to actual dwell time (random)
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.id, this.numOfPassengers);
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (this == obj) {
+			return true;
+		}
+		if (!(obj instanceof Tram)) {
+			return false;
+		}
+		final Tram other = (Tram) obj;
+		return (this.id == other.id) && (this.numOfPassengers == other.numOfPassengers);
+	}
+
+	@Override
+	public String toString() {
+		return "Tram [id=" + this.id + ", numOfPassengers=" + this.numOfPassengers + "]";
 	}
 
 }

@@ -2,29 +2,26 @@ package org.uu.mads.simulation.state;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
 
 import org.uu.mads.simulation.EventScheduler;
 
-public class EndStation {
+public class EndStation extends Platform {
 	private static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(3);
 
 	private final String name;
-	private LocalTime lastPassengersCalc;
+	private final Junction junction;
 	private LocalTime nextScheduledLeave;
-	private final Queue<Passenger> waitingPassengers = new ArrayDeque<>();
 	private Tram tramOnPlatformA;
 	private Tram tramOnPlatformB;
 	private LocalTime arrivalTimePlatformA;
 	private LocalTime arrivalTimePlatformB;
 
-	public EndStation(final String name, final LocalTime nextScheduledLeave) {
-		super();
+	public EndStation(final String name, final Junction junction, final LocalTime nextScheduledLeave,
+			final Duration averageTravelTime, final WaitingPoint nextWaitingPoint,
+			final WaitingPoint lastWaitingPoint) {
+		super(averageTravelTime, nextWaitingPoint, lastWaitingPoint);
 		this.name = name;
+		this.junction = junction;
 		this.nextScheduledLeave = nextScheduledLeave;
 	}
 
@@ -32,44 +29,16 @@ public class EndStation {
 		return this.name;
 	}
 
-	public LocalTime getLastPassengersCalc() {
-		return this.lastPassengersCalc;
-	}
-
-	public void setLastPassengersCalc(final LocalTime lastPassengersCalc) {
-		this.lastPassengersCalc = lastPassengersCalc;
-	}
-
 	public LocalTime getNextScheduledLeave() {
 		return this.nextScheduledLeave;
 	}
 
+	public Junction getJunction() {
+		return this.junction;
+	}
+
 	public void setNextScheduledLeave(final LocalTime nextScheduledLeave) {
 		this.nextScheduledLeave = nextScheduledLeave;
-	}
-
-	public Passenger popFirstWaitingPassenger() {
-		return this.waitingPassengers.poll();
-	}
-
-	public List<Passenger> popFirstWaitingPassengers(final int numberOfWaitingPassengers) {
-		final List<Passenger> passengers = new ArrayList<>();
-		for (int i = 0; i < numberOfWaitingPassengers; i++) {
-			passengers.add(this.waitingPassengers.poll());
-		}
-		return passengers;
-	}
-
-	public Queue<Passenger> addWaitingPassenger(final Passenger waitingPassenger) {
-		this.waitingPassengers.add(waitingPassenger);
-		return this.waitingPassengers;
-	}
-
-	public Queue<Passenger> addWaitingPassengers(final Set<Passenger> waitingPassengers) {
-		for (final Passenger waitingPassenger : waitingPassengers) {
-			addWaitingPassenger(waitingPassenger);
-		}
-		return this.waitingPassengers;
 	}
 
 	public Tram getTramOnPlatformA() {
@@ -120,5 +89,14 @@ public class EndStation {
 
 	public void freePlatformB() {
 		this.tramOnPlatformB = null;
+	}
+
+	@Override
+	// TODO: Update with inherited attributes?
+	public String toString() {
+		return "EndStation [name=" + this.name + ", nextScheduledLeave=" + this.nextScheduledLeave
+				+ ", tramOnPlatformA=" + this.tramOnPlatformA + ", tramOnPlatformB=" + this.tramOnPlatformB
+				+ ", arrivalTimePlatformA=" + this.arrivalTimePlatformA + ", arrivalTimePlatformB="
+				+ this.arrivalTimePlatformB + "]";
 	}
 }
