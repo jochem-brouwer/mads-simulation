@@ -7,7 +7,8 @@ public class Passenger {
 	  return 0; // TODO change
   }
 
-  public static int calculatePassengers(IntPlatform platform) {
+  // I put this function into the IntPlatform class.
+  /*public static int calculatePassengers(IntPlatform platform) {
 	  return 0; // TODO change
-  }
+  }*/
 }

@@ -15,6 +15,8 @@ public class EventScheduler {
 	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
 	private LocalTime currentTime = null;
 
+	private double passengerRate;
+
 	private EventScheduler() {
 		// private constructor because this is a singleton
 	}
@@ -25,6 +27,8 @@ public class EventScheduler {
 		}
 		return instance;
 	}
+
+	public double getPassengerRate() { return this.passengerRate; }
 
 	public LocalTime getCurrentTime() {
 		return this.currentTime;

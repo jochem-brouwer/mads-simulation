@@ -1,8 +1,11 @@
 package org.uu.mads.simulation.state;
 
+import org.uu.mads.simulation.EventScheduler;
+
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Queue;
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class IntPlatform {
 
@@ -36,6 +39,14 @@ public class IntPlatform {
 		return this.averageTravelTime;
 	}
 
+	public long calculatePassengers() {
+		EventScheduler scheduler = EventScheduler.get();
+		long passedTime = (SECONDS.between(scheduler.getCurrentTime(), lastPassengersCalc));
+		long numberOfPassengers = (int)(passedTime * scheduler.getPassengerRate());
+		System.out.println("Number of passengers on Platform :" + numberOfPassengers);
+		return numberOfPassengers;
+	}
+
 	public WaitingPoint getNextWp() {
 		return this.nextWp;
 	}
@@ -43,4 +54,6 @@ public class IntPlatform {
 	public WaitingPointInt getLastWp() {
 		return this.lastWp;
 	}
+
+
 }
