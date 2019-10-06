@@ -11,6 +11,10 @@ public class IntPlatform extends Platform {
 	private Tram tram;
 	private boolean isOccupied;
 
+	private LocalTime lastPassengersCalc;
+	private Queue<Passenger> waitingPassengers;
+	private Duration averageTravelTime;
+
 	public IntPlatform(final Duration averageTravelTime, final WaitingPoint nextWaitingPoint,
 			final WaitingPoint lastWaitingPoint) {
 		super(averageTravelTime, nextWaitingPoint, lastWaitingPoint);
@@ -45,6 +49,7 @@ public class IntPlatform extends Platform {
 	// TODO: Update with inherited values?
 	public String toString() {
 		return "IntPlatform [tram=" + this.tram + ", isOccupied=" + this.isOccupied + "]";
+	}
 	public boolean isPlatformOccupied() {
 		return this.isOccupied;
 	}
