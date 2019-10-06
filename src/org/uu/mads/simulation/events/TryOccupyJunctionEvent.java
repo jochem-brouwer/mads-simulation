@@ -78,7 +78,7 @@ public class TryOccupyJunctionEvent extends Event {
 				// We send the tram from platform A to the junction
 				final Tram tramOnPlatformA = this.endStation.getTramOnPlatformA();
 				junction.setTramOnLaneOutA(tramOnPlatformA);
-				this.endStation.freePlatformA();
+				this.endStation.departFromPlatformA();
 				System.out
 						.println("Tram +  " + tramOnPlatformA.getId() + " has moved from platform A of the end station "
 								+ this.endStation.getName() + " to the lane Out-A of its junction.");
@@ -87,7 +87,7 @@ public class TryOccupyJunctionEvent extends Event {
 				// We send the tram from platform B to the junction
 				final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
 				junction.setTramOnLaneOutB(tramOnPlatformB);
-				this.endStation.freePlatformB();
+				this.endStation.departFromPlatformB();
 				System.out
 						.println("Tram +  " + tramOnPlatformB.getId() + " has moved from platform B of the end station "
 								+ this.endStation.getName() + " to the lane Out-B of its junction.");
@@ -100,7 +100,7 @@ public class TryOccupyJunctionEvent extends Event {
 					"The junction of the end station " + this.endStation.getName() + "  is currently being used.");
 			final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
 			junction.setTramOnLaneOutB(tramOnPlatformB);
-			this.endStation.freePlatformB();
+			this.endStation.departFromPlatformB();
 			System.out.println("Tram +  " + tramOnPlatformB.getId() + " has moved from platform B of the end station "
 					+ this.endStation.getName() + " to the lane Out-B of its junction.");
 			scheduleFreeJunctionEvent(tramOnPlatformB);

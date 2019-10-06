@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
 
 public class EndStation extends Platform {
 	private static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(3);
@@ -83,12 +84,14 @@ public class EndStation extends Platform {
 		return false;
 	}
 
-	public void freePlatformA() {
+	public void departFromPlatformA() {
 		this.tramOnPlatformA = null;
+		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
 	}
 
-	public void freePlatformB() {
+	public void departFromPlatformB() {
 		this.tramOnPlatformB = null;
+		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
 	}
 
 	@Override

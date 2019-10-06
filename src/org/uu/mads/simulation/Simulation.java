@@ -1,6 +1,9 @@
 package org.uu.mads.simulation;
 
+import java.time.Duration;
+
 public class Simulation {
+	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofMinutes(5); // TODO: Adapt
 
 	public static void main(final String[] args) {
 

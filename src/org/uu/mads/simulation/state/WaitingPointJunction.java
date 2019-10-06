@@ -13,13 +13,9 @@ public class WaitingPointJunction extends WaitingPoint {
 	private EndStation endStation;
 	private Tram previousTram;
 
-	public WaitingPointJunction(IntPlatform nextPlatform) {
-		super(nextPlatform);
-	}
-
 	// TODO: No constructor, no getters, no setters?!
 
-	private void fire(final EventScheduler scheduler) {
+	private void schedule(final EventScheduler scheduler) {
 
 		// TODO: This method is dead code as it is private and never called locally
 		for (int i = 0; i < this.tramList.size(); i++) {
@@ -28,7 +24,8 @@ public class WaitingPointJunction extends WaitingPoint {
 
 			if (currentTram.getId() == (this.previousTram.getId() + 1)) {
 				final LocalTime time = scheduler.getCurrentTime();
-				final TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(this.endStation);
+				final TryOccupyJunctionEvent junctionEvent = new TryOccupyJunctionEvent(this.endStation, this,
+						this.nextJunction);
 				scheduler.scheduleEvent(junctionEvent, time);
 				this.previousTram = currentTram;
 
