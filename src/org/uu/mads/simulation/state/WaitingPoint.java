@@ -9,7 +9,7 @@ public class WaitingPoint {
 	private int lastTramLeftWaitingPoint = 0;
 
 	public WaitingPoint(final IntPlatform nextPlatform) {
-		super();
+		// super();
 		this.nextPlatform = nextPlatform;
 	}
 

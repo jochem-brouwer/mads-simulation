@@ -28,7 +28,7 @@ public class TramArrivesIntStationEvent extends Event {
 
 	@Override
 	public void fire() {
-		Passenger.calculatePassengers(this.intPlatform);
+		this.intPlatform.calculatePassengers();
 		final Duration dwellTime = this.tram.loadPassengers(this.intPlatform);
 
 		this.intPlatform.setOccupied();
