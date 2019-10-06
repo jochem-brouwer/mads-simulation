@@ -7,18 +7,17 @@ import java.time.LocalTime;
 import java.util.Queue;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-public class IntPlatform {
-
-	private LocalTime lastPassengersCalc;
-	private Queue<Passenger> waitingPassengers;
+public class IntPlatform extends Platform {
 	private Tram tram;
 	private boolean isOccupied;
-	private WaitingPoint nextWp;
-	private WaitingPointInt lastWp;
-	private final Duration averageTravelTime;
 
-	public IntPlatform(final Duration aVGTravelTime) {
-		this.averageTravelTime = aVGTravelTime;
+	public IntPlatform(final Duration averageTravelTime, final WaitingPoint nextWaitingPoint,
+			final WaitingPoint lastWaitingPoint) {
+		super(averageTravelTime, nextWaitingPoint, lastWaitingPoint);
+	}
+
+	public boolean isOccupied() {
+		return this.isOccupied;
 	}
 
 	public void setOccupied() {
@@ -29,31 +28,24 @@ public class IntPlatform {
 		this.isOccupied = false;
 	}
 
+    public Duration getTravelTime() {
+        // TODO logic to calculate "random" travel time
+        return this.averageTravelTime;
+    }
+
+    public long calculatePassengers() {
+        EventScheduler scheduler = EventScheduler.get();
+        long passedTime = (SECONDS.between(scheduler.getCurrentTime(), lastPassengersCalc));
+        long numberOfPassengers = (int)(passedTime * scheduler.getPassengerRate());
+        System.out.println("Number of passengers on Platform :" + numberOfPassengers);
+        return numberOfPassengers;
+    }
+
+	@Override
+	// TODO: Update with inherited values?
+	public String toString() {
+		return "IntPlatform [tram=" + this.tram + ", isOccupied=" + this.isOccupied + "]";
 	public boolean isPlatformOccupied() {
 		return this.isOccupied;
 	}
-
-	// returns travel duration of this platform to the next platform
-	public Duration getTravelTime() {
-		// TODO logic to calculate "random" travel time
-		return this.averageTravelTime;
-	}
-
-	public long calculatePassengers() {
-		EventScheduler scheduler = EventScheduler.get();
-		long passedTime = (SECONDS.between(scheduler.getCurrentTime(), lastPassengersCalc));
-		long numberOfPassengers = (int)(passedTime * scheduler.getPassengerRate());
-		System.out.println("Number of passengers on Platform :" + numberOfPassengers);
-		return numberOfPassengers;
-	}
-
-	public WaitingPoint getNextWp() {
-		return this.nextWp;
-	}
-
-	public WaitingPointInt getLastWp() {
-		return this.lastWp;
-	}
-
-
 }

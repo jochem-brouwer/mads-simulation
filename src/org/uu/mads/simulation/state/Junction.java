@@ -5,7 +5,6 @@ public class Junction {
 	private Tram tramOnLaneInB;
 	private Tram tramOnLaneOutA;
 	private Tram tramOnLaneOutB;
-	private Boolean isJunctionUsed = false;
 
 	public Junction() {
 		super();
@@ -19,12 +18,20 @@ public class Junction {
 		this.tramOnLaneInA = tramOnLaneInA;
 	}
 
+	public void removeTramOnLaneInA() {
+		this.tramOnLaneInA = null;
+	}
+
 	public Tram getTramOnLaneInB() {
 		return this.tramOnLaneInB;
 	}
 
 	public void setTramOnLaneInB(final Tram tramOnLaneInB) {
 		this.tramOnLaneInB = tramOnLaneInB;
+	}
+
+	public void removeTramOnLaneInB() {
+		this.tramOnLaneInB = null;
 	}
 
 	public Tram getTramOnLaneOutA() {
@@ -35,6 +42,10 @@ public class Junction {
 		this.tramOnLaneOutA = tramOnLaneOutA;
 	}
 
+	public void removeTramOnLaneOutA() {
+		this.tramOnLaneOutA = null;
+	}
+
 	public Tram getTramOnLaneOutB() {
 		return this.tramOnLaneOutB;
 	}
@@ -43,19 +54,20 @@ public class Junction {
 		this.tramOnLaneOutB = tramOnLaneOutB;
 	}
 
-	public Boolean isJunctionUsed() {
-		return this.isJunctionUsed;
+	public void removeTramOnLaneOutB() {
+		this.tramOnLaneOutB = null;
 	}
 
-	public void setJunctionUsed(final Boolean isJunctionUsed) {
-		this.isJunctionUsed = isJunctionUsed;
+	public Boolean isJunctionUsed() {
+		return (this.tramOnLaneInA != null) || (this.tramOnLaneInB != null) || (this.tramOnLaneOutA != null)
+				|| (this.tramOnLaneOutB != null);
 	}
 
 	@Override
 	public String toString() {
 		return "Junction [tramOnLaneInA=" + this.tramOnLaneInA + ", tramOnLaneInB=" + this.tramOnLaneInB
 				+ ", tramOnLaneOutA=" + this.tramOnLaneOutA + ", tramOnLaneOutB=" + this.tramOnLaneOutB
-				+ ", isJunctionUsed=" + this.isJunctionUsed + "]";
+				+ ", isJunctionUsed=" + "]";
 	}
 
 }

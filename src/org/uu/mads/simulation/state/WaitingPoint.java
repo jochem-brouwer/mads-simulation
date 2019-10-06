@@ -4,8 +4,18 @@ import java.util.HashSet;
 import java.util.Set;
 
 public class WaitingPoint {
+	private final Platform nextPlatform;
 	private final Set<Tram> waitingTrams = new HashSet<>();
 	private int lastTramLeftWaitingPoint = 0;
+
+	public WaitingPoint(final IntPlatform nextPlatform) {
+		super();
+		this.nextPlatform = nextPlatform;
+	}
+
+	public Platform getNextPlatform() {
+		return this.nextPlatform;
+	}
 
 	public void addTram(final Tram tram) {
 		this.waitingTrams.add(tram);
@@ -45,5 +55,11 @@ public class WaitingPoint {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		return "WaitingPoint [waitingTrams=" + this.waitingTrams + ", lastTramLeftWaitingPoint="
+				+ this.lastTramLeftWaitingPoint + "]";
 	}
 }

@@ -5,7 +5,7 @@ import java.time.Duration;
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Tram;
-import org.uu.mads.simulation.state.WaitingPointInt;
+import org.uu.mads.simulation.state.WaitingPoint;
 
 public class PlatformFreeEvent extends Event {
 	private final IntPlatform intPlatform;
@@ -23,12 +23,11 @@ public class PlatformFreeEvent extends Event {
 	public void fire() {
 		this.intPlatform.setUnoccupied();
 
-		final WaitingPointInt wp = this.intPlatform.getLastWp();
+		final WaitingPoint wp = this.intPlatform.getLastWaitingPoint();
 
 		final Tram nextTram = wp.popNextTramWaiting();
 		if (nextTram != null) {
-			wp.removeTram(nextTram);
-			final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(
+			final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
 					this.intPlatform, nextTram);
 			EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 		}
