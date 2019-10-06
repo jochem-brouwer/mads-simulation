@@ -5,7 +5,6 @@ import java.time.Duration;
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
-import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPointJunction;
 
 public class TryOccupyJunctionEvent extends Event {
@@ -14,15 +13,13 @@ public class TryOccupyJunctionEvent extends Event {
 	private final EndStation endStation;
 	private final WaitingPointJunction waitingPointJunction;
 	private final Junction junction;
-	private final Tram tram;
 
 	public TryOccupyJunctionEvent(final EndStation endStation, final WaitingPointJunction waitingPointJunction,
-			final Junction junction, final Tram tram) {
+			final Junction junction) {
 		super();
 		this.endStation = endStation;
 		this.waitingPointJunction = waitingPointJunction;
 		this.junction = junction;
-		this.tram = tram;
 	}
 
 	public EndStation getEndStation() {
@@ -39,7 +36,7 @@ public class TryOccupyJunctionEvent extends Event {
 
 	@Override
 	public void fire() {
-		if (this.waitingPointJunction.getNextTramWaiting() != null) {
+		if (this.waitingPointJunction.isTramWaiting()) {
 			useJunctionForArrival();
 		} else {
 			useJunctionForDeparture();
@@ -48,39 +45,42 @@ public class TryOccupyJunctionEvent extends Event {
 
 	private void useJunctionForArrival() {
 		if (!this.junction.isJunctionUsed()) {
-			// We can send our tram into the crossing.
+			// We can send our tram into the crossing
 			if (this.endStation.getTramOnPlatformB() == null) {
-				// We send the tram from the junction to platform B.
-				this.junction.setTramOnLaneInB(this.tram);
+				// We send the tram from the junction to platform B
+				this.junction.setTramOnLaneInB(this.waitingPointJunction.popNextTramWaiting());
 				scheduleFreeJunctionEvent();
 			} else if (this.endStation.getTramOnPlatformA() == null) {
-				// We send the tram from the junction to platform A.
-				this.junction.setTramOnLaneInA(this.tram);
+				// We send the tram from the junction to platform A
+				this.junction.setTramOnLaneInA(this.waitingPointJunction.popNextTramWaiting());
 				scheduleFreeJunctionEvent();
 			}
 		} else if (this.endStation.getTramOnPlatformA() == null) {
 			// We are in mode 3 and can send two trams at once
-			this.junction.setTramOnLaneInA(this.tram);
+			// We send the tram from the junction to platform A
+			this.junction.setTramOnLaneInA(this.waitingPointJunction.popNextTramWaiting());
 			scheduleFreeJunctionEvent();
 		}
 	}
 
 	private void useJunctionForDeparture() {
 		if (!this.junction.isJunctionUsed()) {
-			if (this.endStation.getTramOnPlatformB() == null) {
-				// We send the tram from the junction to platform B.
-				this.junction.setTramOnLaneOutB(this.tram);
-				this.endStation.freePlatformB();
-				scheduleFreeJunctionEvent();
-			} else if (this.endStation.getTramOnPlatformA() == null) {
-				// We send the tram from the junction to platform A.
-				this.junction.setTramOnLaneOutA(this.tram);
+			if (this.endStation.isTramReadyOnPlatformA()) {
+				// We send the tram from platform A to the junction
+				this.junction.setTramOnLaneOutA(this.endStation.getTramOnPlatformA());
 				this.endStation.freePlatformA();
 				scheduleFreeJunctionEvent();
+			} else if (this.endStation.isTramReadyOnPlatformB()) {
+				// We send the tram from platform B to the junction
+				this.junction.setTramOnLaneOutB(this.endStation.getTramOnPlatformB());
+				this.endStation.freePlatformB();
+				scheduleFreeJunctionEvent();
 			}
-		} else if (this.endStation.getTramOnPlatformB() == null) {
+		} else if (this.endStation.isTramReadyOnPlatformB()) {
 			// We are in mode 3 and can send two trams at once
-			this.junction.setTramOnLaneOutB(this.tram);
+			// We send the tram from platform B to the junction
+			this.junction.setTramOnLaneOutB(this.endStation.getTramOnPlatformB());
+			this.endStation.freePlatformB();
 			scheduleFreeJunctionEvent();
 		}
 	}
@@ -93,6 +93,6 @@ public class TryOccupyJunctionEvent extends Event {
 	@Override
 	public String toString() {
 		return "TryOccupyJunctionEvent [endStation=" + this.endStation + ", waitingPointJunction="
-				+ this.waitingPointJunction + ", junction=" + this.junction + ", tram=" + this.tram + "]";
+				+ this.waitingPointJunction + ", junction=" + this.junction + "]";
 	}
 }

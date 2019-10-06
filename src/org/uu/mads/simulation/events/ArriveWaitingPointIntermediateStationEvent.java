@@ -27,7 +27,7 @@ public class ArriveWaitingPointIntermediateStationEvent extends Event {
 	@Override
 	public void fire() {
 		this.waitingPointInt.addTram(this.tram);
-		final Tram nextTram = this.waitingPointInt.getNextTramWaiting();
+		final Tram nextTram = this.waitingPointInt.popNextTramWaiting();
 
 		if (nextTram != null) {
 			this.waitingPointInt.removeTram(nextTram);

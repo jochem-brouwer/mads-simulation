@@ -25,7 +25,7 @@ public class PlatformFreeEvent extends Event {
 
 		final WaitingPointInt wp = this.intPlatform.getLastWp();
 
-		final Tram nextTram = wp.getNextTramWaiting();
+		final Tram nextTram = wp.popNextTramWaiting();
 		if (nextTram != null) {
 			wp.removeTram(nextTram);
 			final TramArrivesIntermediateEvent tramArrivesIntermediateEvent = new TramArrivesIntermediateEvent(

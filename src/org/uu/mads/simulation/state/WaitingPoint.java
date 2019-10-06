@@ -1,25 +1,14 @@
 package org.uu.mads.simulation.state;
 
-import java.util.LinkedList;
-import java.util.List;
-
-import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Set;
 
 public class WaitingPoint {
-	private final List<Tram> waitingTrams = new LinkedList<>();
+	private final Set<Tram> waitingTrams = new HashSet<>();
 	private int lastTramLeftWaitingPoint = 0;
 
-	// Getters and setters are here
-
-	public Tram getNextTramWaiting() {
-		final int targetID = this.lastTramLeftWaitingPoint + 1;
-		for (Iterator<Tram> iter = this.waitingTrams.iterator(); iter.hasNext();) {
-			final Tram tram = iter.next();
-			if (tram.getId() == targetID) {
-				return tram;
-			}
-		}
-		return null;
+	public void addTram(final Tram tram) {
+		this.waitingTrams.add(tram);
 	}
 
 	public void removeTram(final Tram tram) {
@@ -29,7 +18,32 @@ public class WaitingPoint {
 		}
 	}
 
-	public void addTram(final Tram tram) {
-		this.waitingTrams.add(tram);
+	/**
+	 * Gets the next tram from the set of the waiting trams if it fits the correct
+	 * order and removes it from the set afterwards. If the tram of correct order
+	 * hasn't arrived yet or if there are no trams waiting, null is returned.
+	 *
+	 * @return next tram waiting or null
+	 */
+	public Tram popNextTramWaiting() {
+		final Tram nextTramWaiting = getNextTramWaiting();
+		if (nextTramWaiting != null) {
+			this.waitingTrams.remove(nextTramWaiting);
+		}
+		return nextTramWaiting;
+	}
+
+	public boolean isTramWaiting() {
+		return getNextTramWaiting() != null;
+	}
+
+	private Tram getNextTramWaiting() {
+		final int targetID = this.lastTramLeftWaitingPoint + 1;
+		for (final Tram tram : this.waitingTrams) {
+			if (tram.getId() == targetID) {
+				return tram;
+			}
+		}
+		return null;
 	}
 }
