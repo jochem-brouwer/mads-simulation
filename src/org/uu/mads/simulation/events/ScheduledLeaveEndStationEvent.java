@@ -9,12 +9,10 @@ public class ScheduledLeaveEndStationEvent extends Event {
 	private static final int PRIORITY = 1;
 
 	private final EndStation endStation;
-	private final Duration tramLeaveFrequency;
 
-	public ScheduledLeaveEndStationEvent(final EndStation endStation, final Duration tramLeaveFrequency) {
+	public ScheduledLeaveEndStationEvent(final EndStation endStation) {
 		super(PRIORITY);
 		this.endStation = endStation;
-		this.tramLeaveFrequency = tramLeaveFrequency;
 	}
 
 	public EndStation getEndStation() {
@@ -34,7 +32,7 @@ public class ScheduledLeaveEndStationEvent extends Event {
 			System.out.println("Tram is ready at end station " + this.endStation
 					+ " but the next scheduled leave is in the future.");
 			final ScheduledLeaveEndStationEvent scheduledLeaveEndStationEvent = new ScheduledLeaveEndStationEvent(
-					this.endStation, this.tramLeaveFrequency);
+					this.endStation);
 			EventScheduler.get().scheduleEvent(scheduledLeaveEndStationEvent, this.endStation.getNextScheduledLeave());
 		}
 
