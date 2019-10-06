@@ -40,6 +40,7 @@ public class FreeJunctionEvent extends Event {
 						"There is already a tram on platform A while trying to let a new one arrive from the junction.");
 			}
 			this.endStation.setTramOnPlatformA(this.tram);
+			scheduleScheduledLeaveEndStationEvent();
 			System.out.println("Tram from lane In-A of junction for end station " + this.endStation.getName()
 					+ " has been moved to platform A.");
 		} else if (this.tram.equals(junction.getTramOnLaneInB())) {
@@ -49,6 +50,7 @@ public class FreeJunctionEvent extends Event {
 						"There is already a tram on platform B while trying to let a new one arrive from the junction.");
 			}
 			this.endStation.setTramOnPlatformB(this.tram);
+			scheduleScheduledLeaveEndStationEvent();
 			System.out.println("Tram from lane In-B of junction for end station " + this.endStation.getName()
 					+ " has been moved to platform B.");
 		} else if (this.tram.equals(junction.getTramOnLaneOutA())) {
@@ -69,6 +71,12 @@ public class FreeJunctionEvent extends Event {
 		// Schedule TryOccupyJunction again
 		final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(this.endStation);
 		EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
+	}
+
+	private void scheduleScheduledLeaveEndStationEvent() {
+		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationEvent = new ScheduledLeaveEndStationEvent(
+				this.endStation);
+		EventScheduler.get().scheduleEventAhead(scheduledLeaveEndStationEvent, EndStation.TURN_AROUND_DURATION);
 	}
 
 	private void scheduleArriveWaitingPointEvent() {
