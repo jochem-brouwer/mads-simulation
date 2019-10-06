@@ -1,7 +1,6 @@
 package org.uu.mads.simulation.events;
 
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
+import java.time.Duration;
 
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.EndStation;
@@ -10,6 +9,8 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPointJunction;
 
 public class TryOccupyJunctionEvent extends Event {
+	private static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
+
 	private final EndStation endStation;
 	private final WaitingPointJunction waitingPointJunction;
 	private final Junction junction;
@@ -38,33 +39,57 @@ public class TryOccupyJunctionEvent extends Event {
 
 	@Override
 	public void fire() {
-		if (this.junction.isJunctionUsed() == false) {
-
-			// If the platform B is free, we send the tram from the junction to platform B.
-			if (this.endStation.getTramOnPlatformB() == null) {
-
-				this.junction.setTramOnLaneInB(this.tram);
-
-				final LocalTime time = EventScheduler.get().getCurrentTime();
-				time.plus(1, ChronoUnit.MINUTES);
-
-				// We schedule a new event to free the junction again.
-				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
-				EventScheduler.get().scheduleEvent(freeJunctionEvent, time);
-
-				// If the platform A is free, we send the tram from the junction to platform A.
-			} else if (this.endStation.getTramOnPlatformA() == null) {
-
-				this.junction.setTramOnLaneInA(this.tram);
-				final LocalTime time = EventScheduler.get().getCurrentTime();
-				time.plus(1, ChronoUnit.MINUTES);
-
-				// We schedule a new event to free the junction again.
-				final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
-				EventScheduler.get().scheduleEvent(freeJunctionEvent, time);
+		if (!this.junction.isJunctionUsed()) {
+			if (this.waitingPointJunction.getNextTramWaiting() != null) {
+				useJunctionForArrival();
+			} else {
+				useJunctionForDeparture();
 			}
-
 		}
+	}
+
+	private void useJunctionForArrival() {
+		if (this.junction.isJunctionUsed() == false) {
+			// We can send our tram into the crossing.
+			if (this.endStation.getTramOnPlatformB() == null) {
+				// We send the tram from the junction to platform B.
+				this.junction.setTramOnLaneInB(this.tram);
+				scheduleFreeJunctionEvent();
+			} else if (this.endStation.getTramOnPlatformA() == null) {
+				// We send the tram from the junction to platform A.
+				this.junction.setTramOnLaneInA(this.tram);
+				scheduleFreeJunctionEvent();
+			}
+		} else if (this.endStation.getTramOnPlatformA() == null) {
+			// We are in mode 3 and can send two trams at once
+			this.junction.setTramOnLaneInA(this.tram);
+			scheduleFreeJunctionEvent();
+		}
+	}
+
+	private void useJunctionForDeparture() {
+		if (this.junction.isJunctionUsed() == false) {
+			if (this.endStation.getTramOnPlatformB() == null) {
+				// We send the tram from the junction to platform B.
+				this.junction.setTramOnLaneOutB(this.tram);
+				this.endStation.freePlatformB();
+				scheduleFreeJunctionEvent();
+			} else if (this.endStation.getTramOnPlatformA() == null) {
+				// We send the tram from the junction to platform A.
+				this.junction.setTramOnLaneOutA(this.tram);
+				this.endStation.freePlatformA();
+				scheduleFreeJunctionEvent();
+			}
+		} else if (this.endStation.getTramOnPlatformB() == null) {
+			// We are in mode 3 and can send two trams at once
+			this.junction.setTramOnLaneOutB(this.tram);
+			scheduleFreeJunctionEvent();
+		}
+	}
+
+	private void scheduleFreeJunctionEvent() {
+		final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.junction);
+		EventScheduler.get().scheduleEventAhead(freeJunctionEvent, JUNCTION_DURATION);
 	}
 
 	@Override

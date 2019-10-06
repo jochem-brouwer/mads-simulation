@@ -3,8 +3,8 @@ package org.uu.mads.simulation.state;
 public class Junction {
 	private Tram tramOnLaneInA;
 	private Tram tramOnLaneInB;
-	private Tram tramOnLaneAOut;
-	private Tram tramOnLaneBOut;
+	private Tram tramOnLaneOutA;
+	private Tram tramOnLaneOutB;
 	private Boolean isJunctionUsed = false;
 
 	public Junction() {
@@ -27,20 +27,20 @@ public class Junction {
 		this.tramOnLaneInB = tramOnLaneInB;
 	}
 
-	public Tram getTramOnLaneAOut() {
-		return this.tramOnLaneAOut;
+	public Tram getTramOnLaneOutA() {
+		return this.tramOnLaneOutA;
 	}
 
-	public void setTramOnLaneAOut(final Tram tramOnLaneAOut) {
-		this.tramOnLaneAOut = tramOnLaneAOut;
+	public void setTramOnLaneOutA(final Tram tramOnLaneOutA) {
+		this.tramOnLaneOutA = tramOnLaneOutA;
 	}
 
-	public Tram getTramOnLaneBOut() {
-		return this.tramOnLaneBOut;
+	public Tram getTramOnLaneOutB() {
+		return this.tramOnLaneOutB;
 	}
 
-	public void setTramOnLaneBOut(final Tram tramOnLaneBOut) {
-		this.tramOnLaneBOut = tramOnLaneBOut;
+	public void setTramOnLaneOutB(final Tram tramOnLaneOutB) {
+		this.tramOnLaneOutB = tramOnLaneOutB;
 	}
 
 	public Boolean isJunctionUsed() {

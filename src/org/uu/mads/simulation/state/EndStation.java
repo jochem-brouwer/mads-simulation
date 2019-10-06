@@ -40,4 +40,12 @@ public class EndStation {
 	public double getPlatformBArrivalTime() {
 		return this.platformBArrivalTime;
 	}
+
+	public void freePlatformA() {
+		this.tramOnPlatformA = null;
+	}
+
+	public void freePlatformB() {
+		this.tramOnPlatformB = null;
+	}
 }
