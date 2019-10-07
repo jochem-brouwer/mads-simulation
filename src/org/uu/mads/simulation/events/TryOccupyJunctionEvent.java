@@ -24,12 +24,12 @@ public class TryOccupyJunctionEvent extends Event {
 	@Override
 	public void fire() {
 		if (this.endStation.getLastWaitingPoint().isTramWaiting()) {
-			System.out.println("There is a tram at the waiting point for the end station " + this.endStation
+			System.out.println("There is a tram at the waiting point for the end station " + this.endStation.getName()
 					+ " that is requesting to use the junction.");
 			useJunctionForArrival();
 			useJunctionForDeparture();
 		} else {
-			System.out.println("There is a tram ready at end station " + this.endStation
+			System.out.println("There is a tram ready at end station " + this.endStation.getName()
 					+ " that is requesting to use the junction.");
 			useJunctionForDeparture();
 		}
@@ -57,7 +57,7 @@ public class TryOccupyJunctionEvent extends Event {
 								+ this.endStation.getName() + " to the lane In-A of its junction.");
 				scheduleFreeJunctionEvent(nextTramWaiting);
 			}
-		} else if (this.endStation.getTramOnPlatformA() == null && junction.canUseLaneInA()) {
+		} else if ((this.endStation.getTramOnPlatformA() == null) && junction.canUseLaneInA()) {
 			System.out.println(
 					"The junction of the end station " + this.endStation.getName() + "  is currently being used.");
 			// We are in mode 3 and can send two trams at once
