@@ -62,6 +62,20 @@ public class Junction {
 		return (this.tramOnLaneInA != null) || (this.tramOnLaneInB != null) || (this.tramOnLaneOutA != null)
 				|| (this.tramOnLaneOutB != null);
 	}
+	
+	/**
+	 * @return returns True if lane A In can be used. This means the following lanes are unoccupied: Lane A In Lane A Out Lane B In
+	 */
+	public Boolean canUseLaneInA() {
+		return (this.tramOnLaneInA == null && this.tramOnLaneInB == null && this.tramOnLaneOutA == null);
+	}
+	
+	/**
+	 * @return returns True if lane B Out can be used. This means the following lanes are unoccupied: Lane A Out Lane B In Lane B Out
+	 */
+	public Boolean canUseLaneOutB() {
+		return (this.tramOnLaneInB == null && this.tramOnLaneOutA == null && this.tramOnLaneOutB == null);
+	}
 
 	@Override
 	public String toString() {

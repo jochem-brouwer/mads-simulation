@@ -3,6 +3,8 @@ package org.uu.mads.simulation.state;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.uu.mads.simulation.Simulation;
+
 public class WaitingPoint {
 	private final Platform nextPlatform;
 	private final Set<Tram> waitingTrams = new HashSet<>();
@@ -48,7 +50,7 @@ public class WaitingPoint {
 	}
 
 	public Tram getNextTramWaiting() {
-		final int targetID = this.lastTramLeftWaitingPoint + 1;
+		final int targetID = (this.lastTramLeftWaitingPoint) % Simulation.NUMBER_OF_TRAMS + 1;
 		for (final Tram tram : this.waitingTrams) {
 			if (tram.getId() == targetID) {
 				return tram;

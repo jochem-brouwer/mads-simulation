@@ -27,6 +27,7 @@ public class TryOccupyJunctionEvent extends Event {
 			System.out.println("There is a tram at the waiting point for the end station " + this.endStation
 					+ " that is requesting to use the junction.");
 			useJunctionForArrival();
+			useJunctionForDeparture();
 		} else {
 			System.out.println("There is a tram ready at end station " + this.endStation
 					+ " that is requesting to use the junction.");
@@ -56,7 +57,7 @@ public class TryOccupyJunctionEvent extends Event {
 								+ this.endStation.getName() + " to the lane In-A of its junction.");
 				scheduleFreeJunctionEvent(nextTramWaiting);
 			}
-		} else if (this.endStation.getTramOnPlatformA() == null) {
+		} else if (this.endStation.getTramOnPlatformA() == null && junction.canUseLaneInA()) {
 			System.out.println(
 					"The junction of the end station " + this.endStation.getName() + "  is currently being used.");
 			// We are in mode 3 and can send two trams at once
@@ -67,6 +68,8 @@ public class TryOccupyJunctionEvent extends Event {
 					"Tram +  " + nextTramWaiting.getId() + " has moved from the waiting point for the end station "
 							+ this.endStation.getName() + " to the lane In-A of its junction.");
 			scheduleFreeJunctionEvent(nextTramWaiting);
+		} else {
+			System.out.println("Cannot use junction for arrival");
 		}
 	}
 
@@ -93,7 +96,7 @@ public class TryOccupyJunctionEvent extends Event {
 								+ this.endStation.getName() + " to the lane Out-B of its junction.");
 				scheduleFreeJunctionEvent(tramOnPlatformB);
 			}
-		} else if (this.endStation.isTramReadyOnPlatformB()) {
+		} else if (this.endStation.isTramReadyOnPlatformB() && junction.canUseLaneOutB()) {
 			// We are in mode 3 and can send two trams at once
 			// We send the tram from platform B to the junction
 			System.out.println(

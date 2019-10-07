@@ -8,6 +8,7 @@ public class Simulation {
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_CS = LocalTime.of(6, 0); // TODO: Adapt
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofMinutes(5); // TODO: Adapt
+	public static final int NUMBER_OF_TRAMS = 15;
 
 	public static void main(final String[] args) {
 
