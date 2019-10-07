@@ -2,9 +2,6 @@ package org.uu.mads.simulation;
 
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.List;
-import static java.time.temporal.ChronoUnit.MINUTES;
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
 import org.uu.mads.simulation.state.EndStation;
@@ -18,39 +15,38 @@ public class Simulation {
 	public static final Duration TURN_AROUND = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
-	public static LocalTime FIRST_SCHEDULED_LEAVE_TIME_CS = LocalTime.of(6, 0); // TODO: Adapt
+	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(225); // This is 3.75 minutes with 16 trams
 	public static final int NUMBER_OF_TRAMS = 15;
 
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
-	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(225); // This is 3.75 minutes with 16 trams
+	private static LocalTime firstScheduledLeaveTimeCS;
 
-
-	private static void calculateCSLeave(Duration frequency, LocalTime startTime) {
-		// Calculates the first schedules leave time for central station.
-
-		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(Duration.ofMinutes(17) .plus(TURN_AROUND));
-		while (firstRound.compareTo(startTime.plus(frequency)) == 1) {
-			firstRound = firstRound.minus(frequency);
+	/**
+	 * Calculates the first schedules leave time for central station.
+	 */
+	private static void calculateCSLeave() {
+		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(Duration.ofMinutes(17).plus(TURN_AROUND));
+		while (firstRound.compareTo(FIRST_SCHEDULED_LEAVE_TIME_PR.plus(TRAM_LEAVE_FREQUENCY)) == 1) {
+			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
 		}
 
-		FIRST_SCHEDULED_LEAVE_TIME_CS = firstRound;
 		System.out.println("First scheduled leave at PR: " + FIRST_SCHEDULED_LEAVE_TIME_PR);
-		System.out.println("First scheduled leave at CS: " + FIRST_SCHEDULED_LEAVE_TIME_CS);
+		System.out.println("First scheduled leave at CS: " + firstRound);
+		firstScheduledLeaveTimeCS = firstRound;
 	}
 
 	public static void main(final String[] args) {
-
-		calculateCSLeave(TRAM_LEAVE_FREQUENCY, FIRST_SCHEDULED_LEAVE_TIME_CS);
-
 		initializeState();
+
+		calculateCSLeave();
 
 		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationCentraalEvent = new ScheduledLeaveEndStationEvent(
 				centraalEndStation);
 		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationUithofEvent = new ScheduledLeaveEndStationEvent(
 				uithofEndStation);
 
-		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationCentraalEvent, FIRST_SCHEDULED_LEAVE_TIME_CS);
+		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationCentraalEvent, firstScheduledLeaveTimeCS);
 		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
 		// TODO: Schedule initial Event
 
@@ -65,7 +61,7 @@ public class Simulation {
 		final Junction uithofJunction = new Junction();
 
 		// Platforms Direction A -> Uithof
-		centraalEndStation = new EndStation("Centraal Station", centraalJunction, FIRST_SCHEDULED_LEAVE_TIME_CS,
+		centraalEndStation = new EndStation("Centraal Station", centraalJunction, firstScheduledLeaveTimeCS,
 				Duration.ofSeconds(134));
 		final IntPlatform vrPlatformA = new IntPlatform("Vaartsche-Rijn-A", Duration.ofSeconds(243));
 		final IntPlatform gwPlatformA = new IntPlatform("Galgenwaard-A", Duration.ofSeconds(59));
