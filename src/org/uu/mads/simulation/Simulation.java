@@ -106,39 +106,39 @@ public class Simulation {
 		final WaitingPoint centraalWaitingPoint = new WaitingPoint(centraalEndStation);
 
 		// Waiting Point Chain at Platforms Direction A -> Uithof
-		centraalEndStation.setLastWaitingPoint(vrWaitingPointPlB);
+		centraalEndStation.setLastWaitingPoint(centraalWaitingPoint);
 		centraalEndStation.setNextWaitingPoint(vrWaitingPointPlA);
-		vrPlatformA.setLastWaitingPoint(centraalWaitingPoint);
+		vrPlatformA.setLastWaitingPoint(vrWaitingPointPlA);
 		vrPlatformA.setNextWaitingPoint(gwWaitingPointPlA);
-		gwPlatformA.setLastWaitingPoint(vrWaitingPointPlA);
+		gwPlatformA.setLastWaitingPoint(gwWaitingPointPlA);
 		gwPlatformA.setNextWaitingPoint(krWaitingPointPlA);
-		krPlatformA.setLastWaitingPoint(gwWaitingPointPlA);
+		krPlatformA.setLastWaitingPoint(krWaitingPointPlA);
 		krPlatformA.setNextWaitingPoint(plWaitingPointPlA);
-		plPlatformA.setLastWaitingPoint(krWaitingPointPlA);
+		plPlatformA.setLastWaitingPoint(plWaitingPointPlA);
 		plPlatformA.setNextWaitingPoint(hlWaitingPointPlA);
-		hlPlatformA.setLastWaitingPoint(plWaitingPointPlA);
+		hlPlatformA.setLastWaitingPoint(hlWaitingPointPlA);
 		hlPlatformA.setNextWaitingPoint(umcWaitingPointPlA);
-		umcPlatformA.setLastWaitingPoint(hlWaitingPointPlA);
+		umcPlatformA.setLastWaitingPoint(umcWaitingPointPlA);
 		umcPlatformA.setNextWaitingPoint(wkzWaitingPointPlA);
-		wkzPlatformA.setLastWaitingPoint(umcWaitingPointPlA);
+		wkzPlatformA.setLastWaitingPoint(wkzWaitingPointPlA);
 		wkzPlatformA.setNextWaitingPoint(uithofWaitingPoint);
 
 		// Waiting Point Chain at Platforms Direction B -> Centraal
-		uithofEndStation.setLastWaitingPoint(wkzWaitingPointPlA);
+		uithofEndStation.setLastWaitingPoint(uithofWaitingPoint);
 		uithofEndStation.setNextWaitingPoint(wkzWaitingPointPlB);
-		wkzPlatformB.setLastWaitingPoint(uithofWaitingPoint);
+		wkzPlatformB.setLastWaitingPoint(wkzWaitingPointPlB);
 		wkzPlatformB.setNextWaitingPoint(umcWaitingPointPlB);
-		umcPlatformB.setLastWaitingPoint(wkzWaitingPointPlB);
+		umcPlatformB.setLastWaitingPoint(umcWaitingPointPlB);
 		umcPlatformB.setNextWaitingPoint(hlWaitingPointPlB);
-		hlPlatformB.setLastWaitingPoint(umcWaitingPointPlB);
+		hlPlatformB.setLastWaitingPoint(hlWaitingPointPlB);
 		hlPlatformB.setNextWaitingPoint(plWaitingPointPlB);
-		plPlatformB.setLastWaitingPoint(hlWaitingPointPlB);
+		plPlatformB.setLastWaitingPoint(plWaitingPointPlB);
 		plPlatformB.setNextWaitingPoint(krWaitingPointPlB);
-		krPlatformB.setLastWaitingPoint(plWaitingPointPlB);
+		krPlatformB.setLastWaitingPoint(krWaitingPointPlB);
 		krPlatformB.setNextWaitingPoint(gwWaitingPointPlB);
-		gwPlatformB.setLastWaitingPoint(krWaitingPointPlB);
+		gwPlatformB.setLastWaitingPoint(gwWaitingPointPlB);
 		gwPlatformB.setNextWaitingPoint(vrWaitingPointPlB);
-		vrPlatformB.setLastWaitingPoint(gwWaitingPointPlB);
+		vrPlatformB.setLastWaitingPoint(vrWaitingPointPlB);
 		vrPlatformB.setNextWaitingPoint(centraalWaitingPoint);
 
 		// Add trams
