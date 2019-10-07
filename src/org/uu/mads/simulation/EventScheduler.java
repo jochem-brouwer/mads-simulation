@@ -13,7 +13,7 @@ public class EventScheduler {
 	private static EventScheduler instance = null;
 
 	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
-	private LocalTime currentTime = Simulation.FIRST_SCHEDULED_LEAVE_TIME_PR;
+	private LocalTime currentTime = Simulation.FIRST_SCHEDULED_LEAVE_TIME_PR.minus(Simulation.TURN_AROUND_DURATION);
 
 	private double passengerRate;
 
@@ -79,7 +79,7 @@ public class EventScheduler {
 						+ " at the end of the event list for that time.");
 			}
 		} else {
-			System.out.println("There are no events yet scheduled at " + eventTime + " yet.");
+			System.out.println("There are no events scheduled at " + eventTime + " yet.");
 			scheduledEvents = new LinkedList<>();
 			scheduledEvents.add(event);
 			System.out.println(
