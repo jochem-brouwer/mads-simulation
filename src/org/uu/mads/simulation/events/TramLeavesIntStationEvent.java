@@ -1,9 +1,12 @@
 package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.IntPlatform;
+import org.uu.mads.simulation.state.Passenger;
+import org.uu.mads.simulation.state.Platform;
 import org.uu.mads.simulation.state.Tram;
 
 public class TramLeavesIntStationEvent extends Event {
@@ -24,8 +27,12 @@ public class TramLeavesIntStationEvent extends Event {
 		return this.tram;
 	}
 
+	// This function is used to load all of the passengers from the platform onto the tram as long as we have enough
+	// capacity.
+
 	@Override
 	public void fire() {
+
 		final Duration platformFreeTime = Duration.ofSeconds(40);
 		final Duration travelTime = this.intPlatform.getTravelTime();
 
@@ -35,6 +42,7 @@ public class TramLeavesIntStationEvent extends Event {
 
 		final PlatformFreeEvent platformFreeEvent = new PlatformFreeEvent(this.intPlatform);
 		EventScheduler.get().scheduleEventAhead(platformFreeEvent, platformFreeTime);
+
 	}
 
 	@Override

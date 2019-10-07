@@ -1,19 +1,23 @@
 package org.uu.mads.simulation.state;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Queue;
+import java.util.Random;
 import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class IntPlatform extends Platform {
 	private Tram tram;
 	private boolean isOccupied;
 
-	private LocalTime lastPassengersCalc;
-	private Queue<Passenger> waitingPassengers;
 	private Duration averageTravelTime;
+
+
+	private Random random;
 
 	public IntPlatform(final Duration averageTravelTime, final WaitingPoint nextWaitingPoint,
 			final WaitingPoint lastWaitingPoint) {
@@ -35,14 +39,6 @@ public class IntPlatform extends Platform {
     public Duration getTravelTime() {
         // TODO logic to calculate "random" travel time
         return this.averageTravelTime;
-    }
-
-    public long calculatePassengers() {
-        EventScheduler scheduler = EventScheduler.get();
-        long passedTime = (SECONDS.between(scheduler.getCurrentTime(), lastPassengersCalc));
-        long numberOfPassengers = (int)(passedTime * scheduler.getPassengerRate());
-        System.out.println("Number of passengers on Platform :" + numberOfPassengers);
-        return numberOfPassengers;
     }
 
 	@Override

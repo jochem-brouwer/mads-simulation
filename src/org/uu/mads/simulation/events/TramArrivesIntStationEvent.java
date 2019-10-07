@@ -1,6 +1,7 @@
 package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.IntPlatform;
@@ -27,8 +28,14 @@ public class TramArrivesIntStationEvent extends Event {
 
 	@Override
 	public void fire() {
+
+		// When a tram arrives, we calculate the passengers and load them into the tram.
+		int passengersOut = this.intPlatform.dumpPassengers(this.tram);
 		this.intPlatform.calculatePassengers();
-		final Duration dwellTime = this.tram.loadPassengers(this.intPlatform);
+		int passengersIn = this.intPlatform.loadPassengers(this.intPlatform, this.tram);
+
+		final Duration dwellTime = this.tram.calculateDwellTime(
+				this.intPlatform, passengersIn, passengersOut);
 
 		this.intPlatform.setOccupied();
 

@@ -4,10 +4,12 @@ import java.time.Duration;
 import java.util.Objects;
 
 public class Tram {
-	public static final int CAPACITY = 400; // TODO: change
+	public static final int CAPACITY = 400; // TODO May change.
 
 	private final int id;
-	private final int numOfPassengers;
+	private int numOfPassengers;
+
+	private int remainingCapacity;
 
 	public Tram(final int id, final int numOfPassengers) {
 		super();
@@ -15,19 +17,22 @@ public class Tram {
 		this.numOfPassengers = numOfPassengers;
 	}
 
+	public void setNumOfPassengers(int passengers ){ this.numOfPassengers = passengers; }
+
 	public int getId() {
 		return this.id;
 	}
+
+	public int getRemainingCapacity() { return (this.CAPACITY - this.numOfPassengers); }
 
 	public int getNumOfPassengers() {
 		return this.numOfPassengers;
 	}
 
 	// loads/unloads passengers on a platform and returns the dwell time of the tram
-	public Duration loadPassengers(final IntPlatform platform) {
-		// this.numOfPassengers = this.numOfPassengers; // TODO: WTF?
-
-		return Duration.ZERO; // TODO change this to actual dwell time (random)
+	public Duration calculateDwellTime(final IntPlatform platform, int passengersIn, int passengersOut) {
+		Duration dwellTime = Duration.ofSeconds((long)(12.5 + (0.22 * passengersIn) + (0.13 * passengersOut)));
+		return dwellTime; // TODO add a stochastic distribution.
 	}
 
 	@Override
