@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
 import org.uu.mads.simulation.state.Platform;
@@ -76,7 +77,7 @@ public class FreeJunctionEvent extends Event {
 	private void scheduleScheduledLeaveEndStationEvent() {
 		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationEvent = new ScheduledLeaveEndStationEvent(
 				this.endStation);
-		EventScheduler.get().scheduleEventAhead(scheduledLeaveEndStationEvent, EndStation.TURN_AROUND_DURATION);
+		EventScheduler.get().scheduleEventAhead(scheduledLeaveEndStationEvent, Simulation.TURN_AROUND_DURATION);
 	}
 
 	private void scheduleArriveWaitingPointEvent() {

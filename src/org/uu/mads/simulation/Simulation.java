@@ -13,7 +13,7 @@ import org.uu.mads.simulation.state.WaitingPoint;
 public class Simulation {
 
 	public static final int TRAMS_PER_HOUR = 16; // This is fixed during our simulation run.
-	public static final Duration TURN_AROUND = Duration.ofMinutes(4); // Turn around time is 4 min.
+	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(225); // This is 3.75 minutes with 16 trams
@@ -27,7 +27,7 @@ public class Simulation {
 	 * Calculates the first schedules leave time for central station.
 	 */
 	private static void calculateCSLeave() {
-		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(Duration.ofMinutes(17).plus(TURN_AROUND));
+		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(Duration.ofMinutes(17).plus(TURN_AROUND_DURATION));
 		while (firstRound.compareTo(FIRST_SCHEDULED_LEAVE_TIME_PR.plus(TRAM_LEAVE_FREQUENCY)) == 1) {
 			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
 		}

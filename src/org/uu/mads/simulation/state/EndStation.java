@@ -7,8 +7,6 @@ import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Simulation;
 
 public class EndStation extends Platform {
-	public static final Duration TURN_AROUND_DURATION = Simulation.TURN_AROUND;
-
 	private final Junction junction;
 	private LocalTime nextScheduledLeave;
 	private Tram tramOnPlatformA;
@@ -63,7 +61,7 @@ public class EndStation extends Platform {
 
 	public boolean isTramReadyOnPlatformA() {
 		if ((this.tramOnPlatformA != null) && this.arrivalTimePlatformA
-				.isBefore(EventScheduler.get().getCurrentTime().minus(TURN_AROUND_DURATION))) {
+				.isBefore(EventScheduler.get().getCurrentTime().minus(Simulation.TURN_AROUND_DURATION))) {
 			return true;
 		}
 		return false;
@@ -71,7 +69,7 @@ public class EndStation extends Platform {
 
 	public boolean isTramReadyOnPlatformB() {
 		if ((this.tramOnPlatformB != null) && this.arrivalTimePlatformB
-				.isBefore(EventScheduler.get().getCurrentTime().minus(TURN_AROUND_DURATION))) {
+				.isBefore(EventScheduler.get().getCurrentTime().minus(Simulation.TURN_AROUND_DURATION))) {
 			return true;
 		}
 		return false;
