@@ -60,16 +60,22 @@ public class EndStation extends Platform {
 	}
 
 	public boolean isTramReadyOnPlatformA() {
-		if ((this.tramOnPlatformA != null) && this.arrivalTimePlatformA
-				.isBefore(EventScheduler.get().getCurrentTime().minus(Simulation.TURN_AROUND_DURATION))) {
+		final LocalTime lastPossibleArrivalTime = EventScheduler.get().getCurrentTime()
+				.minus(Simulation.TURN_AROUND_DURATION);
+
+		if ((this.tramOnPlatformA != null) && (this.arrivalTimePlatformA.equals(lastPossibleArrivalTime)
+				|| this.arrivalTimePlatformA.isBefore(lastPossibleArrivalTime))) {
 			return true;
 		}
 		return false;
 	}
 
 	public boolean isTramReadyOnPlatformB() {
-		if ((this.tramOnPlatformB != null) && this.arrivalTimePlatformB
-				.isBefore(EventScheduler.get().getCurrentTime().minus(Simulation.TURN_AROUND_DURATION))) {
+		final LocalTime lastPossibleArrivalTime = EventScheduler.get().getCurrentTime()
+				.minus(Simulation.TURN_AROUND_DURATION);
+
+		if ((this.tramOnPlatformB != null) && (this.arrivalTimePlatformB.equals(lastPossibleArrivalTime)
+				|| this.arrivalTimePlatformB.isBefore(lastPossibleArrivalTime))) {
 			return true;
 		}
 		return false;
