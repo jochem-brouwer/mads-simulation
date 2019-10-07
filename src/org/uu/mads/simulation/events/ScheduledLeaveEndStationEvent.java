@@ -6,12 +6,12 @@ import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.EndStation;
 
 public class ScheduledLeaveEndStationEvent extends Event {
-	private static final int PRIORITY = 1;
+	private static final int LOW_PRIORITY = 1;
 
 	private final EndStation endStation;
 
 	public ScheduledLeaveEndStationEvent(final EndStation endStation) {
-		super(PRIORITY);
+		super(LOW_PRIORITY);
 		this.endStation = endStation;
 	}
 

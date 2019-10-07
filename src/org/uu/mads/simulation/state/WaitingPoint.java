@@ -47,7 +47,7 @@ public class WaitingPoint {
 		return getNextTramWaiting() != null;
 	}
 
-	private Tram getNextTramWaiting() {
+	public Tram getNextTramWaiting() {
 		final int targetID = this.lastTramLeftWaitingPoint + 1;
 		for (final Tram tram : this.waitingTrams) {
 			if (tram.getId() == targetID) {

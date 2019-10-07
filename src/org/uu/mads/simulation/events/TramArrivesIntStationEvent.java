@@ -8,12 +8,11 @@ import org.uu.mads.simulation.state.Passenger;
 import org.uu.mads.simulation.state.Tram;
 
 public class TramArrivesIntStationEvent extends Event {
-	private static final int PRIORITY = 2;
 	private final IntPlatform intPlatform;
 	private final Tram tram;
 
 	public TramArrivesIntStationEvent(final IntPlatform intPlatform, final Tram tram) {
-		super(PRIORITY);
+		super();
 		this.intPlatform = intPlatform;
 		this.tram = tram;
 	}

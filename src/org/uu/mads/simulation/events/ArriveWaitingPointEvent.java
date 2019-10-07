@@ -9,11 +9,12 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class ArriveWaitingPointEvent extends Event {
+	private final static int HIGH_PRIORITY = 2;
 	private final WaitingPoint waitingPoint;
 	private final Tram tram;
 
 	public ArriveWaitingPointEvent(final WaitingPoint waitingPoint, final Tram tram) {
-		super();
+		super(HIGH_PRIORITY);
 		this.waitingPoint = waitingPoint;
 		this.tram = tram;
 	}
@@ -30,7 +31,7 @@ public class ArriveWaitingPointEvent extends Event {
 	public void fire() {
 		this.waitingPoint.addTram(this.tram);
 
-		final Tram nextTram = this.waitingPoint.popNextTramWaiting();
+		final Tram nextTram = this.waitingPoint.getNextTramWaiting();
 
 		if (nextTram != null) {
 			// The tram with the correct id to leave next has already arrived
