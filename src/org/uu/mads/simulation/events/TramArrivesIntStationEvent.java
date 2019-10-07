@@ -44,7 +44,7 @@ public class TramArrivesIntStationEvent extends Event {
 
 		System.out.println("Tram " + this.tram.getId() + " is arriving at platform " + this.intPlatform.getName() +
 				", dumps " + passengersOut + " passengers and loads " + passengersIn + " passengers.");
-		System.out.println("The dwell time is " + dwellTime + " seconds." );
+		System.out.println("The dwell time is " + (int)(dwellTime.getSeconds()) + " seconds." );
 
 		EventScheduler.get().scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
 	}
