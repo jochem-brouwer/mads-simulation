@@ -5,6 +5,7 @@ import java.time.LocalTime;
 
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Simulation;
+import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
 
 public class EndStation extends Platform {
 	private final Junction junction;
@@ -38,8 +39,11 @@ public class EndStation extends Platform {
 	}
 
 	public void setTramOnPlatformA(final Tram tramOnPlatformA) {
+		System.out.println("OCCUPY A");
 		this.tramOnPlatformA = tramOnPlatformA;
 		this.arrivalTimePlatformA = EventScheduler.get().getCurrentTime();
+		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 
+		EventScheduler.get().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
 	}
 
 	public Tram getTramOnPlatformB() {
@@ -47,8 +51,11 @@ public class EndStation extends Platform {
 	}
 
 	public void setTramOnPlatformB(final Tram tramOnPlatformB) {
+		System.out.println("OCCUPY B");
 		this.tramOnPlatformB = tramOnPlatformB;
 		this.arrivalTimePlatformB = EventScheduler.get().getCurrentTime();
+		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 
+		EventScheduler.get().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
 	}
 
 	public LocalTime getArrivalTimePlatformA() {

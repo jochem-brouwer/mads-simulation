@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
+import org.uu.mads.simulation.events.TryOccupyJunctionEvent;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
@@ -142,5 +143,6 @@ public class Simulation {
 		// Add trams
 		int tramId = 1;
 		uithofEndStation.setTramOnPlatformA(new Tram(tramId++, 0));
+		
 	}
 }
