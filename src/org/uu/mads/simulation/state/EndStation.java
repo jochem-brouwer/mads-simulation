@@ -87,11 +87,13 @@ public class EndStation extends Platform {
 	public void departFromPlatformA() {
 		this.tramOnPlatformA = null;
 		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
+		// TODO: Collect delays for punctuality performance measure
 	}
 
 	public void departFromPlatformB() {
 		this.tramOnPlatformB = null;
 		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
+		// TODO: Collect delays for punctuality performance measure
 	}
 
 	@Override
