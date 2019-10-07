@@ -9,7 +9,6 @@ import org.uu.mads.simulation.Simulation;
 public class EndStation extends Platform {
 	public static final Duration TURN_AROUND_DURATION = Simulation.TURN_AROUND;
 
-	private final String name;
 	private final Junction junction;
 	private LocalTime nextScheduledLeave;
 	private Tram tramOnPlatformA;
@@ -18,16 +17,10 @@ public class EndStation extends Platform {
 	private LocalTime arrivalTimePlatformB;
 
 	public EndStation(final String name, final Junction junction, final LocalTime nextScheduledLeave,
-			final Duration averageTravelTime, final WaitingPoint nextWaitingPoint,
-			final WaitingPoint lastWaitingPoint) {
-		super(averageTravelTime, nextWaitingPoint, lastWaitingPoint);
-		this.name = name;
+			final Duration averageTravelTime) {
+		super(name, averageTravelTime);
 		this.junction = junction;
 		this.nextScheduledLeave = nextScheduledLeave;
-	}
-
-	public String getName() {
-		return this.name;
 	}
 
 	public LocalTime getNextScheduledLeave() {
@@ -97,9 +90,8 @@ public class EndStation extends Platform {
 	}
 
 	@Override
-	// TODO: Update with inherited attributes?
 	public String toString() {
-		return "EndStation [name=" + this.name + ", nextScheduledLeave=" + this.nextScheduledLeave
+		return "EndStation [junction=" + this.junction + ", nextScheduledLeave=" + this.nextScheduledLeave
 				+ ", tramOnPlatformA=" + this.tramOnPlatformA + ", tramOnPlatformB=" + this.tramOnPlatformB
 				+ ", arrivalTimePlatformA=" + this.arrivalTimePlatformA + ", arrivalTimePlatformB="
 				+ this.arrivalTimePlatformB + "]";

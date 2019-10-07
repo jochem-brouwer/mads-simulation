@@ -52,6 +52,7 @@ public class ArriveWaitingPointEvent extends Event {
 				final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
 						(IntPlatform) this.waitingPoint.getNextPlatform(), this.tram);
 				EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
+				this.waitingPoint.popNextTramWaiting();
 			}
 		}
 	}
