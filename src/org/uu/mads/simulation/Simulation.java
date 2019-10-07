@@ -37,9 +37,9 @@ public class Simulation {
 	}
 
 	public static void main(final String[] args) {
-		initializeState();
-
 		calculateCSLeave();
+
+		initializeState();
 
 		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationCentraalEvent = new ScheduledLeaveEndStationEvent(
 				centraalEndStation);
