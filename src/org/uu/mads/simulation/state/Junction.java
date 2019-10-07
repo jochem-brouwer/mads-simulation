@@ -1,5 +1,8 @@
 package org.uu.mads.simulation.state;
 
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
+
 public class Junction {
 	private Tram tramOnLaneInA;
 	private Tram tramOnLaneInB;
@@ -15,10 +18,12 @@ public class Junction {
 	}
 
 	public void setTramOnLaneInA(final Tram tramOnLaneInA) {
+		Simulation.log("Tram " + tramOnLaneInA.getId() + " occupies junction track In A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneInA = tramOnLaneInA;
 	}
 
 	public void removeTramOnLaneInA() {
+		Simulation.log("Tram " + this.tramOnLaneInA.getId() + " leaves junction track In A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneInA = null;
 	}
 
@@ -27,10 +32,12 @@ public class Junction {
 	}
 
 	public void setTramOnLaneInB(final Tram tramOnLaneInB) {
+		Simulation.log("Tram " + tramOnLaneInB.getId() + " occupies junction track In B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneInB = tramOnLaneInB;
 	}
 
 	public void removeTramOnLaneInB() {
+		Simulation.log("Tram " + this.tramOnLaneInB.getId() + " leaves junction track In B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneInB = null;
 	}
 
@@ -39,10 +46,12 @@ public class Junction {
 	}
 
 	public void setTramOnLaneOutA(final Tram tramOnLaneOutA) {
+		Simulation.log("Tram " + tramOnLaneOutA.getId() + " occupies junction track Out A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneOutA = tramOnLaneOutA;
 	}
 
 	public void removeTramOnLaneOutA() {
+		Simulation.log("Tram " + this.tramOnLaneOutA.getId() + " leaves junction track Out A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneOutA = null;
 	}
 
@@ -51,10 +60,12 @@ public class Junction {
 	}
 
 	public void setTramOnLaneOutB(final Tram tramOnLaneOutB) {
+		Simulation.log("Tram " + tramOnLaneOutB.getId() + " occupies junction track Out B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneOutB = tramOnLaneOutB;
 	}
 
 	public void removeTramOnLaneOutB() {
+		Simulation.log("Tram " + this.tramOnLaneOutB.getId() + " leaves junction track Out B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnLaneOutB = null;
 	}
 

@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Passenger;
 import org.uu.mads.simulation.state.Tram;
@@ -42,10 +43,11 @@ public class TramArrivesIntStationEvent extends Event {
 		final TramLeavesIntStationEvent tramLeavesIntermediateEvent = new TramLeavesIntStationEvent(
 				this.intPlatform, this.tram);
 
-		System.out.println("Tram " + this.tram.getId() + " is arriving at platform " + this.intPlatform.getName() +
-				" at " + EventScheduler.get().getCurrentTime() + ", dumps " + passengersOut + " passengers and loads " + passengersIn + " passengers.");
+		//System.out.println("Tram " + this.tram.getId() + " is arriving at platform " + this.intPlatform.getName() +
+		//		" at " + EventScheduler.get().getCurrentTime() + ", dumps " + passengersOut + " passengers and loads " + passengersIn + " passengers.");
 		//System.out.println("The dwell time is " + (int)(dwellTime.getSeconds()) + " seconds." );
-
+		Simulation.log("Tram " + this.tram.getId() + " arrived at " + this.intPlatform.getName() + " at " + EventScheduler.get().getCurrentTime());
+		
 		EventScheduler.get().scheduleEventAhead(tramLeavesIntermediateEvent, dwellTime);
 	}
 

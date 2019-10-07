@@ -4,6 +4,7 @@ import java.time.Duration;
 import java.util.List;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Passenger;
 import org.uu.mads.simulation.state.Platform;
@@ -47,7 +48,7 @@ public class TramLeavesIntStationEvent extends Event {
 		//		" and schedules a new arrival event at platform " +
 		//		this.intPlatform.getNextWaitingPoint().getNextPlatform().getName() + " after travel time " +
 		//		travelTime + ".");
-
+		Simulation.log("Tram " + this.tram.getId() + " leaves " + this.intPlatform.getName() + " at " + EventScheduler.get().getCurrentTime());
 	}
 
 	@Override

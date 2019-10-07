@@ -44,6 +44,7 @@ public class EndStation extends Platform {
 		this.arrivalTimePlatformA = EventScheduler.get().getCurrentTime();
 		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 
 		EventScheduler.get().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
+		Simulation.log("Tram " + tramOnPlatformA.getId() + " arrived at " + this.getName() + " platform A at " + EventScheduler.get().getCurrentTime());
 	}
 
 	public Tram getTramOnPlatformB() {
@@ -56,6 +57,7 @@ public class EndStation extends Platform {
 		this.arrivalTimePlatformB = EventScheduler.get().getCurrentTime();
 		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 
 		EventScheduler.get().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
+		Simulation.log("Tram " + tramOnPlatformB.getId() + " arrived at " + this.getName() + " platform B at " + EventScheduler.get().getCurrentTime());
 	}
 
 	public LocalTime getArrivalTimePlatformA() {
@@ -89,12 +91,14 @@ public class EndStation extends Platform {
 	}
 
 	public void departFromPlatformA() {
+		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + this.getName() + " platform A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformA = null;
 		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
 		// TODO: Collect delays for punctuality performance measure
 	}
 
 	public void departFromPlatformB() {
+		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + this.getName() + " platform B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformB = null;
 		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
 		// TODO: Collect delays for punctuality performance measure
