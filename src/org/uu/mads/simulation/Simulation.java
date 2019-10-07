@@ -53,6 +53,7 @@ public class Simulation {
 
 		while (!EventScheduler.get().getScheduledEventsByTime().isEmpty()) { // TODO: We need better end conditions
 			EventScheduler.get().fireNextEvent();
+			System.out.println(EventScheduler.get().getScheduledEventsByTime());
 		}
 	}
 
