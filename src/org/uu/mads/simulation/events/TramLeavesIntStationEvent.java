@@ -43,6 +43,11 @@ public class TramLeavesIntStationEvent extends Event {
 		final PlatformFreeEvent platformFreeEvent = new PlatformFreeEvent(this.intPlatform);
 		EventScheduler.get().scheduleEventAhead(platformFreeEvent, platformFreeTime);
 
+		System.out.println("Tram " + this.tram.getId() + " leaves the platform " + this.intPlatform +
+				" and schedules a new arrival event at platform " +
+				this.intPlatform.getNextWaitingPoint().getNextPlatform().getName() + " after travel time " +
+				travelTime + ".");
+
 	}
 
 	@Override

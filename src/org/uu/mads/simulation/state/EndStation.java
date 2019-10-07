@@ -7,7 +7,7 @@ import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Simulation;
 
 public class EndStation extends Platform {
-	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(3);
+	public static final Duration TURN_AROUND_DURATION = Simulation.TURN_AROUND;
 
 	private final String name;
 	private final Junction junction;

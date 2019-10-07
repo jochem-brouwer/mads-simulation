@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.util.Objects;
 
 public class Tram {
-	public static final int CAPACITY = 400; // TODO May change.
+	public static final int CAPACITY = 420; // Is fixed.
 
 	private final int id;
 	private int numOfPassengers;
