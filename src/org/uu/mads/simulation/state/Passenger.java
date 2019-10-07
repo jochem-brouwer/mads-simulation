@@ -1,16 +1,17 @@
 package org.uu.mads.simulation.state;
 
+import java.time.LocalTime;
+
 public class Passenger {
-	private double arrivalTimePlatform;
 
-	public static int calculatePassengers(final EndStation endStation) {
-		return 0; // TODO change
-	}
+	private LocalTime arrivalTimePlatform;
+	private LocalTime leaveTimePlatform;
+	private Platform platform;
 
-  // I put this function into the IntPlatform class.
-  /*public static int calculatePassengers(final IntPlatform platform) {
-	  return 0; // TODO change
-  }*/
+	public Passenger(LocalTime arrivalTimePlatform, Platform platform) {
+	    this.arrivalTimePlatform = arrivalTimePlatform;
+	    this.platform = platform;
+    }
 
     @Override
     public String toString() {

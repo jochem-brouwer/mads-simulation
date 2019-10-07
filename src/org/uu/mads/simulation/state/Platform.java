@@ -1,12 +1,13 @@
 package org.uu.mads.simulation.state;
 
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
+
 import java.time.Duration;
 import java.time.LocalTime;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class Platform {
 	private final Duration averageTravelTime;
@@ -20,6 +21,7 @@ public class Platform {
 		this.averageTravelTime = averageTravelTime;
 		this.nextWaitingPoint = nextWaitingPoint;
 		this.lastWaitingPoint = lastWaitingPoint;
+		this.lastPassengersCalc = Simulation.FIRST_PASSENGER_CALC;
 	}
 
 	// returns travel duration of this platform to the next platform
@@ -66,6 +68,58 @@ public class Platform {
 			addWaitingPassenger(waitingPassenger);
 		}
 		return this.waitingPassengers;
+	}
+
+	public void calculatePassengers() {
+		double rate = EventScheduler.get().getPassengerRate();
+		long passedTime = (SECONDS.between(EventScheduler.get().getCurrentTime(), this.lastPassengersCalc));
+		long numberOfPassengers = (int)(passedTime * rate);
+		System.out.println("Number of passengers on Platform :" + numberOfPassengers);
+
+		Random random = new Random();
+
+		// We generate a new passenger with its own arrival time. The passengers are stored in a list that can be
+		// accessed when a tram leaves a station.
+		for (int i = 0; i < passedTime; i++) {
+			int randomInt = random.nextInt(100);
+			if (rate > (randomInt / 100)) { // TODO depends on our poisson rate
+				Passenger passenger = new Passenger(this.lastPassengersCalc.plus(i, SECONDS), this);
+				addWaitingPassenger(passenger);
+			}
+		}
+		this.lastPassengersCalc = EventScheduler.get().getCurrentTime();
+	}
+
+	public int loadPassengers(Platform platform, Tram tram) {
+
+		int remainingCapacity = tram.getRemainingCapacity();
+		int numOfPassengers = tram.getNumOfPassengers();
+		int passengersIn = 0;
+
+		// We iterate through the list of passengers waiting at the platform
+		for (int i = 0; i < this.waitingPassengers.size(); i++) {
+
+			// If we still have capacity, we add the passenger to the tram and delete it from the platformList.
+			// Else, we break the loop.
+			if (remainingCapacity != 0) {
+				this.waitingPassengers.remove();
+				remainingCapacity--;
+				numOfPassengers++;
+				passengersIn++;
+			} else { break; }
+		}
+		// We set the number of passengers to the tram.
+		tram.setNumOfPassengers(numOfPassengers);
+		return passengersIn;
+	}
+
+	public int dumpPassengers(Tram tram) {
+		// This functions calculates the number of passengers leaving the tram and removes them from the tram number.
+		double dumpingPercentage = 0.5; // TODO: This percentage is calculated using the input analysis?
+		int numOfPassengers = tram.getNumOfPassengers();
+		int passengersOut = (int)(numOfPassengers * dumpingPercentage);
+		tram.setNumOfPassengers(numOfPassengers - passengersOut);
+		return passengersOut;
 	}
 
 	@Override

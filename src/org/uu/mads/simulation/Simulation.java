@@ -4,7 +4,9 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 public class Simulation {
-	public static final LocalTime FIRST_TRAM_LEAVE_TIME = LocalTime.of(7, 0); // TODO: Adapt
+	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
+	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
+	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_CS = LocalTime.of(6, 0); // TODO: Adapt
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofMinutes(5); // TODO: Adapt
 
 	public static void main(final String[] args) {
