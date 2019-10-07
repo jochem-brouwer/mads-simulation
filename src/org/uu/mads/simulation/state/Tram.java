@@ -31,7 +31,7 @@ public class Tram {
 
 	// loads/unloads passengers on a platform and returns the dwell time of the tram
 	public Duration calculateDwellTime(final IntPlatform platform, int passengersIn, int passengersOut) {
-		Duration dwellTime = Duration.ofSeconds((long)(12.5 + (0.22 * passengersIn) + (0.13 * passengersOut)));
+		Duration dwellTime = Duration.ofMillis((long)(12.5 + (0.22 * passengersIn) + (0.13 * passengersOut)));
 		return dwellTime; // TODO add a stochastic distribution.
 	}
 
