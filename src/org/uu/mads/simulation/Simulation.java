@@ -7,6 +7,7 @@ import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
+import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
@@ -137,5 +138,9 @@ public class Simulation {
 		gwPlatformB.setNextWaitingPoint(vrWaitingPointPlB);
 		vrPlatformB.setLastWaitingPoint(gwWaitingPointPlB);
 		vrPlatformB.setNextWaitingPoint(centraalWaitingPoint);
+
+		// Add trams
+		int tramId = 1;
+		uithofEndStation.setTramOnPlatformA(new Tram(tramId++, 0));
 	}
 }
