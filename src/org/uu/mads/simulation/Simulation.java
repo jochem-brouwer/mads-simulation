@@ -18,7 +18,7 @@ public class Simulation {
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(225); // This is 3.75 minutes with 16 trams
-	public static final int NUMBER_OF_TRAMS = 15;
+	public static final int NUMBER_OF_TRAMS = 3;
 
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
@@ -145,6 +145,6 @@ public class Simulation {
 		int tramId = 1;
 		uithofEndStation.setTramOnPlatformA(new Tram(tramId++, 0));
 		uithofEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
-		
+		centraalEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
 	}
 }

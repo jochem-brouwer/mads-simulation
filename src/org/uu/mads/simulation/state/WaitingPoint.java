@@ -23,12 +23,7 @@ public class WaitingPoint {
 		this.waitingTrams.add(tram);
 	}
 
-	public void removeTram(final Tram tram) {
-		final boolean hasRemoved = this.waitingTrams.remove(tram);
-		if (hasRemoved) {
-			this.lastTramLeftWaitingPoint = tram.getId();
-		}
-	}
+
 
 	/**
 	 * Gets the next tram from the set of the waiting trams if it fits the correct
@@ -41,6 +36,7 @@ public class WaitingPoint {
 		final Tram nextTramWaiting = getNextTramWaiting();
 		if (nextTramWaiting != null) {
 			this.waitingTrams.remove(nextTramWaiting);
+			this.lastTramLeftWaitingPoint = nextTramWaiting.getId();
 		}
 		return nextTramWaiting;
 	}
