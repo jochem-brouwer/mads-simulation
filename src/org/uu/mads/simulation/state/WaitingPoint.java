@@ -10,7 +10,7 @@ public class WaitingPoint {
 	private final Set<Tram> waitingTrams = new HashSet<>();
 	private int lastTramLeftWaitingPoint = 0;
 
-	public WaitingPoint(final IntPlatform nextPlatform) {
+	public WaitingPoint(final Platform nextPlatform) {
 		super();
 		this.nextPlatform = nextPlatform;
 	}
