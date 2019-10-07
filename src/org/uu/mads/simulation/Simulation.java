@@ -3,6 +3,7 @@ package org.uu.mads.simulation;
 import java.time.Duration;
 import java.time.LocalTime;
 
+import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
@@ -15,15 +16,34 @@ public class Simulation {
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofMinutes(5); // TODO: Adapt
 	public static final int NUMBER_OF_TRAMS = 15;
 
+	private static EndStation centraalEndStation;
+	private static EndStation uithofEndStation;
+
 	public static void main(final String[] args) {
 
+		initializeState();
+
+		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationCentraalEvent = new ScheduledLeaveEndStationEvent(
+				centraalEndStation);
+		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationUithofEvent = new ScheduledLeaveEndStationEvent(
+				uithofEndStation);
+
+		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationCentraalEvent, FIRST_SCHEDULED_LEAVE_TIME_CS);
+		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
+
+		while (!EventScheduler.get().getScheduledEventsByTime().isEmpty()) { // TODO: We need better end conditions
+			EventScheduler.get().fireNextEvent();
+		}
+	}
+
+	private static void initializeState() {
 		// Junctions
 		final Junction centraalJunction = new Junction();
 		final Junction uithofJunction = new Junction();
 
 		// Platforms Direction A -> Uithof
-		final EndStation centraalEndStation = new EndStation("Centraal Station", centraalJunction,
-				FIRST_SCHEDULED_LEAVE_TIME_CS, Duration.ofSeconds(134));
+		centraalEndStation = new EndStation("Centraal Station", centraalJunction, FIRST_SCHEDULED_LEAVE_TIME_CS,
+				Duration.ofSeconds(134));
 		final IntPlatform vrPlatformA = new IntPlatform("Vaartsche-Rijn-A", Duration.ofSeconds(243));
 		final IntPlatform gwPlatformA = new IntPlatform("Galgenwaard-A", Duration.ofSeconds(59));
 		final IntPlatform krPlatformA = new IntPlatform("Kromme-Rijn-A", Duration.ofSeconds(101));
@@ -33,8 +53,8 @@ public class Simulation {
 		final IntPlatform wkzPlatformA = new IntPlatform("WKZ-A", Duration.ofSeconds(113));
 
 		// Platforms Direction B -> Centraal
-		final EndStation uithofEndStation = new EndStation("P+R De Uithof", uithofJunction,
-				FIRST_SCHEDULED_LEAVE_TIME_PR, Duration.ofSeconds(110));
+		uithofEndStation = new EndStation("P+R De Uithof", uithofJunction, FIRST_SCHEDULED_LEAVE_TIME_PR,
+				Duration.ofSeconds(110));
 		final IntPlatform wkzPlatformB = new IntPlatform("WKZ-B", Duration.ofSeconds(78));
 		final IntPlatform umcPlatformB = new IntPlatform("UMC-B", Duration.ofSeconds(82));
 		final IntPlatform hlPlatformB = new IntPlatform("Heidelberglaan-B", Duration.ofSeconds(60));
@@ -98,11 +118,5 @@ public class Simulation {
 		gwPlatformB.setNextWaitingPoint(vrWaitingPointPlB);
 		vrPlatformB.setLastWaitingPoint(gwWaitingPointPlB);
 		vrPlatformB.setNextWaitingPoint(centraalWaitingPoint);
-
-		// TODO: Schedule initial Event
-
-		while (!EventScheduler.get().getScheduledEventsByTime().isEmpty()) { // TODO: We need better end conditions
-			EventScheduler.get().fireNextEvent();
-		}
 	}
 }
