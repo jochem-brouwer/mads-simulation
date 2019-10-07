@@ -39,7 +39,7 @@ public class EndStation extends Platform {
 	}
 
 	public void setTramOnPlatformA(final Tram tramOnPlatformA) {
-		System.out.println("OCCUPY A");
+		//System.out.println("OCCUPY A");
 		this.tramOnPlatformA = tramOnPlatformA;
 		this.arrivalTimePlatformA = EventScheduler.get().getCurrentTime();
 		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 
@@ -51,7 +51,7 @@ public class EndStation extends Platform {
 	}
 
 	public void setTramOnPlatformB(final Tram tramOnPlatformB) {
-		System.out.println("OCCUPY B");
+		//System.out.println("OCCUPY B");
 		this.tramOnPlatformB = tramOnPlatformB;
 		this.arrivalTimePlatformB = EventScheduler.get().getCurrentTime();
 		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 

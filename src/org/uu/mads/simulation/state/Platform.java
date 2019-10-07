@@ -94,7 +94,7 @@ public class Platform {
 		final double rate = EventScheduler.get().getPassengerRate();
 		final long passedTime = (SECONDS.between(EventScheduler.get().getCurrentTime(), this.lastPassengersCalc));
 		final long numberOfPassengers = (int) (passedTime * rate);
-		System.out.println("Number of passengers on Platform :" + numberOfPassengers);
+		//System.out.println("Number of passengers on Platform :" + numberOfPassengers);
 
 		final Random random = new Random();
 

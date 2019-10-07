@@ -52,9 +52,9 @@ public class Simulation {
 		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
 		// TODO: Schedule initial Event
 
-		while (!EventScheduler.get().getScheduledEventsByTime().isEmpty()) { // TODO: We need better end conditions
+		while (LocalTime.of(12, 0).isAfter(EventScheduler.get().getCurrentTime())) { // TODO: We need better end conditions
 			EventScheduler.get().fireNextEvent();
-			System.out.println(EventScheduler.get().getScheduledEventsByTime());
+			//System.out.println(EventScheduler.get().getScheduledEventsByTime());
 		}
 	}
 
@@ -144,6 +144,7 @@ public class Simulation {
 		// Add trams
 		int tramId = 1;
 		uithofEndStation.setTramOnPlatformA(new Tram(tramId++, 0));
+		uithofEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
 		
 	}
 }
