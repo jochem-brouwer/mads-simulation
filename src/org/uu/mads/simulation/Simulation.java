@@ -38,8 +38,8 @@ public class Simulation {
 			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
 		}
 
-		//System.out.println("First scheduled leave at PR: " + FIRST_SCHEDULED_LEAVE_TIME_PR);
-		//System.out.println("First scheduled leave at CS: " + firstRound);
+		// System.out.println("First scheduled leave at PR: " + FIRST_SCHEDULED_LEAVE_TIME_PR);
+		// System.out.println("First scheduled leave at CS: " + firstRound);
 		firstScheduledLeaveTimeCS = firstRound;
 	}
 	
@@ -76,13 +76,20 @@ public class Simulation {
 	
 	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the waiting point at Uithof before the junction at the given
 	// SIMULATION_START_TIME
-	private static void tramFactory(WaitingPoint uithofWaitingPoint) {
-		int tramId = 1;
-		for (int i = 0; i < Simulation.NUMBER_OF_TRAMS; i++) {
+	private static void tramFactory(WaitingPoint cs, WaitingPoint uit) {
+		int tramId = 0;
+		for (int i = tramId; i < Simulation.NUMBER_OF_TRAMS / 2; i++) {
 			Tram newTram = new Tram(tramId++, 0);
-			ArriveWaitingPointEvent arriveWaitingPointUithof = new ArriveWaitingPointEvent(uithofWaitingPoint, newTram);
-			EventScheduler.get().scheduleEventAhead(arriveWaitingPointUithof, Duration.ZERO);
+			ArriveWaitingPointEvent arriveWaitingPointUithofEvent = new ArriveWaitingPointEvent(cs, newTram);
+			EventScheduler.get().scheduleEventAhead(arriveWaitingPointUithofEvent, Duration.ZERO);
 		}
+		uit.setLastTramLeftWaitingPoint(tramId);
+		for (int i = tramId; i < Simulation.NUMBER_OF_TRAMS; i++) {
+			Tram newTram = new Tram(tramId++, 0);
+			ArriveWaitingPointEvent arriveWaitingPointCSEvent = new ArriveWaitingPointEvent(uit, newTram);
+			EventScheduler.get().scheduleEventAhead(arriveWaitingPointCSEvent, Duration.ZERO);
+		}
+
 	}
 
 	private static void initializeState() {
@@ -174,6 +181,6 @@ public class Simulation {
 		//uithofEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
 		//centraalEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
 		
-		tramFactory(uithofWaitingPoint);
+		tramFactory(centraalWaitingPoint, uithofWaitingPoint);
 	}
 }

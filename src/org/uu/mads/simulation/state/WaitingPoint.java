@@ -15,6 +15,10 @@ public class WaitingPoint {
 		this.nextPlatform = nextPlatform;
 	}
 
+	public void setLastTramLeftWaitingPoint(int lastTramLeftWaitingPoint) {
+		this.lastTramLeftWaitingPoint = lastTramLeftWaitingPoint;
+	}
+
 	public Platform getNextPlatform() {
 		return this.nextPlatform;
 	}

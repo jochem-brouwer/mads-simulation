@@ -21,8 +21,7 @@ public class ScheduledLeaveEndStationEvent extends Event {
 
 	@Override
 	public void fire() {
-		if (this.endStation.getNextScheduledLeave().equals(EventScheduler.get().getCurrentTime())
-				|| this.endStation.getNextScheduledLeave().isBefore(EventScheduler.get().getCurrentTime())) {
+		if (this.endStation.isNextScheduledLeaveDue()) {
 			//System.out.println("The schedule demands a tram to leave from end station " + this.endStation + ".");
 			//System.out.println("Requesting to use junction.");
 			final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(this.endStation);

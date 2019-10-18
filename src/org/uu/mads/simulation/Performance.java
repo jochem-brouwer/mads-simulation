@@ -42,7 +42,7 @@ public class Performance {
 
         // We check if the delay is bigger than 1 minute. If so, we add one delay to total_delays and add the amount
         // to total_delay_time.
-        if (delay.compareTo(Duration.ofMinutes(1)) >= 0) {
+        if (delay.compareTo(Duration.ofMinutes(1)) >= 0 && (delay.isNegative() == false)) {
             this.total_delay_time = this.total_delay_time.plus(delay);
             if (delay.compareTo(this.maximum_delay) >= 0) {
                 this.maximum_delay = delay;

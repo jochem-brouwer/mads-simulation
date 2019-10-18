@@ -75,7 +75,7 @@ public class TryOccupyJunctionEvent extends Event {
 
 	private void useJunctionForDeparture() {
 		final Junction junction = this.endStation.getJunction();
-		if (!junction.isJunctionUsed()) {
+		if (!junction.isJunctionUsed() && this.endStation.isNextScheduledLeaveDue()) {
 			//System.out.println("The junction of the end station " + this.endStation.getName() + " is currently free.");
 			if (this.endStation.isTramReadyOnPlatformA()) {
 				// We send the tram from platform A to the junction
