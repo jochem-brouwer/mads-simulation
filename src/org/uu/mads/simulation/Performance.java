@@ -44,6 +44,9 @@ public class Performance {
         // to total_delay_time.
         if (delay.compareTo(Duration.ofMinutes(1)) >= 0) {
             this.total_delay_time = this.total_delay_time.plus(delay);
+            if (delay.compareTo(this.maximum_delay) >= 0) {
+                this.maximum_delay = delay;
+            }
             this.total_delays += 1;
         }
     }
@@ -70,6 +73,8 @@ public class Performance {
         System.out.println("Total delay amount: " + this.total_delay_time.getSeconds());
 
         System.out.println("Average delay time: (total delay amount / total delays): " + this.average_delay.getSeconds());
+
+        System.out.println("Maximum delay: " + this.maximum_delay.toSeconds());
 
         System.out.println("Total departure delays: " + this.total_delays);
         System.out.println("Total departures: " + this.total_departures);

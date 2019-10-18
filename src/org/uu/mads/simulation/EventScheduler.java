@@ -69,8 +69,9 @@ public class EventScheduler {
 				final Event scheduledEvent = scheduledEvents.get(i);
 				if (scheduledEvent.getPriority() < event.getPriority()) {
 					scheduledEvents.add(i, event);
-				//	System.out.println("Event " + event + " has been scheduled at " + eventTime + " at position " + i
-				//			+ " in the event list for that time.");
+					break;
+					//System.out.println("Event " + event + " has been scheduled at " + eventTime + " at position " + i
+					//		+ " in the event list for that time.");
 				}
 			}
 			if (!scheduledEvents.contains(event)) {
