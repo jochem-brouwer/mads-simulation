@@ -18,12 +18,14 @@ public class EndStation extends Platform {
 	private Tram tramOnPlatformB;
 	private LocalTime arrivalTimePlatformA;
 	private LocalTime arrivalTimePlatformB;
+	private int lastTramLeftId;
 
 	public EndStation(final String name, final Junction junction, final LocalTime nextScheduledLeave,
 			final Duration averageTravelTime) {
 		super(name, averageTravelTime);
 		this.junction = junction;
 		this.nextScheduledLeave = nextScheduledLeave;
+		this.lastTramLeftId = 0;
 	}
 
 	public LocalTime getNextScheduledLeave() {
@@ -37,6 +39,10 @@ public class EndStation extends Platform {
 	public void setNextScheduledLeave(final LocalTime nextScheduledLeave) {
 		this.nextScheduledLeave = nextScheduledLeave;
 	}
+
+	public int getLastTramLeft() { return this.lastTramLeftId; }
+
+	public void setLastTramLeft(int id) { this.lastTramLeftId = id; }
 
 	public Tram getTramOnPlatformA() {
 		return this.tramOnPlatformA;
@@ -99,17 +105,19 @@ public class EndStation extends Platform {
 				|| this.nextScheduledLeave.isBefore(EventScheduler.get().getCurrentTime()));
 	}
 
+	public boolean checkForOrder(Tram tram) {
+		return tram.getId() == (this.getLastTramLeft() % Simulation.NUMBER_OF_TRAMS + 1);
+	}
+
 	public void departFromPlatformA() {
 		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + this.getName() + " platform A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformA = null;
 		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
-		System.out.println(this.nextScheduledLeave.toString());
-		System.out.println(EventScheduler.get().getCurrentTime());
+		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
 		System.out.println("Delay: " + delay.toSeconds());
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
-		System.out.println(this.nextScheduledLeave.toString());
-
-		// TODO: Collect delays for punctuality performance measures
+		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		Performance.get().addDelay(delay);
 	}
 
@@ -117,12 +125,11 @@ public class EndStation extends Platform {
 		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + this.getName() + " platform B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformB = null;
 		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
-		System.out.println(this.nextScheduledLeave.toString());
-		System.out.println(EventScheduler.get().getCurrentTime());
+		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
 		System.out.println("Delay: " + delay.toSeconds());
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
-		System.out.println(this.nextScheduledLeave.toString());
-		// TODO: Collect delays for punctuality performance measure
+		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		Performance.get().addDelay(delay);
 	}
 

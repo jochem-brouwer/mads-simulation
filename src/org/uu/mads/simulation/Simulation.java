@@ -77,18 +77,21 @@ public class Simulation {
 	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the waiting point at Uithof before the junction at the given
 	// SIMULATION_START_TIME
 	private static void tramFactory(WaitingPoint cs, WaitingPoint uit) {
-		int tramId = 0;
-		for (int i = tramId; i < Simulation.NUMBER_OF_TRAMS / 2; i++) {
-			Tram newTram = new Tram(tramId++, 0);
+		int tramId = 1;
+		for (int i = 0; i < Simulation.NUMBER_OF_TRAMS/2; i++) {
+			Tram newTram = new Tram(tramId, 0);
 			ArriveWaitingPointEvent arriveWaitingPointUithofEvent = new ArriveWaitingPointEvent(cs, newTram);
 			EventScheduler.get().scheduleEventAhead(arriveWaitingPointUithofEvent, Duration.ZERO);
+			tramId += 1;
 		}
-		uit.setLastTramLeftWaitingPoint(tramId);
-		for (int i = tramId; i < Simulation.NUMBER_OF_TRAMS; i++) {
-			Tram newTram = new Tram(tramId++, 0);
+		uit.setLastTramLeftWaitingPoint(tramId - 1);
+		for (int i = Simulation.NUMBER_OF_TRAMS/2; i < Simulation.NUMBER_OF_TRAMS; i++) {
+			Tram newTram = new Tram(tramId, 0);
 			ArriveWaitingPointEvent arriveWaitingPointCSEvent = new ArriveWaitingPointEvent(uit, newTram);
 			EventScheduler.get().scheduleEventAhead(arriveWaitingPointCSEvent, Duration.ZERO);
+			tramId += 1;
 		}
+		// cs.setLastTramLeftWaitingPoint(0);
 
 	}
 
@@ -100,6 +103,7 @@ public class Simulation {
 		// Platforms Direction A -> Uithof
 		centraalEndStation = new EndStation("Centraal Station", centraalJunction, firstScheduledLeaveTimeCS,
 				Duration.ofSeconds(134));
+		centraalEndStation.setLastTramLeft(0);
 		final IntPlatform vrPlatformA = new IntPlatform("Vaartsche-Rijn-A", Duration.ofSeconds(243));
 		final IntPlatform gwPlatformA = new IntPlatform("Galgenwaard-A", Duration.ofSeconds(59));
 		final IntPlatform krPlatformA = new IntPlatform("Kromme-Rijn-A", Duration.ofSeconds(101));
@@ -111,6 +115,7 @@ public class Simulation {
 		// Platforms Direction B -> Centraal
 		uithofEndStation = new EndStation("P+R De Uithof", uithofJunction, FIRST_SCHEDULED_LEAVE_TIME_PR,
 				Duration.ofSeconds(110));
+		uithofEndStation.setLastTramLeft(8);
 		final IntPlatform wkzPlatformB = new IntPlatform("WKZ-B", Duration.ofSeconds(78));
 		final IntPlatform umcPlatformB = new IntPlatform("UMC-B", Duration.ofSeconds(82));
 		final IntPlatform hlPlatformB = new IntPlatform("Heidelberglaan-B", Duration.ofSeconds(60));

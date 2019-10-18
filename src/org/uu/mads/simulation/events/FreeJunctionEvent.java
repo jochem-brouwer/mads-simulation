@@ -77,7 +77,7 @@ public class FreeJunctionEvent extends Event {
 	private void scheduleScheduledLeaveEndStationEvent() {
 		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationEvent = new ScheduledLeaveEndStationEvent(
 				this.endStation);
-		EventScheduler.get().scheduleEventAhead(scheduledLeaveEndStationEvent, Simulation.TURN_AROUND_DURATION);
+		EventScheduler.get().scheduleEventAhead(scheduledLeaveEndStationEvent, Duration.ZERO);
 	}
 
 	private void scheduleArriveWaitingPointEvent() {
