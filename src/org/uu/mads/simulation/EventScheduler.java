@@ -15,7 +15,7 @@ public class EventScheduler {
 	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
 	private LocalTime currentTime = Simulation.FIRST_SCHEDULED_LEAVE_TIME_PR.minus(Simulation.TURN_AROUND_DURATION);
 
-	private double passengerRate;
+	private double passengerRate = 0.5;
 
 	private EventScheduler() {
 		// private constructor because this is a singleton

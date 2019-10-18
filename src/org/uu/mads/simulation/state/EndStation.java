@@ -4,8 +4,12 @@ import java.time.Duration;
 import java.time.LocalTime;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
+import org.uu.mads.simulation.events.Event;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
+
+import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class EndStation extends Platform {
 	private final Junction junction;
@@ -93,15 +97,19 @@ public class EndStation extends Platform {
 	public void departFromPlatformA() {
 		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + this.getName() + " platform A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformA = null;
-		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
-		// TODO: Collect delays for punctuality performance measure
+		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
+		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
+		// TODO: Collect delays for punctuality performance measures
+		Performance.get().addDelay(delay);
 	}
 
 	public void departFromPlatformB() {
 		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + this.getName() + " platform B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformB = null;
-		this.nextScheduledLeave = EventScheduler.get().getCurrentTime().plus(Simulation.TRAM_LEAVE_FREQUENCY);
+		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
+		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 		// TODO: Collect delays for punctuality performance measure
+		Performance.get().addDelay(delay);
 	}
 
 	@Override

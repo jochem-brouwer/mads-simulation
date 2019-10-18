@@ -14,14 +14,14 @@ import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
 
-	public static final int TRAMS_PER_HOUR = 16; // This is fixed during our simulation run.
+	// public static final int TRAMS_PER_HOUR = 16; // This is fixed during our simulation run.
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(225); // This is 3.75 minutes with 16 trams
-	public static final int NUMBER_OF_TRAMS = 3; // number of trams we want to deploy
+	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(5,20); // time where we start the simulation, e.g. when we deploy our trams to the network
-
+	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21,30); // time where we end the simulation;
 	public static final Boolean LOG_VERBOSE = true; // flag to enable/disable verbose logging
 	
 	
@@ -65,10 +65,13 @@ public class Simulation {
 		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
 		// TODO: Schedule initial Event
 
-		while (LocalTime.of(8, 0).isAfter(EventScheduler.get().getCurrentTime())) { // TODO: We need better end conditions
+		while (SIMULATION_END_TIME.isAfter(EventScheduler.get().getCurrentTime())) { // TODO: We need better end conditions
 			EventScheduler.get().fireNextEvent();
 			//System.out.println(EventScheduler.get().getScheduledEventsByTime());
 		}
+
+		Performance.get().calculateAverageWaitingTime();
+		Performance.get().calculateAveragePunctuality();
 	}
 	
 	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the waiting point at Uithof before the junction at the given

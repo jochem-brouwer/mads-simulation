@@ -12,6 +12,7 @@ import java.util.Random;
 import java.util.Set;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
 
 public class Platform {
@@ -92,9 +93,9 @@ public class Platform {
 
 	public void calculatePassengers() {
 		final double rate = EventScheduler.get().getPassengerRate();
-		final long passedTime = (SECONDS.between(EventScheduler.get().getCurrentTime(), this.lastPassengersCalc));
+		final long passedTime = (SECONDS.between(this.lastPassengersCalc, EventScheduler.get().getCurrentTime()));
 		final long numberOfPassengers = (int) (passedTime * rate);
-		//System.out.println("Number of passengers on Platform :" + numberOfPassengers);
+		System.out.println("Number of passengers on Platform :" + numberOfPassengers);
 
 		final Random random = new Random();
 
@@ -106,6 +107,10 @@ public class Platform {
 			if (rate > (randomInt / 100)) { // TODO depends on our poisson rate
 				final Passenger passenger = new Passenger(this.lastPassengersCalc.plus(i, SECONDS), this);
 				addWaitingPassenger(passenger);
+				Duration waitingTime = Duration.between(
+						this.lastPassengersCalc.plus(i, SECONDS), EventScheduler.get().getCurrentTime());
+				Performance.get().addPassenger(waitingTime);
+
 			}
 		}
 		this.lastPassengersCalc = EventScheduler.get().getCurrentTime();
@@ -144,6 +149,7 @@ public class Platform {
 		final int numOfPassengers = tram.getNumOfPassengers();
 		final int passengersOut = (int) (numOfPassengers * dumpingPercentage);
 		tram.setNumOfPassengers(numOfPassengers - passengersOut);
+
 		return passengersOut;
 	}
 
