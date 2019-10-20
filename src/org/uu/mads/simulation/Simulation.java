@@ -19,7 +19,7 @@ public class Simulation {
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
 	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
-	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds((int)(3600 / NUMBER_OF_TRAMS));
+	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds((3600 / NUMBER_OF_TRAMS));
 	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(5,20); // time where we start the simulation, e.g. when we deploy our trams to the network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21,30); // time where we end the simulation;
 	public static final Boolean LOG_VERBOSE = true; // flag to enable/disable verbose logging
