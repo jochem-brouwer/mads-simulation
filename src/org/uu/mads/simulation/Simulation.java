@@ -22,7 +22,7 @@ public class Simulation {
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
-	public static final int NUMBER_OF_TRAMS = 20; // number of trams we want to deploy
+	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
 	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(5, 20); // time where we start the simulation,
 																				// e.g. when we deploy our trams to the

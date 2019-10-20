@@ -37,6 +37,8 @@ public class ArriveWaitingPointEvent extends Event {
 		final Tram nextTram = this.waitingPoint.getNextTramWaiting();
 
 		if (nextTram != null) {
+			Simulation.log("Trams at " + this.waitingPoint + " are in correct order");
+
 			// The tram with the correct id to leave next has already arrived
 			if (this.waitingPoint.getNextPlatform() instanceof EndStation) {
 				// Next station is an end station -> Schedule TryOccupyJunction
@@ -53,7 +55,7 @@ public class ArriveWaitingPointEvent extends Event {
 				// for the intstation "
 				// + this.waitingPoint.getNextPlatform().getName() + ".");
 				final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
-						(IntPlatform) this.waitingPoint.getNextPlatform(), this.tram);
+						(IntPlatform) this.waitingPoint.getNextPlatform(), nextTram);
 				EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 				this.waitingPoint.popNextTramWaiting();
 			}

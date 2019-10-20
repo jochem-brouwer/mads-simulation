@@ -39,7 +39,7 @@ public class TramArrivesIntStationEvent extends Event {
 
 		final Duration dwellTime = this.tram.calculateDwellTime(this.intPlatform, passengersIn, passengersOut);
 
-		Simulation.logVerbose("The dwell time is " + (int) (dwellTime.getSeconds()) + " seconds.");
+		Simulation.log("The dwell time is " + (int) (dwellTime.getSeconds()) + " seconds.");
 
 		this.intPlatform.setOccupied();
 

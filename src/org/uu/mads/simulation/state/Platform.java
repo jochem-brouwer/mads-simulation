@@ -49,7 +49,7 @@ public class Platform {
 	 */
 	public Duration getTravelTimeToNextPlatform() {
 		final Duration travelTimeToNextPlatf = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
-		Simulation.log("Platform " + this.name + ": Travel final time to next platform is "
+		Simulation.log("Platform " + this.name + ": Travel time to next platform is "
 				+ travelTimeToNextPlatf.toSeconds() + " seconds.");
 		return travelTimeToNextPlatf;
 //		return this.avgTravelTimeToNextPlatf;
