@@ -13,10 +13,10 @@ public class EventScheduler {
 	private static EventScheduler instance = null;
 
 	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
-	private LocalTime currentTime = Simulation.FIRST_SCHEDULED_LEAVE_TIME_PR.minus(
-			Simulation.TURN_AROUND_DURATION.plus(Duration.ofMinutes(1)));
+	private LocalTime currentTime = Simulation.FIRST_SCHEDULED_LEAVE_TIME_PR
+			.minus(Simulation.TURN_AROUND_DURATION.plus(Duration.ofMinutes(1)));
 
-	private double passengerRate = 0.5;
+	private final double passengerRate = 0.5;
 
 	private EventScheduler() {
 		// private constructor because this is a singleton
@@ -42,8 +42,6 @@ public class EventScheduler {
 	}
 
 	public void fireNextEvent() {
-
-		// System.out.println(this.scheduledEventsByTime);
 		this.currentTime = this.scheduledEventsByTime.firstKey();
 		final List<Event> eventsForCurrentTime = this.scheduledEventsByTime.get(this.currentTime);
 		final Event nextEvent = eventsForCurrentTime.get(0);
@@ -58,36 +56,50 @@ public class EventScheduler {
 		}
 
 		nextEvent.fire();
-		// System.out.println("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
+		if (Simulation.LOG_VERBOSE) {
+			System.out.println("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
+		}
 	}
 
 	public void scheduleEvent(final Event event, final LocalTime eventTime) {
-		//System.out.println("Event " + event + " is to be scheduled at " + eventTime + ".");
+		if (Simulation.LOG_VERBOSE) {
+			System.out.println("Event " + event + " is to be scheduled at " + eventTime + ".");
+		}
 
 		final List<Event> scheduledEvents;
 		if (this.scheduledEventsByTime.containsKey(eventTime)) {
-			//System.out.println("There are already events scheduled at " + eventTime + ".");
+			if (Simulation.LOG_VERBOSE) {
+				System.out.println("There are already events scheduled at " + eventTime + ".");
+			}
 			scheduledEvents = this.scheduledEventsByTime.get(eventTime);
 			for (int i = 0; i < scheduledEvents.size(); i++) {
 				final Event scheduledEvent = scheduledEvents.get(i);
 				if (scheduledEvent.getPriority() < event.getPriority()) {
 					scheduledEvents.add(i, event);
+					if (Simulation.LOG_VERBOSE) {
+						System.out.println("Event " + event + " has been scheduled at " + eventTime + " at position "
+								+ i + " in the event list for that time.");
+					}
 					break;
-					//System.out.println("Event " + event + " has been scheduled at " + eventTime + " at position " + i
-					//		+ " in the event list for that time.");
 				}
 			}
 			if (!scheduledEvents.contains(event)) {
 				scheduledEvents.add(event);
-				//System.out.println("Event " + event + " has been scheduled at " + eventTime
-				//		+ " at the end of the event list for that time.");
+				if (Simulation.LOG_VERBOSE) {
+					System.out.println("Event " + event + " has been scheduled at " + eventTime
+							+ " at the end of the event list for that time.");
+				}
 			}
 		} else {
-			//System.out.println("There are no events scheduled at " + eventTime + " yet.");
+			if (Simulation.LOG_VERBOSE) {
+				System.out.println("There are no events scheduled at " + eventTime + " yet.");
+			}
 			scheduledEvents = new LinkedList<>();
 			scheduledEvents.add(event);
-			//System.out.println(
-			//		"Event " + event + " has been scheduled at " + eventTime + " in a new event list for that time.");
+			if (Simulation.LOG_VERBOSE) {
+				System.out.println("Event " + event + " has been scheduled at " + eventTime
+						+ " in a new event list for that time.");
+			}
 		}
 		this.scheduledEventsByTime.put(eventTime, scheduledEvents);
 	}

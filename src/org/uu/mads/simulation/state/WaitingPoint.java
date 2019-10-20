@@ -8,14 +8,11 @@ import org.uu.mads.simulation.Simulation;
 public class WaitingPoint {
 	private final Platform nextPlatform;
 	private final Set<Tram> waitingTrams = new HashSet<>();
-	private int lastTramLeftWaitingPoint = 0;
+	private int lastTramLeftWaitingPoint = -1;
 
-	public WaitingPoint(final Platform nextPlatform) {
+	public WaitingPoint(final Platform nextPlatform, final int lastTramLeftWaitingPoint) {
 		super();
 		this.nextPlatform = nextPlatform;
-	}
-
-	public void setLastTramLeftWaitingPoint(int lastTramLeftWaitingPoint) {
 		this.lastTramLeftWaitingPoint = lastTramLeftWaitingPoint;
 	}
 
@@ -26,8 +23,6 @@ public class WaitingPoint {
 	public void addTram(final Tram tram) {
 		this.waitingTrams.add(tram);
 	}
-
-
 
 	/**
 	 * Gets the next tram from the set of the waiting trams if it fits the correct
@@ -50,10 +45,9 @@ public class WaitingPoint {
 	}
 
 	public Tram getNextTramWaiting() {
-		final int targetID = (this.lastTramLeftWaitingPoint) % Simulation.NUMBER_OF_TRAMS + 1;
-		System.out.println(targetID);
+		final int targetID = (this.lastTramLeftWaitingPoint % Simulation.NUMBER_OF_TRAMS) + 1;
 		for (final Tram tram : this.waitingTrams) {
-			if (tram.getId() == targetID || targetID == 0) {
+			if (tram.getId() == targetID) {
 				return tram;
 			}
 		}

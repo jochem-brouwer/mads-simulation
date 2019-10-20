@@ -82,21 +82,18 @@ public class Simulation {
 	// SIMULATION_START_TIME
 	private static void tramFactory(final WaitingPoint cs, final WaitingPoint uit) {
 		int tramId = 1;
-		for (int i = 0; i < (Simulation.NUMBER_OF_TRAMS / 2); i++) {
+		for (int i = 0; i < (NUMBER_OF_TRAMS / 2); i++) {
 			final Tram newTram = new Tram(tramId, 0);
-			final ArriveWaitingPointEvent arriveWaitingPointUithofEvent = new ArriveWaitingPointEvent(cs, newTram);
-			EventScheduler.get().scheduleEventAhead(arriveWaitingPointUithofEvent, Duration.ZERO);
+			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(cs, newTram);
+			EventScheduler.get().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
 			tramId += 1;
 		}
-
-		for (int i = Simulation.NUMBER_OF_TRAMS / 2; i < Simulation.NUMBER_OF_TRAMS; i++) {
+		for (int i = NUMBER_OF_TRAMS / 2; i < NUMBER_OF_TRAMS; i++) {
 			final Tram newTram = new Tram(tramId, 0);
-			final ArriveWaitingPointEvent arriveWaitingPointCSEvent = new ArriveWaitingPointEvent(uit, newTram);
-			EventScheduler.get().scheduleEventAhead(arriveWaitingPointCSEvent, Duration.ZERO);
+			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(uit, newTram);
+			EventScheduler.get().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
 			tramId += 1;
 		}
-		// cs.setLastTramLeftWaitingPoint(0);
-
 	}
 
 	private static void initializeState() {
@@ -129,24 +126,24 @@ public class Simulation {
 		final IntPlatform vrPlatformB = new IntPlatform("Vaartsche-Rijn-B", Duration.ofSeconds(135));
 
 		// Waiting Points Direction A -> Uithof
-		final WaitingPoint vrWaitingPointPlA = new WaitingPoint(vrPlatformA);
-		final WaitingPoint gwWaitingPointPlA = new WaitingPoint(gwPlatformA);
-		final WaitingPoint krWaitingPointPlA = new WaitingPoint(krPlatformA);
-		final WaitingPoint plWaitingPointPlA = new WaitingPoint(plPlatformA);
-		final WaitingPoint hlWaitingPointPlA = new WaitingPoint(hlPlatformA);
-		final WaitingPoint umcWaitingPointPlA = new WaitingPoint(umcPlatformA);
-		final WaitingPoint wkzWaitingPointPlA = new WaitingPoint(wkzPlatformA);
-		final WaitingPoint uithofWaitingPoint = new WaitingPoint(uithofEndStation);
+		final WaitingPoint vrWaitingPointPlA = new WaitingPoint(vrPlatformA, NUMBER_OF_TRAMS);
+		final WaitingPoint gwWaitingPointPlA = new WaitingPoint(gwPlatformA, NUMBER_OF_TRAMS);
+		final WaitingPoint krWaitingPointPlA = new WaitingPoint(krPlatformA, NUMBER_OF_TRAMS);
+		final WaitingPoint plWaitingPointPlA = new WaitingPoint(plPlatformA, NUMBER_OF_TRAMS);
+		final WaitingPoint hlWaitingPointPlA = new WaitingPoint(hlPlatformA, NUMBER_OF_TRAMS);
+		final WaitingPoint umcWaitingPointPlA = new WaitingPoint(umcPlatformA, NUMBER_OF_TRAMS);
+		final WaitingPoint wkzWaitingPointPlA = new WaitingPoint(wkzPlatformA, NUMBER_OF_TRAMS);
+		final WaitingPoint uithofWaitingPoint = new WaitingPoint(uithofEndStation, NUMBER_OF_TRAMS / 2);
 
 		// Waiting Points Direction B -> Centraal
-		final WaitingPoint wkzWaitingPointPlB = new WaitingPoint(wkzPlatformB);
-		final WaitingPoint umcWaitingPointPlB = new WaitingPoint(umcPlatformB);
-		final WaitingPoint hlWaitingPointPlB = new WaitingPoint(hlPlatformB);
-		final WaitingPoint plWaitingPointPlB = new WaitingPoint(plPlatformB);
-		final WaitingPoint krWaitingPointPlB = new WaitingPoint(krPlatformB);
-		final WaitingPoint gwWaitingPointPlB = new WaitingPoint(gwPlatformB);
-		final WaitingPoint vrWaitingPointPlB = new WaitingPoint(vrPlatformB);
-		final WaitingPoint centraalWaitingPoint = new WaitingPoint(centraalEndStation);
+		final WaitingPoint wkzWaitingPointPlB = new WaitingPoint(wkzPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint umcWaitingPointPlB = new WaitingPoint(umcPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint hlWaitingPointPlB = new WaitingPoint(hlPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint plWaitingPointPlB = new WaitingPoint(plPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint krWaitingPointPlB = new WaitingPoint(krPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint gwWaitingPointPlB = new WaitingPoint(gwPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint vrWaitingPointPlB = new WaitingPoint(vrPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint centraalWaitingPoint = new WaitingPoint(centraalEndStation, NUMBER_OF_TRAMS);
 
 		// Waiting Point Chain at Platforms Direction A -> Uithof
 		centraalEndStation.setLastWaitingPoint(centraalWaitingPoint);

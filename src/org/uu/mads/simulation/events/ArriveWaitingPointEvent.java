@@ -34,12 +34,12 @@ public class ArriveWaitingPointEvent extends Event {
 		final Tram nextTram = this.waitingPoint.getNextTramWaiting();
 
 		if (nextTram != null) {
-
 			// The tram with the correct id to leave next has already arrived
 			if (this.waitingPoint.getNextPlatform() instanceof EndStation) {
 				// Next station is an end station -> Schedule TryOccupyJunction
-				//System.out.println("Tram " + tram.getId() + " arrived at the waiting point for the endstation "
-				//		+ this.waitingPoint.getNextPlatform().getName() + ".");
+				// System.out.println("Tram " + tram.getId() + " arrived at the waiting point
+				// for the endstation "
+				// + this.waitingPoint.getNextPlatform().getName() + ".");
 
 				final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(
 						(EndStation) this.waitingPoint.getNextPlatform());
@@ -47,13 +47,16 @@ public class ArriveWaitingPointEvent extends Event {
 			} else {
 
 				// Next station is an int. station -> Schedule TramArrivesIntermediate
-				//System.out.println("Tram " + tram.getId() + " arrived at the waiting point for the intstation "
-				//		+ this.waitingPoint.getNextPlatform().getName() + ".");
+				// System.out.println("Tram " + tram.getId() + " arrived at the waiting point
+				// for the intstation "
+				// + this.waitingPoint.getNextPlatform().getName() + ".");
 				final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
 						(IntPlatform) this.waitingPoint.getNextPlatform(), this.tram);
 				EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 				this.waitingPoint.popNextTramWaiting();
 			}
+		} else {
+			final boolean x = true;
 		}
 	}
 
