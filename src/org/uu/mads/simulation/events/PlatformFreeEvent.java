@@ -30,7 +30,6 @@ public class PlatformFreeEvent extends Event {
 			final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
 					this.intPlatform, nextTram);
 			EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
-			//System.out.println("Tram " + nextTram.getId() + "freed the platform " + this.intPlatform.getName() + ".");
 		}
 	}
 

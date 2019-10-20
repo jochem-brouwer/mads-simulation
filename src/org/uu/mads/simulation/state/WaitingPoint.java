@@ -56,7 +56,7 @@ public class WaitingPoint {
 
 	@Override
 	public String toString() {
-		return "WaitingPoint [waitingTrams=" + this.waitingTrams + ", lastTramLeftWaitingPoint="
-				+ this.lastTramLeftWaitingPoint + "]";
+		return "WaitingPoint [platform=" + this.nextPlatform.getName() + ", waitingTrams=" + this.waitingTrams
+				+ ", lastTramLeftWaitingPoint=" + this.lastTramLeftWaitingPoint + "]";
 	}
 }
