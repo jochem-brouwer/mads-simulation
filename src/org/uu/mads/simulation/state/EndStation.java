@@ -106,13 +106,9 @@ public class EndStation extends Platform {
 	}
 
 	public boolean checkForOrder(Tram tram) {
-		/*System.out.println("Endstation: " + this.getName());
-		System.out.println("Check for tram id: " + tram.getId());
-		System.out.println("last tram left: " + this.getLastTramLeft());*/
-
 		if (tram.getId() == (this.getLastTramLeft() % Simulation.NUMBER_OF_TRAMS + 1)) {
 			return true;
-		} else if (this.getLastTramLeft() == 0) {
+		} else if (this.getLastTramLeft() == -1) {
 			return true;
 		} else {return false;}
 	}
