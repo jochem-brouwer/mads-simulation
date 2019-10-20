@@ -6,10 +6,7 @@ import java.time.LocalTime;
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
-import org.uu.mads.simulation.events.Event;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
-
-import static java.time.temporal.ChronoUnit.SECONDS;
 
 public class EndStation extends Platform {
 	private final Junction junction;
@@ -40,21 +37,26 @@ public class EndStation extends Platform {
 		this.nextScheduledLeave = nextScheduledLeave;
 	}
 
-	public int getLastTramLeft() { return this.lastTramLeftId; }
+	public int getLastTramLeft() {
+		return this.lastTramLeftId;
+	}
 
-	public void setLastTramLeft(int id) { this.lastTramLeftId = id; }
+	public void setLastTramLeft(final int id) {
+		this.lastTramLeftId = id;
+	}
 
 	public Tram getTramOnPlatformA() {
 		return this.tramOnPlatformA;
 	}
 
 	public void setTramOnPlatformA(final Tram tramOnPlatformA) {
-		//System.out.println("OCCUPY A");
+		// System.out.println("OCCUPY A");
 		this.tramOnPlatformA = tramOnPlatformA;
 		this.arrivalTimePlatformA = EventScheduler.get().getCurrentTime();
-		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 
+		final ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this);
 		EventScheduler.get().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
-		Simulation.log("Tram " + tramOnPlatformA.getId() + " arrived at " + this.getName() + " platform A at " + EventScheduler.get().getCurrentTime());
+		Simulation.log("Tram " + tramOnPlatformA.getId() + " arrived at " + getName() + " platform A at "
+				+ EventScheduler.get().getCurrentTime());
 	}
 
 	public Tram getTramOnPlatformB() {
@@ -62,12 +64,13 @@ public class EndStation extends Platform {
 	}
 
 	public void setTramOnPlatformB(final Tram tramOnPlatformB) {
-		//System.out.println("OCCUPY B");
+		// System.out.println("OCCUPY B");
 		this.tramOnPlatformB = tramOnPlatformB;
 		this.arrivalTimePlatformB = EventScheduler.get().getCurrentTime();
-		ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this); 
+		final ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this);
 		EventScheduler.get().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
-		Simulation.log("Tram " + tramOnPlatformB.getId() + " arrived at " + this.getName() + " platform B at " + EventScheduler.get().getCurrentTime());
+		Simulation.log("Tram " + tramOnPlatformB.getId() + " arrived at " + getName() + " platform B at "
+				+ EventScheduler.get().getCurrentTime());
 	}
 
 	public LocalTime getArrivalTimePlatformA() {
@@ -105,18 +108,36 @@ public class EndStation extends Platform {
 				|| this.nextScheduledLeave.isBefore(EventScheduler.get().getCurrentTime()));
 	}
 
+<<<<<<< Upstream, based on branch 'master' of https://github.com/jochem-brouwer/mads-simulation.git
 	public boolean checkForOrder(Tram tram) {
 		if (tram.getId() == (this.getLastTramLeft() % Simulation.NUMBER_OF_TRAMS + 1)) {
+=======
+	public boolean checkForOrder(final Tram tram) {
+		/*
+		 * System.out.println("Endstation: " + this.getName());
+		 * System.out.println("Check for tram id: " + tram.getId());
+		 * System.out.println("last tram left: " + this.getLastTramLeft());
+		 */
+
+		if (tram.getId() == ((getLastTramLeft() % Simulation.NUMBER_OF_TRAMS) + 1)) {
+>>>>>>> 3e9369f Minor refactoring
 			return true;
+<<<<<<< Upstream, based on branch 'master' of https://github.com/jochem-brouwer/mads-simulation.git
 		} else if (this.getLastTramLeft() == -1) {
+=======
+		} else if (getLastTramLeft() == 0) {
+>>>>>>> 3e9369f Minor refactoring
 			return true;
-		} else {return false;}
+		} else {
+			return false;
+		}
 	}
 
 	public void departFromPlatformA() {
-		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + this.getName() + " platform A at " + EventScheduler.get().getCurrentTime());
+		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + getName() + " platform A at "
+				+ EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformA = null;
-		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
+		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
 
 		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
@@ -124,15 +145,17 @@ public class EndStation extends Platform {
 
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
-		//System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		// System.out.println("Next scheduled leave: " +
+		// this.nextScheduledLeave.toString());
 
 		Performance.get().addDelay(delay);
 	}
 
 	public void departFromPlatformB() {
-		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + this.getName() + " platform B at " + EventScheduler.get().getCurrentTime());
+		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + getName() + " platform B at "
+				+ EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformB = null;
-		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
+		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
 
 		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
@@ -140,7 +163,8 @@ public class EndStation extends Platform {
 
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
-		//System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		// System.out.println("Next scheduled leave: " +
+		// this.nextScheduledLeave.toString());
 
 		Performance.get().addDelay(delay);
 	}

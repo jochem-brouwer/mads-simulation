@@ -116,7 +116,6 @@ public class Platform {
 				final Duration waitingTime = Duration.between(this.lastPassengersCalc.plus(i, SECONDS),
 						EventScheduler.get().getCurrentTime());
 				Performance.get().addPassenger(waitingTime);
-
 			}
 		}
 		this.lastPassengersCalc = EventScheduler.get().getCurrentTime();

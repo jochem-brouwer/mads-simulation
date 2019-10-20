@@ -5,7 +5,6 @@ import java.time.LocalTime;
 
 import org.uu.mads.simulation.events.ArriveWaitingPointEvent;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
-import org.uu.mads.simulation.events.TryOccupyJunctionEvent;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
@@ -14,17 +13,19 @@ import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
 
-	// public static final int TRAMS_PER_HOUR = 16; // This is fixed during our simulation run.
+	// public static final int TRAMS_PER_HOUR = 16; // This is fixed during our
+	// simulation run.
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
 	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
-	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds((int)(3600 / NUMBER_OF_TRAMS));
-	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(5,20); // time where we start the simulation, e.g. when we deploy our trams to the network
-	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21,30); // time where we end the simulation;
+	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
+	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(5, 20); // time where we start the simulation,
+																				// e.g. when we deploy our trams to the
+																				// network
+	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
 	public static final Boolean LOG_VERBOSE = true; // flag to enable/disable verbose logging
-	
-	
+
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
 	private static LocalTime firstScheduledLeaveTimeCS;
@@ -38,11 +39,12 @@ public class Simulation {
 			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
 		}
 
-		// System.out.println("First scheduled leave at PR: " + FIRST_SCHEDULED_LEAVE_TIME_PR);
+		// System.out.println("First scheduled leave at PR: " +
+		// FIRST_SCHEDULED_LEAVE_TIME_PR);
 		// System.out.println("First scheduled leave at CS: " + firstRound);
 		firstScheduledLeaveTimeCS = firstRound;
 	}
-	
+
 	public static void log(final String logme) {
 		if (LOG_VERBOSE) {
 			System.out.println(logme);
@@ -51,7 +53,7 @@ public class Simulation {
 
 	public static void main(final String[] args) {
 		System.out.println("Start simulation");
-		
+
 		calculateCSLeave();
 
 		initializeState();
@@ -65,29 +67,31 @@ public class Simulation {
 		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
 		// TODO: Schedule initial Event
 
-		while (SIMULATION_END_TIME.isAfter(EventScheduler.get().getCurrentTime())) { // TODO: We need better end conditions
+		while (SIMULATION_END_TIME.isAfter(EventScheduler.get().getCurrentTime())) { // TODO: We need better end
+																						// conditions
 			EventScheduler.get().fireNextEvent();
-			//System.out.println(EventScheduler.get().getScheduledEventsByTime());
+			// System.out.println(EventScheduler.get().getScheduledEventsByTime());
 		}
 
 		Performance.get().calculateAverageWaitingTime();
 		Performance.get().calculateAveragePunctuality();
 	}
-	
-	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the waiting point at Uithof before the junction at the given
+
+	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the
+	// waiting point at Uithof before the junction at the given
 	// SIMULATION_START_TIME
-	private static void tramFactory(WaitingPoint cs, WaitingPoint uit) {
+	private static void tramFactory(final WaitingPoint cs, final WaitingPoint uit) {
 		int tramId = 1;
-		for (int i = 0; i < Simulation.NUMBER_OF_TRAMS/2; i++) {
-			Tram newTram = new Tram(tramId, 0);
-			ArriveWaitingPointEvent arriveWaitingPointUithofEvent = new ArriveWaitingPointEvent(cs, newTram);
+		for (int i = 0; i < (Simulation.NUMBER_OF_TRAMS / 2); i++) {
+			final Tram newTram = new Tram(tramId, 0);
+			final ArriveWaitingPointEvent arriveWaitingPointUithofEvent = new ArriveWaitingPointEvent(cs, newTram);
 			EventScheduler.get().scheduleEventAhead(arriveWaitingPointUithofEvent, Duration.ZERO);
 			tramId += 1;
 		}
 		uit.setLastTramLeftWaitingPoint(tramId - 1);
-		for (int i = Simulation.NUMBER_OF_TRAMS/2; i < Simulation.NUMBER_OF_TRAMS; i++) {
-			Tram newTram = new Tram(tramId, 0);
-			ArriveWaitingPointEvent arriveWaitingPointCSEvent = new ArriveWaitingPointEvent(uit, newTram);
+		for (int i = Simulation.NUMBER_OF_TRAMS / 2; i < Simulation.NUMBER_OF_TRAMS; i++) {
+			final Tram newTram = new Tram(tramId, 0);
+			final ArriveWaitingPointEvent arriveWaitingPointCSEvent = new ArriveWaitingPointEvent(uit, newTram);
 			EventScheduler.get().scheduleEventAhead(arriveWaitingPointCSEvent, Duration.ZERO);
 			tramId += 1;
 		}
@@ -181,11 +185,11 @@ public class Simulation {
 		vrPlatformB.setNextWaitingPoint(centraalWaitingPoint);
 
 		// Add trams
-		//int tramId = 1;
-		//uithofEndStation.setTramOnPlatformA(new Tram(tramId++, 0));
-		//uithofEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
-		//centraalEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
-		
+		// int tramId = 1;
+		// uithofEndStation.setTramOnPlatformA(new Tram(tramId++, 0));
+		// uithofEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
+		// centraalEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
+
 		tramFactory(centraalWaitingPoint, uithofWaitingPoint);
 	}
 }
