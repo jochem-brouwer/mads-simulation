@@ -108,25 +108,10 @@ public class EndStation extends Platform {
 				|| this.nextScheduledLeave.isBefore(EventScheduler.get().getCurrentTime()));
 	}
 
-<<<<<<< Upstream, based on branch 'master' of https://github.com/jochem-brouwer/mads-simulation.git
-	public boolean checkForOrder(Tram tram) {
-		if (tram.getId() == (this.getLastTramLeft() % Simulation.NUMBER_OF_TRAMS + 1)) {
-=======
 	public boolean checkForOrder(final Tram tram) {
-		/*
-		 * System.out.println("Endstation: " + this.getName());
-		 * System.out.println("Check for tram id: " + tram.getId());
-		 * System.out.println("last tram left: " + this.getLastTramLeft());
-		 */
-
 		if (tram.getId() == ((getLastTramLeft() % Simulation.NUMBER_OF_TRAMS) + 1)) {
->>>>>>> 3e9369f Minor refactoring
 			return true;
-<<<<<<< Upstream, based on branch 'master' of https://github.com/jochem-brouwer/mads-simulation.git
-		} else if (this.getLastTramLeft() == -1) {
-=======
-		} else if (getLastTramLeft() == 0) {
->>>>>>> 3e9369f Minor refactoring
+		} else if (getLastTramLeft() == -1) {
 			return true;
 		} else {
 			return false;
