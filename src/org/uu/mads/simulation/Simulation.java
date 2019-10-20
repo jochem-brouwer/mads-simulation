@@ -29,7 +29,7 @@ public class Simulation {
 																				// network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
-    public static final Boolean ARTIFICIAL_DATA = true;
+    public static final Boolean ARTIFICIAL_DATA = false;
 
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
