@@ -111,8 +111,6 @@ public class EndStation extends Platform {
 	public boolean checkForOrder(final Tram tram) {
 		if (tram.getId() == ((getLastTramLeft() % Simulation.NUMBER_OF_TRAMS) + 1)) {
 			return true;
-		} else if (getLastTramLeft() == -1) {
-			return true;
 		} else {
 			return false;
 		}
