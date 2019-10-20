@@ -23,12 +23,6 @@ public class IntPlatform extends Platform {
 	}
 
 	@Override
-	public Duration getTravelTime() {
-		// TODO logic to calculate "random" travel time
-		return getAverageTravelTime();
-	}
-
-	@Override
 	// TODO: Update with inherited values?
 	public String toString() {
 		return "IntPlatform [tram=" + this.tram + ", isOccupied=" + this.isOccupied + "]";

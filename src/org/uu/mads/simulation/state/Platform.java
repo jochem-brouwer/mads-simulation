@@ -11,21 +11,28 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
 
 public class Platform {
+	private static final double STANDARD_DEVIATION_LOG = 0.3588221;
+
 	private final String name;
-	private final Duration averageTravelTime;
+	private final Duration avgTravelTimeToNextPlatf;
+	private final LogNormalDistribution travelTimeToNexcPlatfDist;
+	private LocalTime lastPassengersCalc;
+
 	private WaitingPoint nextWaitingPoint;
 	private WaitingPoint lastWaitingPoint;
-	private LocalTime lastPassengersCalc;
 	private final Queue<Passenger> waitingPassengers = new ArrayDeque<>();
 
 	public Platform(final String name, final Duration averageTravelTime) {
 		this.name = name;
-		this.averageTravelTime = averageTravelTime;
+		this.avgTravelTimeToNextPlatf = averageTravelTime;
+		this.travelTimeToNexcPlatfDist = new LogNormalDistribution(Math.log(averageTravelTime.toSeconds()),
+				STANDARD_DEVIATION_LOG);
 		this.lastPassengersCalc = Simulation.FIRST_PASSENGER_CALC;
 	}
 
@@ -34,15 +41,14 @@ public class Platform {
 	}
 
 	public Duration getAverageTravelTime() {
-		return this.averageTravelTime;
+		return this.avgTravelTimeToNextPlatf;
 	}
 
 	/**
 	 * @return travel duration of this platform to the next platform
 	 */
-	public Duration getTravelTime() {
-		// TODO logic to calculate "random" travel time
-		return this.averageTravelTime;
+	public Duration getTravelTimeToNextPlatform() {
+		return Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
 	}
 
 	public WaitingPoint getNextWaitingPoint() {
@@ -107,8 +113,8 @@ public class Platform {
 			if (rate > (randomInt / 100)) { // TODO depends on our poisson rate
 				final Passenger passenger = new Passenger(this.lastPassengersCalc.plus(i, SECONDS), this);
 				addWaitingPassenger(passenger);
-				Duration waitingTime = Duration.between(
-						this.lastPassengersCalc.plus(i, SECONDS), EventScheduler.get().getCurrentTime());
+				final Duration waitingTime = Duration.between(this.lastPassengersCalc.plus(i, SECONDS),
+						EventScheduler.get().getCurrentTime());
 				Performance.get().addPassenger(waitingTime);
 
 			}
@@ -155,9 +161,10 @@ public class Platform {
 
 	@Override
 	public String toString() {
-		return "Platform [name=" + this.name + ", averageTravelTime=" + this.averageTravelTime + ", nextWaitingPoint="
-				+ this.nextWaitingPoint + ", lastWaitingPoint=" + this.lastWaitingPoint + ", lastPassengersCalc="
-				+ this.lastPassengersCalc + ", waitingPassengers=" + this.waitingPassengers + "]";
+		return "Platform [name=" + this.name + ", averageTravelTime=" + this.avgTravelTimeToNextPlatf
+				+ ", nextWaitingPoint=" + this.nextWaitingPoint + ", lastWaitingPoint=" + this.lastWaitingPoint
+				+ ", lastPassengersCalc=" + this.lastPassengersCalc + ", waitingPassengers=" + this.waitingPassengers
+				+ "]";
 	}
 
 }

@@ -7,7 +7,6 @@ import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
-import org.uu.mads.simulation.state.Platform;
 import org.uu.mads.simulation.state.Tram;
 
 public class FreeJunctionEvent extends Event {
@@ -42,8 +41,9 @@ public class FreeJunctionEvent extends Event {
 			}
 			this.endStation.setTramOnPlatformA(this.tram);
 			scheduleScheduledLeaveEndStationEvent();
-			//System.out.println("Tram from lane In-A of junction for end station " + this.endStation.getName()
-			//		+ " has been moved to platform A.");
+			// System.out.println("Tram from lane In-A of junction for end station " +
+			// this.endStation.getName()
+			// + " has been moved to platform A.");
 		} else if (this.tram.equals(junction.getTramOnLaneInB())) {
 			junction.removeTramOnLaneInB();
 			if (this.endStation.getTramOnPlatformB() != null) {
@@ -52,19 +52,22 @@ public class FreeJunctionEvent extends Event {
 			}
 			this.endStation.setTramOnPlatformB(this.tram);
 			scheduleScheduledLeaveEndStationEvent();
-			//System.out.println("Tram from lane In-B of junction for end station " + this.endStation.getName()
-			//		+ " has been moved to platform B.");
+			// System.out.println("Tram from lane In-B of junction for end station " +
+			// this.endStation.getName()
+			// + " has been moved to platform B.");
 		} else if (this.tram.equals(junction.getTramOnLaneOutA())) {
 			junction.removeTramOnLaneOutA();
 			scheduleArriveWaitingPointEvent();
-			//System.out.println("Tram from lane Out-A of junction for end station " + this.endStation.getName()
-			//		+ " has been moved to the next platform's waiting point.");
+			// System.out.println("Tram from lane Out-A of junction for end station " +
+			// this.endStation.getName()
+			// + " has been moved to the next platform's waiting point.");
 
 		} else if (this.tram.equals(junction.getTramOnLaneOutB())) {
 			junction.removeTramOnLaneOutB();
 			scheduleArriveWaitingPointEvent();
-			//System.out.println("Tram from lane Out-B of junction for end station " + this.endStation.getName()
-			//		+ " has been moved to the next platform's waiting point.");
+			// System.out.println("Tram from lane Out-B of junction for end station " +
+			// this.endStation.getName()
+			// + " has been moved to the next platform's waiting point.");
 		} else {
 			throw new IllegalArgumentException("The given tram is not in the junction.");
 		}
@@ -83,8 +86,7 @@ public class FreeJunctionEvent extends Event {
 	private void scheduleArriveWaitingPointEvent() {
 		final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(
 				this.endStation.getNextWaitingPoint(), this.tram);
-		final Platform nextPlatform = this.endStation.getNextWaitingPoint().getNextPlatform();
-		EventScheduler.get().scheduleEventAhead(arriveWaitingPointEvent, nextPlatform.getTravelTime());
+		EventScheduler.get().scheduleEventAhead(arriveWaitingPointEvent, this.endStation.getTravelTimeToNextPlatform());
 	}
 
 	@Override
