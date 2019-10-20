@@ -18,8 +18,8 @@ public class Simulation {
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
-	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(225); // This is 3.75 minutes with 16 trams
-	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
+	public static final int NUMBER_OF_TRAMS = 3; // number of trams we want to deploy
+	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds((int)(3600 / NUMBER_OF_TRAMS));
 	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(5,20); // time where we start the simulation, e.g. when we deploy our trams to the network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21,30); // time where we end the simulation;
 	public static final Boolean LOG_VERBOSE = true; // flag to enable/disable verbose logging
@@ -115,7 +115,7 @@ public class Simulation {
 		// Platforms Direction B -> Centraal
 		uithofEndStation = new EndStation("P+R De Uithof", uithofJunction, FIRST_SCHEDULED_LEAVE_TIME_PR,
 				Duration.ofSeconds(110));
-		uithofEndStation.setLastTramLeft(8);
+		uithofEndStation.setLastTramLeft(0);
 		final IntPlatform wkzPlatformB = new IntPlatform("WKZ-B", Duration.ofSeconds(78));
 		final IntPlatform umcPlatformB = new IntPlatform("UMC-B", Duration.ofSeconds(82));
 		final IntPlatform hlPlatformB = new IntPlatform("Heidelberglaan-B", Duration.ofSeconds(60));

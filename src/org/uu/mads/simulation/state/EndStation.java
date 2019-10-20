@@ -109,7 +109,12 @@ public class EndStation extends Platform {
 		/*System.out.println("Endstation: " + this.getName());
 		System.out.println("Check for tram id: " + tram.getId());
 		System.out.println("last tram left: " + this.getLastTramLeft());*/
-		return tram.getId() == (this.getLastTramLeft() % Simulation.NUMBER_OF_TRAMS + 1);
+
+		if (tram.getId() == (this.getLastTramLeft() % Simulation.NUMBER_OF_TRAMS + 1)) {
+			return true;
+		} else if (this.getLastTramLeft() == 0) {
+			return true;
+		} else {return false;}
 	}
 
 	public void departFromPlatformA() {
@@ -117,9 +122,9 @@ public class EndStation extends Platform {
 		this.tramOnPlatformA = null;
 		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
 
-		/*System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
-		System.out.println("Delay: " + delay.toSeconds());*/
+		System.out.println("Delay: " + delay.toSeconds());
 
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
@@ -133,14 +138,14 @@ public class EndStation extends Platform {
 		this.tramOnPlatformB = null;
 		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
 
-		/*System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
-		System.out.println("Delay: " + delay.toSeconds());*/
+		System.out.println("Delay: " + delay.toSeconds());
 
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
 		//System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
-		
+
 		Performance.get().addDelay(delay);
 	}
 
