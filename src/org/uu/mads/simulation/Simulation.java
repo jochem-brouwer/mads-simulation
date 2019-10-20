@@ -1,7 +1,6 @@
 package org.uu.mads.simulation;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
@@ -13,7 +12,6 @@ import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
 import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
-import org.uu.mads.simulation.InputReader;
 
 public class Simulation {
 
@@ -29,7 +27,7 @@ public class Simulation {
 																				// network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
-    public static final Boolean ARTIFICIAL_DATA = false;
+	public static final Boolean ARTIFICIAL_DATA = false;
 
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
@@ -50,13 +48,13 @@ public class Simulation {
 		firstScheduledLeaveTimeCS = firstRound;
 	}
 
-	public static void log(final String logme) {
-		System.out.println(logme);
+	public static void log(final String log) {
+		System.out.println(EventScheduler.get().getCurrentTime() + ": " + log);
 	}
 
-	public static void logVerbose(final String logme) {
+	public static void logVerbose(final String log) {
 		if (LOG_VERBOSE) {
-			System.out.println(logme);
+			log(log);
 		}
 	}
 
@@ -64,11 +62,11 @@ public class Simulation {
 		System.out.println("Start simulation");
 
 		if (ARTIFICIAL_DATA) {
-			File file1 = new File(
+			final File file1 = new File(
 					System.getProperty("user.dir") + "\\" + "articifial-data\\artificial-input-data-passengers-01.csv");
-		    InputReader reader = new InputReader(file1);
-		    reader.outPut();
-        }
+			final InputReader reader = new InputReader(file1);
+			reader.outPut();
+		}
 
 		calculateCSLeave();
 
