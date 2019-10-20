@@ -1,5 +1,8 @@
 package org.uu.mads.simulation;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
 
@@ -10,6 +13,7 @@ import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
 import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
+import org.uu.mads.simulation.InputReader;
 
 public class Simulation {
 
@@ -24,7 +28,8 @@ public class Simulation {
 																				// e.g. when we deploy our trams to the
 																				// network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
-	public static final Boolean LOG_VERBOSE = true; // flag to enable/disable verbose logging
+	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
+    public static final Boolean ARTIFICIAL_DATA = true;
 
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
@@ -51,8 +56,15 @@ public class Simulation {
 		}
 	}
 
-	public static void main(final String[] args) {
+	public static void main(final String[] args) throws IOException {
 		System.out.println("Start simulation");
+
+		if (ARTIFICIAL_DATA) {
+			File file1 = new File(
+					System.getProperty("user.dir") + "\\" + "articifial-data\\artificial-input-data-passengers-01.csv");
+		    InputReader reader = new InputReader(file1);
+		    reader.outPut();
+        }
 
 		calculateCSLeave();
 
