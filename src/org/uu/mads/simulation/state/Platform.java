@@ -49,11 +49,10 @@ public class Platform {
 	 */
 	public Duration getTravelTimeToNextPlatform() {
 		final Duration travelTimeToNextPlatf = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
-		if (Simulation.LOG_VERBOSE) {
-			System.out.println("Platform " + this.name + ": Travel time to next platform is "
-					+ travelTimeToNextPlatf.toSeconds() + " seconds.");
-		}
+		Simulation.log("Platform " + this.name + ": Travel final time to next platform is "
+				+ travelTimeToNextPlatf.toSeconds() + " seconds.");
 		return travelTimeToNextPlatf;
+//		return this.avgTravelTimeToNextPlatf;
 	}
 
 	public WaitingPoint getNextWaitingPoint() {

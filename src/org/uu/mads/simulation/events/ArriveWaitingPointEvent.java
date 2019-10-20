@@ -3,6 +3,7 @@ package org.uu.mads.simulation.events;
 import java.time.Duration;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Tram;
@@ -29,6 +30,8 @@ public class ArriveWaitingPointEvent extends Event {
 
 	@Override
 	public void fire() {
+		Simulation.log("Tram " + this.tram.getId() + " arrived at Waiting point of platform "
+				+ this.waitingPoint.getNextPlatform().getName() + " at " + EventScheduler.get().getCurrentTime());
 		this.waitingPoint.addTram(this.tram);
 
 		final Tram nextTram = this.waitingPoint.getNextTramWaiting();
@@ -45,7 +48,6 @@ public class ArriveWaitingPointEvent extends Event {
 						(EndStation) this.waitingPoint.getNextPlatform());
 				EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
 			} else {
-
 				// Next station is an int. station -> Schedule TramArrivesIntermediate
 				// System.out.println("Tram " + tram.getId() + " arrived at the waiting point
 				// for the intstation "
@@ -56,7 +58,7 @@ public class ArriveWaitingPointEvent extends Event {
 				this.waitingPoint.popNextTramWaiting();
 			}
 		} else {
-			final boolean x = true;
+			Simulation.log("Trams at " + this.waitingPoint + " are not in correct order");
 		}
 	}
 

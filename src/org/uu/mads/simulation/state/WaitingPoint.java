@@ -8,7 +8,7 @@ import org.uu.mads.simulation.Simulation;
 public class WaitingPoint {
 	private final Platform nextPlatform;
 	private final Set<Tram> waitingTrams = new HashSet<>();
-	private int lastTramLeftWaitingPoint = -1;
+	private int lastTramLeftWaitingPoint;
 
 	public WaitingPoint(final Platform nextPlatform, final int lastTramLeftWaitingPoint) {
 		super();
@@ -56,7 +56,7 @@ public class WaitingPoint {
 
 	@Override
 	public String toString() {
-		return "WaitingPoint [waitingTrams=" + this.waitingTrams + ", lastTramLeftWaitingPoint="
-				+ this.lastTramLeftWaitingPoint + "]";
+		return "WaitingPoint [platform=" + this.nextPlatform.getName() + ", waitingTrams=" + this.waitingTrams
+				+ ", lastTramLeftWaitingPoint=" + this.lastTramLeftWaitingPoint + "]";
 	}
 }

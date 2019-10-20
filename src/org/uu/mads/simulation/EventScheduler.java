@@ -56,50 +56,36 @@ public class EventScheduler {
 		}
 
 		nextEvent.fire();
-		if (Simulation.LOG_VERBOSE) {
-			System.out.println("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
-		}
+		Simulation.logVerbose("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
 	}
 
 	public void scheduleEvent(final Event event, final LocalTime eventTime) {
-		if (Simulation.LOG_VERBOSE) {
-			System.out.println("Event " + event + " is to be scheduled at " + eventTime + ".");
-		}
+		Simulation.logVerbose("Event " + event + " is to be scheduled at " + eventTime + ".");
 
 		final List<Event> scheduledEvents;
 		if (this.scheduledEventsByTime.containsKey(eventTime)) {
-			if (Simulation.LOG_VERBOSE) {
-				System.out.println("There are already events scheduled at " + eventTime + ".");
-			}
+			Simulation.logVerbose("There are already events scheduled at " + eventTime + ".");
 			scheduledEvents = this.scheduledEventsByTime.get(eventTime);
 			for (int i = 0; i < scheduledEvents.size(); i++) {
 				final Event scheduledEvent = scheduledEvents.get(i);
 				if (scheduledEvent.getPriority() < event.getPriority()) {
 					scheduledEvents.add(i, event);
-					if (Simulation.LOG_VERBOSE) {
-						System.out.println("Event " + event + " has been scheduled at " + eventTime + " at position "
-								+ i + " in the event list for that time.");
-					}
+					Simulation.logVerbose("Event " + event + " has been scheduled at " + eventTime + " at position " + i
+							+ " in the event list for that time.");
 					break;
 				}
 			}
 			if (!scheduledEvents.contains(event)) {
 				scheduledEvents.add(event);
-				if (Simulation.LOG_VERBOSE) {
-					System.out.println("Event " + event + " has been scheduled at " + eventTime
-							+ " at the end of the event list for that time.");
-				}
+				Simulation.logVerbose("Event " + event + " has been scheduled at " + eventTime
+						+ " at the end of the event list for that time.");
 			}
 		} else {
-			if (Simulation.LOG_VERBOSE) {
-				System.out.println("There are no events scheduled at " + eventTime + " yet.");
-			}
+			Simulation.logVerbose("There are no events scheduled at " + eventTime + " yet.");
 			scheduledEvents = new LinkedList<>();
 			scheduledEvents.add(event);
-			if (Simulation.LOG_VERBOSE) {
-				System.out.println("Event " + event + " has been scheduled at " + eventTime
-						+ " in a new event list for that time.");
-			}
+			Simulation.logVerbose(
+					"Event " + event + " has been scheduled at " + eventTime + " in a new event list for that time.");
 		}
 		this.scheduledEventsByTime.put(eventTime, scheduledEvents);
 	}
