@@ -65,7 +65,9 @@ public class Performance {
 
     public Duration calculateAveragePunctuality() {
 
-        this.average_delay = this.total_delay_time.dividedBy(total_delays);
+        if(total_delays != 0) {
+            this.average_delay = this.total_delay_time.dividedBy(total_delays);
+        } else { this.average_delay = Duration.ZERO; }
 
         this.percentage_of_delays = ((float)this.total_delays / (float)this.total_departures) * 100;
 

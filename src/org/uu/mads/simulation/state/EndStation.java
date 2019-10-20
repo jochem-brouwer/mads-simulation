@@ -106,6 +106,9 @@ public class EndStation extends Platform {
 	}
 
 	public boolean checkForOrder(Tram tram) {
+		/*System.out.println("Endstation: " + this.getName());
+		System.out.println("Check for tram id: " + tram.getId());
+		System.out.println("last tram left: " + this.getLastTramLeft());*/
 		return tram.getId() == (this.getLastTramLeft() % Simulation.NUMBER_OF_TRAMS + 1);
 	}
 
@@ -113,11 +116,15 @@ public class EndStation extends Platform {
 		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + this.getName() + " platform A at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformA = null;
 		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
-		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+
+		/*System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
-		System.out.println("Delay: " + delay.toSeconds());
+		System.out.println("Delay: " + delay.toSeconds());*/
+
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
-		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+
+		//System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+
 		Performance.get().addDelay(delay);
 	}
 
@@ -125,11 +132,15 @@ public class EndStation extends Platform {
 		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + this.getName() + " platform B at " + EventScheduler.get().getCurrentTime());
 		this.tramOnPlatformB = null;
 		Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
-		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+
+		/*System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		System.out.println("We leave at current time: " + EventScheduler.get().getCurrentTime());
-		System.out.println("Delay: " + delay.toSeconds());
+		System.out.println("Delay: " + delay.toSeconds());*/
+
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
-		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+
+		//System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		
 		Performance.get().addDelay(delay);
 	}
 
