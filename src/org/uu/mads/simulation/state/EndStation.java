@@ -18,11 +18,11 @@ public class EndStation extends Platform {
 	private int lastTramLeftId;
 
 	public EndStation(final String name, final Junction junction, final LocalTime nextScheduledLeave,
-			final Duration averageTravelTime) {
+			final Duration averageTravelTime, final int lastTramLeftId) {
 		super(name, averageTravelTime);
 		this.junction = junction;
 		this.nextScheduledLeave = nextScheduledLeave;
-		this.lastTramLeftId = 0;
+		this.lastTramLeftId = lastTramLeftId;
 	}
 
 	public LocalTime getNextScheduledLeave() {
@@ -39,10 +39,6 @@ public class EndStation extends Platform {
 
 	public int getLastTramLeft() {
 		return this.lastTramLeftId;
-	}
-
-	public void setLastTramLeft(final int id) {
-		this.lastTramLeftId = id;
 	}
 
 	public Tram getTramOnPlatformA() {
@@ -121,6 +117,7 @@ public class EndStation extends Platform {
 	public void departFromPlatformA() {
 		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + getName() + " platform A at "
 				+ EventScheduler.get().getCurrentTime());
+		this.lastTramLeftId = this.tramOnPlatformA.getId();
 		this.tramOnPlatformA = null;
 		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
 
@@ -139,6 +136,7 @@ public class EndStation extends Platform {
 	public void departFromPlatformB() {
 		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + getName() + " platform B at "
 				+ EventScheduler.get().getCurrentTime());
+		this.lastTramLeftId = this.tramOnPlatformB.getId();
 		this.tramOnPlatformB = null;
 		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.get().getCurrentTime());
 

@@ -103,7 +103,7 @@ public class Simulation {
 
 		// Platforms Direction A -> Uithof
 		centraalEndStation = new EndStation("Centraal Station", centraalJunction, firstScheduledLeaveTimeCS,
-				Duration.ofSeconds(134));
+				Duration.ofSeconds(134), NUMBER_OF_TRAMS);
 
 		final IntPlatform vrPlatformA = new IntPlatform("Vaartsche-Rijn-A", Duration.ofSeconds(243));
 		final IntPlatform gwPlatformA = new IntPlatform("Galgenwaard-A", Duration.ofSeconds(59));
@@ -115,8 +115,7 @@ public class Simulation {
 
 		// Platforms Direction B -> Centraal
 		uithofEndStation = new EndStation("P+R De Uithof", uithofJunction, FIRST_SCHEDULED_LEAVE_TIME_PR,
-				Duration.ofSeconds(110));
-		uithofEndStation.setLastTramLeft(-1);
+				Duration.ofSeconds(110), NUMBER_OF_TRAMS / 2);
 		final IntPlatform wkzPlatformB = new IntPlatform("WKZ-B", Duration.ofSeconds(78));
 		final IntPlatform umcPlatformB = new IntPlatform("UMC-B", Duration.ofSeconds(82));
 		final IntPlatform hlPlatformB = new IntPlatform("Heidelberglaan-B", Duration.ofSeconds(60));
