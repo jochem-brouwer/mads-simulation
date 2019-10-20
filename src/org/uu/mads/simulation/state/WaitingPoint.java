@@ -8,7 +8,7 @@ import org.uu.mads.simulation.Simulation;
 public class WaitingPoint {
 	private final Platform nextPlatform;
 	private final Set<Tram> waitingTrams = new HashSet<>();
-	private int lastTramLeftWaitingPoint = -1;
+	private int lastTramLeftWaitingPoint = 0;
 
 	public WaitingPoint(final Platform nextPlatform) {
 		super();
@@ -51,6 +51,7 @@ public class WaitingPoint {
 
 	public Tram getNextTramWaiting() {
 		final int targetID = (this.lastTramLeftWaitingPoint) % Simulation.NUMBER_OF_TRAMS + 1;
+		System.out.println(targetID);
 		for (final Tram tram : this.waitingTrams) {
 			if (tram.getId() == targetID || targetID == 0) {
 				return tram;

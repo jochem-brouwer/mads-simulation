@@ -42,6 +42,8 @@ public class EventScheduler {
 	}
 
 	public void fireNextEvent() {
+
+		// System.out.println(this.scheduledEventsByTime);
 		this.currentTime = this.scheduledEventsByTime.firstKey();
 		final List<Event> eventsForCurrentTime = this.scheduledEventsByTime.get(this.currentTime);
 		final Event nextEvent = eventsForCurrentTime.get(0);
@@ -56,7 +58,7 @@ public class EventScheduler {
 		}
 
 		nextEvent.fire();
-		//System.out.println("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
+		// System.out.println("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
 	}
 
 	public void scheduleEvent(final Event event, final LocalTime eventTime) {

@@ -88,7 +88,7 @@ public class Simulation {
 			EventScheduler.get().scheduleEventAhead(arriveWaitingPointUithofEvent, Duration.ZERO);
 			tramId += 1;
 		}
-		uit.setLastTramLeftWaitingPoint(tramId - 1);
+
 		for (int i = Simulation.NUMBER_OF_TRAMS / 2; i < Simulation.NUMBER_OF_TRAMS; i++) {
 			final Tram newTram = new Tram(tramId, 0);
 			final ArriveWaitingPointEvent arriveWaitingPointCSEvent = new ArriveWaitingPointEvent(uit, newTram);
