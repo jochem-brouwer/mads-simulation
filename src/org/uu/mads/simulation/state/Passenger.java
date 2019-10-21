@@ -1,20 +1,26 @@
 package org.uu.mads.simulation.state;
 
 import java.time.LocalTime;
+import java.util.Objects;
 
 public class Passenger {
 
-	private LocalTime arrivalTimePlatform;
+	private final LocalTime arrivalTimePlatform;
 	private LocalTime leaveTimePlatform;
-	private Platform platform;
+	private final Platform platform;
 
-	public Passenger(LocalTime arrivalTimePlatform, Platform platform) {
-	    this.arrivalTimePlatform = arrivalTimePlatform;
-	    this.platform = platform;
-    }
+	public Passenger(final LocalTime arrivalTimePlatform, final Platform platform) {
+		super();
 
-    @Override
-    public String toString() {
-        return "Passenger [arrivalTimePlatform=" + this.arrivalTimePlatform + "]";
-    }
+		Objects.requireNonNull(arrivalTimePlatform, "Given arrivalTimePlatform must not be null!");
+		Objects.requireNonNull(platform, "Given platform must not be null!");
+
+		this.arrivalTimePlatform = arrivalTimePlatform;
+		this.platform = platform;
+	}
+
+	@Override
+	public String toString() {
+		return "Passenger [arrivalTimePlatform=" + this.arrivalTimePlatform + "]";
+	}
 }

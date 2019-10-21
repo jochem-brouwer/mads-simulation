@@ -1,6 +1,8 @@
 package org.uu.mads.simulation.state;
 
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import org.uu.mads.simulation.Simulation;
@@ -12,12 +14,20 @@ public class WaitingPoint {
 
 	public WaitingPoint(final Platform nextPlatform, final int lastTramLeftWaitingPoint) {
 		super();
+
+		Objects.requireNonNull(nextPlatform, "Given nextPlatform must not be null!");
+
 		this.nextPlatform = nextPlatform;
 		this.lastTramLeftWaitingPoint = lastTramLeftWaitingPoint;
 	}
 
 	public Platform getNextPlatform() {
 		return this.nextPlatform;
+	}
+
+	public Set<Tram> getWaitingTrams() {
+		// Do not return actual set reference to ensure immutability from outside
+		return Collections.unmodifiableSet(this.waitingTrams);
 	}
 
 	public void addTram(final Tram tram) {
@@ -40,11 +50,11 @@ public class WaitingPoint {
 		return nextTramWaiting;
 	}
 
-	public boolean isTramWaiting() {
+	public boolean isTramWaitingInCorrectOrder() {
 		return getNextTramWaiting() != null;
 	}
 
-	public Tram getNextTramWaiting() {
+	private Tram getNextTramWaiting() {
 		final int targetID = (this.lastTramLeftWaitingPoint % Simulation.NUMBER_OF_TRAMS) + 1;
 		for (final Tram tram : this.waitingTrams) {
 			if (tram.getId() == targetID) {

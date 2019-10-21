@@ -1,8 +1,10 @@
 package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
 import org.uu.mads.simulation.state.Tram;
@@ -14,25 +16,22 @@ public class TryOccupyJunctionEvent extends Event {
 
 	public TryOccupyJunctionEvent(final EndStation endStation) {
 		super();
-		this.endStation = endStation;
-	}
 
-	public EndStation getEndStation() {
-		return this.endStation;
+		Objects.requireNonNull(endStation, "Given endStation must not be null!");
+
+		this.endStation = endStation;
 	}
 
 	@Override
 	public void fire() {
-		if (this.endStation.getLastWaitingPoint().isTramWaiting()) {
-			// System.out.println("There is a tram at the waiting point for the end station
-			// " + this.endStation.getName()
-			// + " that is requesting to use the junction.");
+		if (this.endStation.getLastWaitingPoint().isTramWaitingInCorrectOrder()) {
+			Simulation.logVerbose("There is a tram at the waiting point for the end station" + this.endStation.getName()
+					+ " that is requesting to use the junction.");
 			useJunctionForArrival();
 			useJunctionForDeparture();
 		} else {
-			// System.out.println("There is a tram ready at end station " +
-			// this.endStation.getName()
-			// + " that is requesting to use the junction.");
+			Simulation.logVerbose("There is a tram ready at end station " + this.endStation.getName()
+					+ " that is requesting to use the junction.");
 			useJunctionForDeparture();
 		}
 	}
@@ -40,88 +39,58 @@ public class TryOccupyJunctionEvent extends Event {
 	private void useJunctionForArrival() {
 		final Junction junction = this.endStation.getJunction();
 		if (!junction.isJunctionUsed()) {
-			// System.out.println("The junction of the end station " +
-			// this.endStation.getName() + " is currently free.");
-			// We can send our tram into the crossing
 			if (this.endStation.getTramOnPlatformB() == null) {
 				// We send the tram from the junction to platform B
 				final Tram nextTramWaiting = this.endStation.getLastWaitingPoint().popNextTramWaiting();
 				junction.setTramOnLaneInB(nextTramWaiting);
-				// System.out.println(
-				// "Tram " + nextTramWaiting.getId() + " has moved from the waiting point for
-				// the end station "
-				// + this.endStation.getName() + " to the lane In-B of its junction.");
 				scheduleFreeJunctionEvent(nextTramWaiting);
+				Simulation.logTramPositions();
 			} else if (this.endStation.getTramOnPlatformA() == null) {
 				// We send the tram from the junction to platform A
 				final Tram nextTramWaiting = this.endStation.getLastWaitingPoint().popNextTramWaiting();
 				junction.setTramOnLaneInA(nextTramWaiting);
-				// System.out.println(
-				// "Tram " + nextTramWaiting.getId() + " has moved from the waiting point for
-				// the end station "
-				// + this.endStation.getName() + " to the lane In-A of its junction.");
 				scheduleFreeJunctionEvent(nextTramWaiting);
+				Simulation.logTramPositions();
 			}
 		} else if ((this.endStation.getTramOnPlatformA() == null) && junction.canUseLaneInA()) {
-			// System.out.println(
-			// "The junction of the end station " + this.endStation.getName() + " is
-			// currently being used.");
 			// We are in mode 3 and can send two trams at once
 			// We send the tram from the junction to platform A
 			final Tram nextTramWaiting = this.endStation.getLastWaitingPoint().popNextTramWaiting();
 			junction.setTramOnLaneInA(nextTramWaiting);
-			// System.out.println(
-			// "Tram " + nextTramWaiting.getId() + " has moved from the waiting point for
-			// the end station "
-			// + this.endStation.getName() + " to the lane In-A of its junction.");
 			scheduleFreeJunctionEvent(nextTramWaiting);
-		} else {
-			// System.out.println("Cannot use junction for arrival");
+			Simulation.logTramPositions();
 		}
 	}
 
 	private void useJunctionForDeparture() {
 		final Junction junction = this.endStation.getJunction();
 		if (!junction.isJunctionUsed() && this.endStation.isNextScheduledLeaveDue()) {
-			// System.out.println("The junction of the end station " +
-			// this.endStation.getName() + " is currently free.");
 			if (this.endStation.isTramReadyOnPlatformA()
 					&& this.endStation.checkForOrder(this.endStation.getTramOnPlatformA())) {
 				// We send the tram from platform A to the junction
 				final Tram tramOnPlatformA = this.endStation.getTramOnPlatformA();
 				junction.setTramOnLaneOutA(tramOnPlatformA);
 				this.endStation.departFromPlatformA();
-				// System.out
-				// .println("Tram + " + tramOnPlatformA.getId() + " has moved from platform A of
-				// the end station "
-				// + this.endStation.getName() + " to the lane Out-A of its junction.");
 				scheduleFreeJunctionEvent(tramOnPlatformA);
+				Simulation.logTramPositions();
 			} else if (this.endStation.isTramReadyOnPlatformB()
 					&& this.endStation.checkForOrder(this.endStation.getTramOnPlatformB())) {
 				// We send the tram from platform B to the junction
 				final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
 				junction.setTramOnLaneOutB(tramOnPlatformB);
 				this.endStation.departFromPlatformB();
-				// System.out
-				// .println("Tram + " + tramOnPlatformB.getId() + " has moved from platform B of
-				// the end station "
-				// + this.endStation.getName() + " to the lane Out-B of its junction.");
 				scheduleFreeJunctionEvent(tramOnPlatformB);
+				Simulation.logTramPositions();
 			}
 		} else if (this.endStation.isTramReadyOnPlatformB() && this.endStation.isNextScheduledLeaveDue()
 				&& junction.canUseLaneOutB() && this.endStation.checkForOrder(this.endStation.getTramOnPlatformB())) {
 			// We are in mode 3 and can send two trams at once
 			// We send the tram from platform B to the junction
-			// System.out.println(
-			// "The junction of the end station " + this.endStation.getName() + " is
-			// currently being used.");
 			final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
 			junction.setTramOnLaneOutB(tramOnPlatformB);
 			this.endStation.departFromPlatformB();
-			// System.out.println("Tram + " + tramOnPlatformB.getId() + " has moved from
-			// platform B of the end station "
-			// + this.endStation.getName() + " to the lane Out-B of its junction.");
 			scheduleFreeJunctionEvent(tramOnPlatformB);
+			Simulation.logTramPositions();
 		}
 	}
 

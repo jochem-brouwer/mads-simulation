@@ -10,6 +10,23 @@ public class IntPlatform extends Platform {
 		super(name, averageTravelTime);
 	}
 
+	public Tram departTram() {
+		if (this.tram == null) {
+			throw new IllegalStateException("There is no tram on platform " + getName() + " that could depart.");
+		}
+		final Tram departingTram = this.tram;
+		this.tram = null;
+		return departingTram;
+	}
+
+	public Tram getTram() {
+		return this.tram;
+	}
+
+	public void setTram(final Tram tram) {
+		this.tram = tram;
+	}
+
 	public boolean isOccupied() {
 		return this.isOccupied;
 	}
@@ -23,12 +40,7 @@ public class IntPlatform extends Platform {
 	}
 
 	@Override
-	// TODO: Update with inherited values?
 	public String toString() {
 		return "IntPlatform [tram=" + this.tram + ", isOccupied=" + this.isOccupied + "]";
-	}
-
-	public boolean isPlatformOccupied() {
-		return this.isOccupied;
 	}
 }

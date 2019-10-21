@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
@@ -29,6 +30,11 @@ public class Platform {
 	private final Queue<Passenger> waitingPassengers = new ArrayDeque<>();
 
 	public Platform(final String name, final Duration averageTravelTime) {
+		super();
+
+		Objects.requireNonNull(name, "Given name must not be null!");
+		Objects.requireNonNull(averageTravelTime, "Given averageTravelTime must not be null!");
+
 		this.name = name;
 		this.avgTravelTimeToNextPlatf = averageTravelTime;
 		this.travelTimeToNexcPlatfDist = new LogNormalDistribution(Math.log(averageTravelTime.toSeconds()),
@@ -52,7 +58,6 @@ public class Platform {
 		Simulation.log("Platform " + this.name + ": Travel time to next platform is "
 				+ travelTimeToNextPlatf.toSeconds() + " seconds.");
 		return travelTimeToNextPlatf;
-//		return this.avgTravelTimeToNextPlatf;
 	}
 
 	public WaitingPoint getNextWaitingPoint() {
@@ -105,7 +110,7 @@ public class Platform {
 		final double rate = EventScheduler.get().getPassengerRate();
 		final long passedTime = (SECONDS.between(this.lastPassengersCalc, EventScheduler.get().getCurrentTime()));
 		final long numberOfPassengers = (int) (passedTime * rate);
-		System.out.println("Number of passengers on Platform :" + numberOfPassengers);
+		Simulation.logVerbose("Number of passengers on Platform :" + numberOfPassengers);
 
 		final Random random = new Random();
 
@@ -125,7 +130,8 @@ public class Platform {
 		this.lastPassengersCalc = EventScheduler.get().getCurrentTime();
 	}
 
-	public int loadPassengers(final Platform platform, final Tram tram) {
+	// TODO: Include in Tram class?
+	public int loadPassengers(final Tram tram) {
 
 		int remainingCapacity = tram.getRemainingCapacity();
 		int numOfPassengers = tram.getNumOfPassengers();
@@ -151,6 +157,7 @@ public class Platform {
 		return passengersIn;
 	}
 
+	// TODO: Include in Tram class?
 	public int dumpPassengers(final Tram tram) {
 		// This functions calculates the number of passengers leaving the tram and
 		// removes them from the tram number.

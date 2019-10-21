@@ -15,22 +15,16 @@ public class FreeJunctionEvent extends Event {
 
 	public FreeJunctionEvent(final EndStation endStation, final Tram tram) {
 		super();
+
+		Objects.requireNonNull(tram, "Given tram must not be null!");
+		Objects.requireNonNull(endStation, "Given endStation must not be null!");
+
 		this.endStation = endStation;
 		this.tram = tram;
 	}
 
-	public EndStation getEndStation() {
-		return this.endStation;
-	}
-
-	public Tram getTram() {
-		return this.tram;
-	}
-
 	@Override
 	public void fire() {
-		Objects.requireNonNull(this.tram, "Given tram must not be null!");
-
 		final Junction junction = this.endStation.getJunction();
 
 		if (this.tram.equals(junction.getTramOnLaneInA())) {
@@ -41,9 +35,7 @@ public class FreeJunctionEvent extends Event {
 			}
 			this.endStation.setTramOnPlatformA(this.tram);
 			scheduleScheduledLeaveEndStationEvent();
-			// System.out.println("Tram from lane In-A of junction for end station " +
-			// this.endStation.getName()
-			// + " has been moved to platform A.");
+			Simulation.logTramPositions();
 		} else if (this.tram.equals(junction.getTramOnLaneInB())) {
 			junction.removeTramOnLaneInB();
 			if (this.endStation.getTramOnPlatformB() != null) {
@@ -52,22 +44,16 @@ public class FreeJunctionEvent extends Event {
 			}
 			this.endStation.setTramOnPlatformB(this.tram);
 			scheduleScheduledLeaveEndStationEvent();
-			// System.out.println("Tram from lane In-B of junction for end station " +
-			// this.endStation.getName()
-			// + " has been moved to platform B.");
+			Simulation.logTramPositions();
 		} else if (this.tram.equals(junction.getTramOnLaneOutA())) {
 			junction.removeTramOnLaneOutA();
 			scheduleArriveWaitingPointEvent();
-			// System.out.println("Tram from lane Out-A of junction for end station " +
-			// this.endStation.getName()
-			// + " has been moved to the next platform's waiting point.");
+			Simulation.logTramPositions();
 
 		} else if (this.tram.equals(junction.getTramOnLaneOutB())) {
 			junction.removeTramOnLaneOutB();
 			scheduleArriveWaitingPointEvent();
-			// System.out.println("Tram from lane Out-B of junction for end station " +
-			// this.endStation.getName()
-			// + " has been moved to the next platform's waiting point.");
+			Simulation.logTramPositions();
 		} else {
 			throw new IllegalArgumentException("The given tram is not in the junction.");
 		}

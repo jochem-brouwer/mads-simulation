@@ -1,6 +1,7 @@
 package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Simulation;
@@ -16,16 +17,12 @@ public class ArriveWaitingPointEvent extends Event {
 
 	public ArriveWaitingPointEvent(final WaitingPoint waitingPoint, final Tram tram) {
 		super(HIGH_PRIORITY);
+
+		Objects.requireNonNull(tram, "Given tram must not be null!");
+		Objects.requireNonNull(waitingPoint, "Given waitingPoint must not be null!");
+
 		this.waitingPoint = waitingPoint;
 		this.tram = tram;
-	}
-
-	public WaitingPoint getWaitingPoint() {
-		return this.waitingPoint;
-	}
-
-	public Tram getTram() {
-		return this.tram;
 	}
 
 	@Override
@@ -34,30 +31,20 @@ public class ArriveWaitingPointEvent extends Event {
 				+ this.waitingPoint.getNextPlatform().getName() + " at " + EventScheduler.get().getCurrentTime());
 		this.waitingPoint.addTram(this.tram);
 
-		final Tram nextTram = this.waitingPoint.getNextTramWaiting();
+		Simulation.logTramPositions();
 
-		if (nextTram != null) {
+		if (this.waitingPoint.isTramWaitingInCorrectOrder()) {
 			Simulation.logVerbose("Trams at " + this.waitingPoint + " are in correct order");
 
 			// The tram with the correct id to leave next has already arrived
 			if (this.waitingPoint.getNextPlatform() instanceof EndStation) {
-				// Next station is an end station -> Schedule TryOccupyJunction
-				// System.out.println("Tram " + tram.getId() + " arrived at the waiting point
-				// for the endstation "
-				// + this.waitingPoint.getNextPlatform().getName() + ".");
-
 				final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(
 						(EndStation) this.waitingPoint.getNextPlatform());
 				EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
-			} else {
-				// Next station is an int. station -> Schedule TramArrivesIntermediate
-				// System.out.println("Tram " + tram.getId() + " arrived at the waiting point
-				// for the intstation "
-				// + this.waitingPoint.getNextPlatform().getName() + ".");
-				final TramArrivesIntStationEvent tramArrivesIntermediateEvent = new TramArrivesIntStationEvent(
-						(IntPlatform) this.waitingPoint.getNextPlatform(), nextTram);
+			} else if (!((IntPlatform) this.waitingPoint.getNextPlatform()).isOccupied()) {
+				final TramArrivesIntPlatformEvent tramArrivesIntermediateEvent = new TramArrivesIntPlatformEvent(
+						(IntPlatform) this.waitingPoint.getNextPlatform(), this.waitingPoint.popNextTramWaiting());
 				EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
-				this.waitingPoint.popNextTramWaiting();
 			}
 		} else {
 			Simulation.logVerbose("Trams at " + this.waitingPoint + " are not in correct order");

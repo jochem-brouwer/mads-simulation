@@ -10,6 +10,7 @@ import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
+import org.uu.mads.simulation.state.Platform;
 import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
@@ -58,6 +59,28 @@ public class Simulation {
 		}
 	}
 
+	public static void logTramPositions() {
+		Platform platform = uithofEndStation;
+		do {
+			if (platform instanceof EndStation) {
+				final EndStation endStation = (EndStation) platform;
+				final Junction junction = endStation.getJunction();
+				logVerbose("Trams on junction for end station " + endStation.getName() + ": "
+						+ junction.getTramOnLaneInA() + " (In-A), " + junction.getTramOnLaneInB() + " (In-B), "
+						+ junction.getTramOnLaneOutA() + " (Out-A), " + junction.getTramOnLaneOutB() + " (Out-B).");
+				logVerbose("Trams on end station " + endStation.getName() + ": " + endStation.getTramOnPlatformA()
+						+ " (Platform A), " + endStation.getTramOnPlatformB() + " (Platform B).");
+			} else {
+				final IntPlatform intPlatform = (IntPlatform) platform;
+				logVerbose("Tram on platform " + intPlatform.getName() + ": " + intPlatform.getTram());
+			}
+			final WaitingPoint nextWaitingPoint = platform.getNextWaitingPoint();
+			logVerbose("Trams on waiting point for platform " + nextWaitingPoint.getNextPlatform().getName() + ": "
+					+ nextWaitingPoint.getWaitingTrams());
+			platform = nextWaitingPoint.getNextPlatform();
+		} while (!platform.equals(uithofEndStation)); // until the circle is complete
+	}
+
 	public static void main(final String[] args) throws IOException {
 		System.out.println("Start simulation");
 
@@ -84,7 +107,6 @@ public class Simulation {
 		while (SIMULATION_END_TIME.isAfter(EventScheduler.get().getCurrentTime())) { // TODO: We need better end
 																						// conditions
 			EventScheduler.get().fireNextEvent();
-			// System.out.println(EventScheduler.get().getScheduledEventsByTime());
 		}
 
 		Performance.get().calculateAverageWaitingTime();

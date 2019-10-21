@@ -2,6 +2,7 @@ package org.uu.mads.simulation.state;
 
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Performance;
@@ -20,6 +21,11 @@ public class EndStation extends Platform {
 	public EndStation(final String name, final Junction junction, final LocalTime nextScheduledLeave,
 			final Duration averageTravelTime, final int lastTramLeftId) {
 		super(name, averageTravelTime);
+
+		Objects.requireNonNull(junction, "Given junction must not be null!");
+		Objects.requireNonNull(nextScheduledLeave, "Given nextScheduledLeave must not be null!");
+		Objects.requireNonNull(lastTramLeftId, "Given lastTramleftId must not be null!");
+
 		this.junction = junction;
 		this.nextScheduledLeave = nextScheduledLeave;
 		this.lastTramLeftId = lastTramLeftId;
