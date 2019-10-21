@@ -49,7 +49,6 @@ public class FreeJunctionEvent extends Event {
 			junction.removeTramOnLaneOutA();
 			scheduleArriveWaitingPointEvent();
 			Simulation.logTramPositions();
-
 		} else if (this.tram.equals(junction.getTramOnLaneOutB())) {
 			junction.removeTramOnLaneOutB();
 			scheduleArriveWaitingPointEvent();

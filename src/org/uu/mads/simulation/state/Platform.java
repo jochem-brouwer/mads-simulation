@@ -12,13 +12,15 @@ import java.util.Queue;
 import java.util.Random;
 import java.util.Set;
 
+import org.apache.commons.math3.distribution.GammaDistribution;
 import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
 
 public class Platform {
-	private static final double STANDARD_DEVIATION_LOG = 0.3588221;
+	private static final double TRAVEL_TIME_SD_LOG = 0.3588221;
+	private static final double DWELL_TIME__DIRST_SHAPE = 2.0;
 
 	private final String name;
 	private final Duration avgTravelTimeToNextPlatf;
@@ -38,7 +40,7 @@ public class Platform {
 		this.name = name;
 		this.avgTravelTimeToNextPlatf = averageTravelTime;
 		this.travelTimeToNexcPlatfDist = new LogNormalDistribution(Math.log(averageTravelTime.toSeconds()),
-				STANDARD_DEVIATION_LOG);
+				TRAVEL_TIME_SD_LOG);
 		this.lastPassengersCalc = Simulation.FIRST_PASSENGER_CALC;
 	}
 
@@ -110,7 +112,7 @@ public class Platform {
 		final double rate = EventScheduler.get().getPassengerRate();
 		final long passedTime = (SECONDS.between(this.lastPassengersCalc, EventScheduler.get().getCurrentTime()));
 		final long numberOfPassengers = (int) (passedTime * rate);
-		Simulation.logVerbose("Number of passengers on Platform :" + numberOfPassengers);
+		Simulation.log("Number of passengers on platform " + this.name + ":" + numberOfPassengers);
 
 		final Random random = new Random();
 
@@ -130,6 +132,16 @@ public class Platform {
 		this.lastPassengersCalc = EventScheduler.get().getCurrentTime();
 	}
 
+	public static Duration calculateDwellTime(final int passengersIn, final int passengersOut) {
+		final double mean = 12.5 + (0.22 * passengersIn) + (0.13 * passengersOut);
+		final double scale = Math.pow(mean / Math.sqrt(DWELL_TIME__DIRST_SHAPE), 2) / mean;
+		final double minimum = 0.8 * mean;
+
+		final GammaDistribution dwellTimeDist = new GammaDistribution(DWELL_TIME__DIRST_SHAPE, scale);
+
+		return Duration.ofSeconds(Math.round(Math.max(minimum, dwellTimeDist.sample())));
+	}
+
 	// TODO: Include in Tram class?
 	public int loadPassengers(final Tram tram) {
 
@@ -137,14 +149,8 @@ public class Platform {
 		int numOfPassengers = tram.getNumOfPassengers();
 		int passengersIn = 0;
 
-		// We iterate through the list of passengers waiting at the platform
-		for (int i = 0; i < this.waitingPassengers.size(); i++) {
-
-			// If we still have capacity, we add the passenger to the tram and delete it
-			// from the platformList.
-			// Else, we break the loop.
-			if (remainingCapacity != 0) {
-				this.waitingPassengers.remove();
+		while (remainingCapacity > 0) {
+			if (this.waitingPassengers.poll() != null) {
 				remainingCapacity--;
 				numOfPassengers++;
 				passengersIn++;
@@ -152,15 +158,18 @@ public class Platform {
 				break;
 			}
 		}
+
 		// We set the number of passengers to the tram.
 		tram.setNumOfPassengers(numOfPassengers);
 		return passengersIn;
 	}
 
 	// TODO: Include in Tram class?
+	/**
+	 * This functions calculates the number of passengers leaving the tram and
+	 * removes them from the tram number.
+	 */
 	public int dumpPassengers(final Tram tram) {
-		// This functions calculates the number of passengers leaving the tram and
-		// removes them from the tram number.
 		final double dumpingPercentage = 0.5; // TODO: This percentage is calculated using the input analysis?
 		final int numOfPassengers = tram.getNumOfPassengers();
 		final int passengersOut = (int) (numOfPassengers * dumpingPercentage);

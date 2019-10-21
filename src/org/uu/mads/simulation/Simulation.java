@@ -28,6 +28,7 @@ public class Simulation {
 																				// network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
+	public static final Boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
 	public static final Boolean ARTIFICIAL_DATA = false;
 
 	private static EndStation centraalEndStation;
@@ -60,25 +61,27 @@ public class Simulation {
 	}
 
 	public static void logTramPositions() {
-		Platform platform = uithofEndStation;
-		do {
-			if (platform instanceof EndStation) {
-				final EndStation endStation = (EndStation) platform;
-				final Junction junction = endStation.getJunction();
-				logVerbose("Trams on junction for end station " + endStation.getName() + ": "
-						+ junction.getTramOnLaneInA() + " (In-A), " + junction.getTramOnLaneInB() + " (In-B), "
-						+ junction.getTramOnLaneOutA() + " (Out-A), " + junction.getTramOnLaneOutB() + " (Out-B).");
-				logVerbose("Trams on end station " + endStation.getName() + ": " + endStation.getTramOnPlatformA()
-						+ " (Platform A), " + endStation.getTramOnPlatformB() + " (Platform B).");
-			} else {
-				final IntPlatform intPlatform = (IntPlatform) platform;
-				logVerbose("Tram on platform " + intPlatform.getName() + ": " + intPlatform.getTram());
-			}
-			final WaitingPoint nextWaitingPoint = platform.getNextWaitingPoint();
-			logVerbose("Trams on waiting point for platform " + nextWaitingPoint.getNextPlatform().getName() + ": "
-					+ nextWaitingPoint.getWaitingTrams());
-			platform = nextWaitingPoint.getNextPlatform();
-		} while (!platform.equals(uithofEndStation)); // until the circle is complete
+		if (LOG_TRAM_POSITIONS) {
+			Platform platform = uithofEndStation;
+			do {
+				if (platform instanceof EndStation) {
+					final EndStation endStation = (EndStation) platform;
+					final Junction junction = endStation.getJunction();
+					log("Trams on junction for end station " + endStation.getName() + ": " + junction.getTramOnLaneInA()
+							+ " (In-A), " + junction.getTramOnLaneInB() + " (In-B), " + junction.getTramOnLaneOutA()
+							+ " (Out-A), " + junction.getTramOnLaneOutB() + " (Out-B).");
+					log("Trams on end station " + endStation.getName() + ": " + endStation.getTramOnPlatformA()
+							+ " (Platform A), " + endStation.getTramOnPlatformB() + " (Platform B).");
+				} else {
+					final IntPlatform intPlatform = (IntPlatform) platform;
+					log("Tram on platform " + intPlatform.getName() + ": " + intPlatform.getTram());
+				}
+				final WaitingPoint nextWaitingPoint = platform.getNextWaitingPoint();
+				log("Trams on waiting point for platform " + nextWaitingPoint.getNextPlatform().getName() + ": "
+						+ nextWaitingPoint.getWaitingTrams());
+				platform = nextWaitingPoint.getNextPlatform();
+			} while (!platform.equals(uithofEndStation)); // until the circle is complete
+		}
 	}
 
 	public static void main(final String[] args) throws IOException {
