@@ -3,6 +3,8 @@ package org.uu.mads.simulation.state;
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Simulation;
 
+import java.time.LocalTime;
+
 public class Junction {
 	private Tram tramOnLaneInA;
 	private Tram tramOnLaneInB;

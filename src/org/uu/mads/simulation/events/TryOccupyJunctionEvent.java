@@ -1,9 +1,11 @@
 package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
@@ -69,6 +71,11 @@ public class TryOccupyJunctionEvent extends Event {
 					&& this.endStation.checkForOrder(this.endStation.getTramOnPlatformA())) {
 				// We send the tram from platform A to the junction
 				final Tram tramOnPlatformA = this.endStation.getTramOnPlatformA();
+
+				if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))) {
+					tramOnPlatformA.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+				}
+
 				junction.setTramOnLaneOutA(tramOnPlatformA);
 				this.endStation.departFromPlatformA();
 				scheduleFreeJunctionEvent(tramOnPlatformA);
@@ -77,6 +84,11 @@ public class TryOccupyJunctionEvent extends Event {
 					&& this.endStation.checkForOrder(this.endStation.getTramOnPlatformB())) {
 				// We send the tram from platform B to the junction
 				final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
+
+				if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))) {
+					tramOnPlatformB.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+				}
+
 				junction.setTramOnLaneOutB(tramOnPlatformB);
 				this.endStation.departFromPlatformB();
 				scheduleFreeJunctionEvent(tramOnPlatformB);
@@ -87,6 +99,11 @@ public class TryOccupyJunctionEvent extends Event {
 			// We are in mode 3 and can send two trams at once
 			// We send the tram from platform B to the junction
 			final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
+
+			if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))) {
+				tramOnPlatformB.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+			}
+
 			junction.setTramOnLaneOutB(tramOnPlatformB);
 			this.endStation.departFromPlatformB();
 			scheduleFreeJunctionEvent(tramOnPlatformB);
@@ -97,6 +114,7 @@ public class TryOccupyJunctionEvent extends Event {
 	private void scheduleFreeJunctionEvent(final Tram tram) {
 		final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.endStation, tram);
 		EventScheduler.get().scheduleEventAhead(freeJunctionEvent, JUNCTION_DURATION);
+
 	}
 
 	@Override

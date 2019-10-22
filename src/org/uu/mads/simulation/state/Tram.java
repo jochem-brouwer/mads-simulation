@@ -1,5 +1,6 @@
 package org.uu.mads.simulation.state;
 
+import java.time.LocalTime;
 import java.util.Objects;
 
 public class Tram {
@@ -7,6 +8,15 @@ public class Tram {
 
 	private final int id;
 	private int numOfPassengers;
+
+	private LocalTime JunctionArrivalTime;
+	private LocalTime JunctionEnteringTime;
+
+	public LocalTime getJunctionArrivalTime() { return this.JunctionArrivalTime; }
+	public LocalTime getJunctionEnteringTime() { return this.JunctionEnteringTime; }
+
+	public void setJunctionArrivalTime(LocalTime time) { this.JunctionArrivalTime = time;}
+	public void setJunctionEnteringTime(LocalTime time) { this.JunctionEnteringTime = time; }
 
 	public Tram(final int id, final int numOfPassengers) {
 		super();

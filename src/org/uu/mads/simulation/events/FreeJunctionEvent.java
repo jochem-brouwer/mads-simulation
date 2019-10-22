@@ -1,9 +1,11 @@
 package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
@@ -26,6 +28,24 @@ public class FreeJunctionEvent extends Event {
 	@Override
 	public void fire() {
 		final Junction junction = this.endStation.getJunction();
+
+		if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))
+			&& this.tram.getJunctionArrivalTime() != null) {
+			this.tram.setJunctionEnteringTime(EventScheduler.get().getCurrentTime().minus(Duration.ofMinutes(1)));
+			Duration waitingTime = Duration.between(
+					this.tram.getJunctionArrivalTime(), this.tram.getJunctionEnteringTime());
+
+			/*System.out.println(this.tram.getId());
+			System.out.println(this.tram.getJunctionArrivalTime());
+			System.out.println(this.tram.getJunctionEnteringTime());
+			System.out.println(waitingTime.getSeconds());*/
+
+			if (this.endStation.getName() == "Centraal Station") {
+				Performance.get().addJunctionWaitingTime(waitingTime, 0);
+			} else {
+				Performance.get().addJunctionWaitingTime(waitingTime, 1);
+			}
+		}
 
 		if (this.tram.equals(junction.getTramOnLaneInA())) {
 			junction.removeTramOnLaneInA();

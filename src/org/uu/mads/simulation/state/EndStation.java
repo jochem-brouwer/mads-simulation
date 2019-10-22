@@ -128,7 +128,11 @@ public class EndStation extends Platform {
 		// System.out.println("Next scheduled leave: " +
 		// this.nextScheduledLeave.toString());
 
-		Performance.get().addDelay(delay);
+		if (this.getName() == "Centraal Station") {
+			Performance.get().addDelay(delay, 0);
+		} else {
+			Performance.get().addDelay(delay, 1);
+		}
 	}
 
 	public void departFromPlatformB() {
@@ -147,7 +151,11 @@ public class EndStation extends Platform {
 		// System.out.println("Next scheduled leave: " +
 		// this.nextScheduledLeave.toString());
 
-		Performance.get().addDelay(delay);
+		if (this.getName() == "Centraal Station") {
+			Performance.get().addDelay(delay, 0);
+		} else {
+			Performance.get().addDelay(delay, 1);
+		}
 	}
 
 	@Override

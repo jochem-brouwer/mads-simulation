@@ -113,6 +113,7 @@ public class Simulation {
 		}
 
 		Performance.get().calculateAverageWaitingTime();
+		Performance.get().calculateJunctionWaitingTime();
 		Performance.get().calculateAveragePunctuality();
 	}
 

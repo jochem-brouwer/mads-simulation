@@ -1,10 +1,12 @@
 package org.uu.mads.simulation.events;
 
 import java.time.Duration;
+import java.time.LocalTime;
 import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.state.EndStation;
+import org.uu.mads.simulation.state.Tram;
 
 public class ScheduledLeaveEndStationEvent extends Event {
 	private static final int LOW_PRIORITY = 1;
@@ -24,6 +26,7 @@ public class ScheduledLeaveEndStationEvent extends Event {
 		if (this.endStation.isNextScheduledLeaveDue()) {
 			final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(this.endStation);
 			EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
+
 		} else {
 			final ScheduledLeaveEndStationEvent scheduledLeaveEndStationEvent = new ScheduledLeaveEndStationEvent(
 					this.endStation);
