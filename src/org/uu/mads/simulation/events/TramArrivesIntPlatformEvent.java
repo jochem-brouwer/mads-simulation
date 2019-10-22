@@ -28,9 +28,9 @@ public class TramArrivesIntPlatformEvent extends Event {
 		this.intPlatform.arriveTram(this.tram);
 
 		// When a tram arrives, we calculate the passengers and load them into the tram.
-		final int passengersOut = this.intPlatform.dumpPassengers(this.tram);
+		final int passengersOut = this.tram.dumpPassengers();
 		this.intPlatform.calculatePassengers();
-		final int passengersIn = this.intPlatform.loadPassengers(this.tram);
+		final int passengersIn = this.tram.loadPassengers(this.intPlatform);
 
 		Simulation.log("Tram " + this.tram.getId() + " is arriving at platform " + this.intPlatform.getName() + " at "
 				+ EventScheduler.get().getCurrentTime() + ", dumps " + passengersOut + " passengers and loads "

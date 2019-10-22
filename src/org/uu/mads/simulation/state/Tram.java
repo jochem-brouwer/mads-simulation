@@ -12,11 +12,21 @@ public class Tram {
 	private LocalTime JunctionArrivalTime;
 	private LocalTime JunctionEnteringTime;
 
-	public LocalTime getJunctionArrivalTime() { return this.JunctionArrivalTime; }
-	public LocalTime getJunctionEnteringTime() { return this.JunctionEnteringTime; }
+	public LocalTime getJunctionArrivalTime() {
+		return this.JunctionArrivalTime;
+	}
 
-	public void setJunctionArrivalTime(LocalTime time) { this.JunctionArrivalTime = time;}
-	public void setJunctionEnteringTime(LocalTime time) { this.JunctionEnteringTime = time; }
+	public LocalTime getJunctionEnteringTime() {
+		return this.JunctionEnteringTime;
+	}
+
+	public void setJunctionArrivalTime(final LocalTime time) {
+		this.JunctionArrivalTime = time;
+	}
+
+	public void setJunctionEnteringTime(final LocalTime time) {
+		this.JunctionEnteringTime = time;
+	}
 
 	public Tram(final int id, final int numOfPassengers) {
 		super();
@@ -38,6 +48,40 @@ public class Tram {
 
 	public int getNumOfPassengers() {
 		return this.numOfPassengers;
+	}
+
+	/**
+	 * Calculates the number of passengers entering the tram and adds them to the
+	 * tram.
+	 */
+	public int loadPassengers(final Platform platform) {
+		final int remainingCapacity = getRemainingCapacity();
+		final int noOfWaitingPassengers = platform.getNoOfWaitingPassengers();
+
+		int passengersIn;
+		if (remainingCapacity >= noOfWaitingPassengers) {
+			platform.popFirstWaitingPassengers(noOfWaitingPassengers);
+			passengersIn = noOfWaitingPassengers;
+		} else {
+			platform.popFirstWaitingPassengers(remainingCapacity);
+			passengersIn = remainingCapacity;
+		}
+
+		this.numOfPassengers += passengersIn;
+
+		return passengersIn;
+	}
+
+	/**
+	 * Calculates the number of passengers leaving the tram and removes them from
+	 * the tram.
+	 */
+	public int dumpPassengers() {
+		final double dumpingPercentage = 0.5; // TODO: This percentage is calculated using the input analysis?
+		final int passengersOut = (int) (Math.round(this.numOfPassengers * dumpingPercentage));
+		this.numOfPassengers = this.numOfPassengers - passengersOut;
+
+		return passengersOut;
 	}
 
 	@Override

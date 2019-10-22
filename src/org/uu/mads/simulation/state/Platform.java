@@ -90,6 +90,10 @@ public class Platform {
 		this.lastPassengersCalc = lastPassengersCalc;
 	}
 
+	public int getNoOfWaitingPassengers() {
+		return this.waitingPassengers.size();
+	}
+
 	public Passenger popFirstWaitingPassenger() {
 		return this.waitingPassengers.poll();
 	}
@@ -169,42 +173,6 @@ public class Platform {
 		final GammaDistribution dwellTimeDist = new GammaDistribution(DWELL_TIME__DIRST_SHAPE, scale);
 
 		return Duration.ofSeconds(Math.round(Math.max(minimum, dwellTimeDist.sample())));
-	}
-
-	// TODO: Include in Tram class?
-	public int loadPassengers(final Tram tram) {
-
-		int remainingCapacity = tram.getRemainingCapacity();
-		int numOfPassengers = tram.getNumOfPassengers();
-		int passengersIn = 0;
-
-		while (remainingCapacity > 0) {
-			if (this.waitingPassengers.poll() != null) {
-				remainingCapacity--;
-				numOfPassengers++;
-				passengersIn++;
-			} else {
-				break;
-			}
-		}
-
-		// We set the number of passengers to the tram.
-		tram.setNumOfPassengers(numOfPassengers);
-		return passengersIn;
-	}
-
-	// TODO: Include in Tram class?
-	/**
-	 * This functions calculates the number of passengers leaving the tram and
-	 * removes them from the tram number.
-	 */
-	public int dumpPassengers(final Tram tram) {
-		final double dumpingPercentage = 0.5; // TODO: This percentage is calculated using the input analysis?
-		final int numOfPassengers = tram.getNumOfPassengers();
-		final int passengersOut = (int) (numOfPassengers * dumpingPercentage);
-		tram.setNumOfPassengers(numOfPassengers - passengersOut);
-
-		return passengersOut;
 	}
 
 	@Override
