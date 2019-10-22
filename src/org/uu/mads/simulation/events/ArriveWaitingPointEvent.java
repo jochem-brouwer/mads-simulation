@@ -34,16 +34,16 @@ public class ArriveWaitingPointEvent extends Event {
 
 		Simulation.logTramPositions();
 
+		if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))
+		&& this.waitingPoint.getNextPlatform() instanceof EndStation) {
+			this.tram.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+		}
+
 		if (this.waitingPoint.isTramWaitingInCorrectOrder()) {
 			Simulation.logVerbose("Trams at " + this.waitingPoint + " are in correct order");
 
 			// The tram with the correct id to leave next has already arrived
 			if (this.waitingPoint.getNextPlatform() instanceof EndStation) {
-
-				if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))) {
-					this.tram.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
-				}
-
 				final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(
 						(EndStation) this.waitingPoint.getNextPlatform());
 				EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
