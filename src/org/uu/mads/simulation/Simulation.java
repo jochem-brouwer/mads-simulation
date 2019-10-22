@@ -7,6 +7,7 @@ import java.time.LocalTime;
 
 import org.uu.mads.simulation.events.ArriveWaitingPointEvent;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
+import org.uu.mads.simulation.input.InputReader;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;

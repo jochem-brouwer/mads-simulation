@@ -1,4 +1,4 @@
-package org.uu.mads.simulation;
+package org.uu.mads.simulation.input;
 
 import java.io.*;
 import java.nio.file.Files;
