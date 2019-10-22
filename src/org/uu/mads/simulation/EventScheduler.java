@@ -16,7 +16,7 @@ public class EventScheduler {
 	private LocalTime currentTime = Simulation.FIRST_SCHEDULED_LEAVE_TIME_PR
 			.minus(Simulation.TURN_AROUND_DURATION.plus(Duration.ofMinutes(1)));
 
-	private final double passengerRate = 0.005;
+	private final double passengerRate = 0.1;
 
 	private EventScheduler() {
 		// private constructor because this is a singleton

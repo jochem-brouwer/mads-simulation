@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.Random;
 import java.util.Set;
 
 import org.apache.commons.math3.distribution.GammaDistribution;
@@ -114,21 +113,27 @@ public class Platform {
 		final long numberOfPassengers = (int) (passedTime * rate);
 		Simulation.log("Number of passengers on platform " + this.name + ":" + numberOfPassengers);
 
-		final Random random = new Random();
-
-		// We generate a new passenger with its own arrival time. The passengers are
-		// stored in a list that can be
-		// accessed when a tram leaves a station.
-		for (int i = 0; i < passedTime; i++) {
-			final int randomInt = random.nextInt(100);
-			if (rate > (randomInt / 100)) { // TODO depends on our poisson rate
-				final Passenger passenger = new Passenger(this.lastPassengersCalc.plus(i, SECONDS), this);
-				addWaitingPassenger(passenger);
-				final Duration waitingTime = Duration.between(this.lastPassengersCalc.plus(i, SECONDS),
-						EventScheduler.get().getCurrentTime());
-				Performance.get().addPassenger(waitingTime);
-			}
+		for (int i = 0; i < numberOfPassengers; i++) {
+			final Passenger passenger = new Passenger(this.lastPassengersCalc.plus(i, SECONDS), this);
+			addWaitingPassenger(passenger);
+			final Duration waitingTime = Duration.between(this.lastPassengersCalc.plus(i, SECONDS),
+					EventScheduler.get().getCurrentTime());
+			Performance.get().addPassenger(waitingTime);
 		}
+
+//		// We generate a new passenger with its own arrival time. The passengers are
+//		// stored in a queue that can be accessed when a tram leaves a station.
+//		final Random random = new Random();
+//		for (int i = 0; i < passedTime; i++) {
+//			final int randomInt = random.nextInt(100);
+//			if (rate > (randomInt / 100)) { // TODO depends on our poisson rate
+//				final Passenger passenger = new Passenger(this.lastPassengersCalc.plus(i, SECONDS), this);
+//				addWaitingPassenger(passenger);
+//				final Duration waitingTime = Duration.between(this.lastPassengersCalc.plus(i, SECONDS),
+//						EventScheduler.get().getCurrentTime());
+//				Performance.get().addPassenger(waitingTime);
+//			}
+//		}
 		this.lastPassengersCalc = EventScheduler.get().getCurrentTime();
 	}
 
