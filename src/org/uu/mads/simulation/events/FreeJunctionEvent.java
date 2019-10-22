@@ -35,10 +35,10 @@ public class FreeJunctionEvent extends Event {
 			Duration waitingTime = Duration.between(
 					this.tram.getJunctionArrivalTime(), this.tram.getJunctionEnteringTime());
 
-			System.out.println(this.tram.getId());
+			/*System.out.println(this.tram.getId());
 			System.out.println(this.tram.getJunctionArrivalTime());
 			System.out.println(this.tram.getJunctionEnteringTime());
-			System.out.println(waitingTime.getSeconds());
+			System.out.println(waitingTime.getSeconds());*/
 
 			if (this.endStation.getName() == "Centraal Station") {
 				Performance.get().addJunctionWaitingTime(waitingTime, 0);
