@@ -1,6 +1,5 @@
 package org.uu.mads.simulation.events;
 
-import java.time.Duration;
 import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
@@ -27,22 +26,8 @@ public class TramArrivesIntPlatformEvent extends Event {
 	public void fire() {
 		this.intPlatform.arriveTram(this.tram);
 
-		// When a tram arrives, we calculate the passengers and load them into the tram.
-		final int passengersOut = this.tram.dumpPassengers();
-		this.intPlatform.calculatePassengers();
-		final int passengersIn = this.tram.loadPassengers(this.intPlatform);
-
-		Simulation.log("Tram " + this.tram.getId() + " is arriving at platform " + this.intPlatform.getName() + " at "
-				+ EventScheduler.getInstance().getCurrentTime() + ", dumps " + passengersOut + " passengers and loads "
-				+ passengersIn + " passengers.");
-
-		final Duration dwellTime = IntPlatform.calculateDwellTime(passengersIn, passengersOut);
-
-		Simulation.log("The dwell time is " + dwellTime.getSeconds() + " seconds.");
-
 		final TramLeavesIntPlatformEvent tramLeavesIntStationEvent = new TramLeavesIntPlatformEvent(this.intPlatform);
-
-		EventScheduler.getInstance().scheduleEventAhead(tramLeavesIntStationEvent, dwellTime);
+		EventScheduler.getInstance().scheduleEventAhead(tramLeavesIntStationEvent, this.intPlatform.getDwellTime());
 
 		Simulation.logTramPositions();
 	}

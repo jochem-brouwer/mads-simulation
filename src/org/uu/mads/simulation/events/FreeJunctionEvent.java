@@ -31,16 +31,10 @@ public class FreeJunctionEvent extends Event {
 
 		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7, 30))
 				&& (this.tram.getJunctionArrivalTime() != null)) {
-			this.tram.setJunctionEnteringTime(EventScheduler.getInstance().getCurrentTime().minus(Duration.ofMinutes(1)));
+			this.tram.setJunctionEnteringTime(
+					EventScheduler.getInstance().getCurrentTime().minus(Duration.ofMinutes(1)));
 			final Duration waitingTime = Duration.between(this.tram.getJunctionArrivalTime(),
 					this.tram.getJunctionEnteringTime());
-
-			/*
-			 * System.out.println(this.tram.getId());
-			 * System.out.println(this.tram.getJunctionArrivalTime());
-			 * System.out.println(this.tram.getJunctionEnteringTime());
-			 * System.out.println(waitingTime.getSeconds());
-			 */
 
 			if (this.endStation.getName() == "Centraal Station") {
 				Performance.getInstance().addJunctionWaitingTime(waitingTime, 0);
@@ -85,7 +79,8 @@ public class FreeJunctionEvent extends Event {
 	private void scheduleArriveWaitingPointEvent() {
 		final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(
 				this.endStation.getNextWaitingPoint(), this.tram);
-		EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, this.endStation.getTravelTimeToNextPlatform());
+		EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent,
+				this.endStation.getTravelTimeToNextPlatform());
 	}
 
 	@Override

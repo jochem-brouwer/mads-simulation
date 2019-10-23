@@ -12,7 +12,6 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
-import org.apache.commons.math3.distribution.GammaDistribution;
 import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.uu.mads.simulation.EventScheduler;
@@ -22,7 +21,6 @@ import org.uu.mads.simulation.input.PassengersInReader;
 
 public class Platform {
 	private static final double TRAVEL_TIME_SD_LOG = 0.3588221;
-	private static final double DWELL_TIME__DIRST_SHAPE = 2.0;
 	private static final int POISSON_RATE_INTERVAL_MIN = 15;
 	private static final int POISSON_RATE_INTERVAL_SEC = POISSON_RATE_INTERVAL_MIN * 60;
 
@@ -165,16 +163,6 @@ public class Platform {
 		Simulation.log("Number of passengers that arrived on platform " + this.name
 				+ " since last passenger calculation: " + passArrSinceLastCalc);
 		Simulation.log("New number of passengers on platform " + this.name + ": " + this.waitingPassengers.size());
-	}
-
-	public static Duration calculateDwellTime(final int passengersIn, final int passengersOut) {
-		final double mean = 12.5 + (0.22 * passengersIn) + (0.13 * passengersOut);
-		final double scale = Math.pow(mean / Math.sqrt(DWELL_TIME__DIRST_SHAPE), 2) / mean;
-		final double minimum = 0.8 * mean;
-
-		final GammaDistribution dwellTimeDist = new GammaDistribution(DWELL_TIME__DIRST_SHAPE, scale);
-
-		return Duration.ofSeconds(Math.round(Math.max(minimum, dwellTimeDist.sample())));
 	}
 
 	@Override
