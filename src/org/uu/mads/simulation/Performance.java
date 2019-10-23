@@ -45,7 +45,7 @@ public class Performance {
 		// private constructor because this is a singleton
 	}
 
-	public static Performance get() {
+	public static Performance getInstance() {
 		if (instance == null) {
 			instance = new Performance();
 		}

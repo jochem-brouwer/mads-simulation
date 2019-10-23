@@ -28,10 +28,10 @@ public class TramLeavesIntPlatformEvent extends Event {
 		final Duration travelTime = this.intPlatform.getTravelTimeToNextPlatform();
 		final ArriveWaitingPointEvent arrivalEvent = new ArriveWaitingPointEvent(this.intPlatform.getNextWaitingPoint(),
 				tram);
-		EventScheduler.get().scheduleEventAhead(arrivalEvent, travelTime);
+		EventScheduler.getInstance().scheduleEventAhead(arrivalEvent, travelTime);
 
 		final PlatformFreeEvent platformFreeEvent = new PlatformFreeEvent(this.intPlatform);
-		EventScheduler.get().scheduleEventAhead(platformFreeEvent, PLATFORM_FREE_DURATION);
+		EventScheduler.getInstance().scheduleEventAhead(platformFreeEvent, PLATFORM_FREE_DURATION);
 
 		Simulation.log("Tram " + tram.getId() + " left platform " + this.intPlatform.getName() + ".");
 

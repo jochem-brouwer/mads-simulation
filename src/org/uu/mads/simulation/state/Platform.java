@@ -12,17 +12,15 @@ import java.util.Objects;
 import java.util.Queue;
 import java.util.Set;
 
-import org.apache.commons.math3.distribution.GammaDistribution;
 import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.uu.mads.simulation.EventScheduler;
 import org.uu.mads.simulation.Performance;
 import org.uu.mads.simulation.Simulation;
-import org.uu.mads.simulation.input.PassengerInReader;
+import org.uu.mads.simulation.input.PassengersInReader;
 
 public class Platform {
 	private static final double TRAVEL_TIME_SD_LOG = 0.3588221;
-	private static final double DWELL_TIME__DIRST_SHAPE = 2.0;
 	private static final int POISSON_RATE_INTERVAL_MIN = 15;
 	private static final int POISSON_RATE_INTERVAL_SEC = POISSON_RATE_INTERVAL_MIN * 60;
 
@@ -117,62 +115,54 @@ public class Platform {
 	}
 
 	public void calculatePassengers() {
-		final Map<LocalTime, Double> passengerInRatesByTime = PassengerInReader.getInstance()
-				.getPassengerInRatesByTimeForPlatform(this.name);
+		final Map<LocalTime, Double> passengerInRatesByTime = PassengersInReader.getInstance()
+				.getRatesByTimeForPlatform(this.name, Simulation.CSV_PATH_POISS_PASS_IN);
 
-		final LocalTime currentTime = EventScheduler.get().getCurrentTime();
+		final LocalTime currentTime = EventScheduler.getInstance().getCurrentTime();
 
-		LocalTime currentInterval = LocalTime.ofSecondOfDay(this.lastPassengersCalc.toSecondOfDay()
-				- (this.lastPassengersCalc.toSecondOfDay() % POISSON_RATE_INTERVAL_SEC));
 		int passArrSinceLastCalc = 0;
-		int totalSecondsPassed = 0;
-		LocalTime startTime = this.lastPassengersCalc;
-		do {
-			final LocalTime nextInterval = currentInterval.plusSeconds(POISSON_RATE_INTERVAL_SEC);
-			// End time is either the start of the next interval or the current time (if
-			// calulation ends in this interval)
-			final LocalTime endTime = currentTime.isAfter(nextInterval) ? nextInterval : currentTime;
-			final long secondsInInterval = SECONDS.between(startTime, endTime);
-			final double rate = passengerInRatesByTime.get(currentInterval);
+		if (currentTime.isAfter(this.lastPassengersCalc)) {
+			LocalTime currentInterval = LocalTime.ofSecondOfDay(this.lastPassengersCalc.toSecondOfDay()
+					- (this.lastPassengersCalc.toSecondOfDay() % POISSON_RATE_INTERVAL_SEC));
+			int totalSecondsPassed = 0;
+			LocalTime startTime = this.lastPassengersCalc;
+			do {
+				final LocalTime nextInterval = currentInterval.plusSeconds(POISSON_RATE_INTERVAL_SEC);
+				// End time is either the start of the next interval or the current time (if
+				// calulation ends in this interval)
+				final LocalTime endTime = currentTime.isAfter(nextInterval) ? nextInterval : currentTime;
+				final long secondsInInterval = SECONDS.between(startTime, endTime);
+				final double rate = passengerInRatesByTime.get(currentInterval);
 
-			if (rate != 0) { // rate 0 means no passengers arrive
-				final PoissonDistribution poissonDistribution = new PoissonDistribution(rate);
-				// Find out how many passengers arrive in every second of this interval
-				for (int i = 0; i < secondsInInterval; i++) {
-					totalSecondsPassed++;
-					final int numOfPassengersForSecond = poissonDistribution.sample();
-					// Add passengers for this second
-					for (int j = 0; j < numOfPassengersForSecond; j++) {
-						passArrSinceLastCalc++;
-						final Passenger passenger = new Passenger(
-								this.lastPassengersCalc.plusSeconds(totalSecondsPassed), this);
-						addWaitingPassenger(passenger);
-						final Duration waitingTime = Duration
-								.between(this.lastPassengersCalc.plusSeconds(totalSecondsPassed), currentTime);
-						Performance.get().addPassenger(waitingTime);
+				if (rate != 0) { // rate 0 means no passengers arrive
+					final PoissonDistribution poissonDistribution = new PoissonDistribution(rate);
+					// Find out how many passengers arrive in every second of this interval
+					for (int i = 0; i < secondsInInterval; i++) {
+						totalSecondsPassed++;
+						final int numOfPassengersForSecond = poissonDistribution.sample();
+						// Add passengers for this second
+						for (int j = 0; j < numOfPassengersForSecond; j++) {
+							passArrSinceLastCalc++;
+							final Passenger passenger = new Passenger(
+									this.lastPassengersCalc.plusSeconds(totalSecondsPassed), this);
+							addWaitingPassenger(passenger);
+							final Duration waitingTime = Duration
+									.between(this.lastPassengersCalc.plusSeconds(totalSecondsPassed), currentTime);
+							Performance.getInstance().addPassenger(waitingTime);
+						}
 					}
 				}
-			}
 
-			startTime = endTime;
-			currentInterval = nextInterval;
-		} while (startTime != currentTime);
+				startTime = endTime;
+				currentInterval = nextInterval;
+			} while (startTime != currentTime);
 
-		this.lastPassengersCalc = currentTime;
+			this.lastPassengersCalc = currentTime;
+		}
 
 		Simulation.log("Number of passengers that arrived on platform " + this.name
 				+ " since last passenger calculation: " + passArrSinceLastCalc);
 		Simulation.log("New number of passengers on platform " + this.name + ": " + this.waitingPassengers.size());
-	}
-
-	public static Duration calculateDwellTime(final int passengersIn, final int passengersOut) {
-		final double mean = 12.5 + (0.22 * passengersIn) + (0.13 * passengersOut);
-		final double scale = Math.pow(mean / Math.sqrt(DWELL_TIME__DIRST_SHAPE), 2) / mean;
-		final double minimum = 0.8 * mean;
-
-		final GammaDistribution dwellTimeDist = new GammaDistribution(DWELL_TIME__DIRST_SHAPE, scale);
-
-		return Duration.ofSeconds(Math.round(Math.max(minimum, dwellTimeDist.sample())));
 	}
 
 	@Override

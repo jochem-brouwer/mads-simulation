@@ -25,12 +25,12 @@ public class ScheduledLeaveEndStationEvent extends Event {
 	public void fire() {
 		if (this.endStation.isNextScheduledLeaveDue()) {
 			final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(this.endStation);
-			EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
+			EventScheduler.getInstance().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
 
 		} else {
 			final ScheduledLeaveEndStationEvent scheduledLeaveEndStationEvent = new ScheduledLeaveEndStationEvent(
 					this.endStation);
-			EventScheduler.get().scheduleEvent(scheduledLeaveEndStationEvent, this.endStation.getNextScheduledLeave());
+			EventScheduler.getInstance().scheduleEvent(scheduledLeaveEndStationEvent, this.endStation.getNextScheduledLeave());
 		}
 
 	}
