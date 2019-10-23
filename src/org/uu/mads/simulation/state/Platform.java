@@ -2,7 +2,6 @@ package org.uu.mads.simulation.state;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-import java.io.File;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayDeque;
@@ -109,8 +108,9 @@ public class Platform {
 	}
 
 	public void calculatePassengers() {
-		// final Map<LocalTime, Double> passengerInRatesByTime = PassengersInReader.getInstance()
-				// .getRatesByTimeForPlatform(this.name, Simulation.CSV_PATH_POISS_PASS_IN);
+		// final Map<LocalTime, Double> passengerInRatesByTime =
+		// PassengersInReader.getInstance()
+		// .getRatesByTimeForPlatform(this.name, Simulation.CSV_PATH_POISS_PASS_IN);
 
 		String path;
 		if (Simulation.ARTIFICIAL_DATA) {
@@ -138,7 +138,7 @@ public class Platform {
 				final long secondsInInterval = SECONDS.between(startTime, endTime);
 				final double rate = passengerInRatesByTime.get(currentInterval) * Simulation.PASSENGER_IN_MULTIPLICATOR;
 
-				if (rate != 0) { // rate 0 means no passengers arrive
+				if (rate > 0) { // rate <= 0 means no passengers arrive
 					final PoissonDistribution poissonDistribution = new PoissonDistribution(rate);
 					// Find out how many passengers arrive in every second of this interval
 					for (int i = 0; i < secondsInInterval; i++) {

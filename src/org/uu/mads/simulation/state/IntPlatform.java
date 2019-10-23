@@ -44,7 +44,7 @@ public class IntPlatform extends Platform {
 		this.occupied = true;
 
 		// When a tram arrives, we calculate the passengers and load them into the tram.
-		final int passengersOut = this.tram.dumpPassengers();
+		final int passengersOut = this.tram.dumpPassengers(this);
 		calculatePassengers();
 		final int passengersIn = this.tram.loadPassengers(this);
 

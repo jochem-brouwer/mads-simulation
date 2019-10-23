@@ -60,7 +60,7 @@ public class EndStation extends Platform {
 		this.arrivalTimePlatformA = EventScheduler.getInstance().getCurrentTime();
 
 		// When a tram arrives, we calculate the passengers and load them into the tram.
-		final int passengersOut = tram.dumpPassengers();
+		final int passengersOut = tram.dumpPassengers(this);
 		calculatePassengers();
 		final int passengersIn = tram.loadPassengers(this);
 
@@ -85,7 +85,7 @@ public class EndStation extends Platform {
 		this.arrivalTimePlatformB = EventScheduler.getInstance().getCurrentTime();
 
 		// When a tram arrives, we calculate the passengers and load them into the tram.
-		final int passengersOut = tram.dumpPassengers();
+		final int passengersOut = tram.dumpPassengers(this);
 		calculatePassengers();
 		final int passengersIn = tram.loadPassengers(this);
 

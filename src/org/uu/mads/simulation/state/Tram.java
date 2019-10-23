@@ -1,10 +1,18 @@
 package org.uu.mads.simulation.state;
 
 import java.time.LocalTime;
+import java.util.Map;
 import java.util.Objects;
 
+import org.apache.commons.math3.distribution.PoissonDistribution;
+import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.Simulation;
+import org.uu.mads.simulation.input.PassengersOutReader;
+
 public class Tram {
-	public static final int CAPACITY = 420; // Is fixed.
+	public static final int CAPACITY = 420; // Blaze it!
+	private static final int POISSON_RATE_INTERVAL_MIN = 15;
+	private static final int POISSON_RATE_INTERVAL_SEC = POISSON_RATE_INTERVAL_MIN * 60;
 
 	private final int id;
 	private int numOfPassengers;
@@ -76,9 +84,31 @@ public class Tram {
 	 * Calculates the number of passengers leaving the tram and removes them from
 	 * the tram.
 	 */
-	public int dumpPassengers() {
-		final double dumpingPercentage = 0.5; // TODO: This percentage is calculated using the input analysis?
-		final int passengersOut = (int) (Math.round(this.numOfPassengers * dumpingPercentage));
+	public int dumpPassengers(final Platform platform) {
+		final double rate;
+		if ((platform instanceof EndStation)) {
+			rate = 1;
+		} else {
+			final Map<LocalTime, Double> ratesByTime = PassengersOutReader.getInstance()
+					.getRatesByTimeForPlatform(platform.getName(), Simulation.CSV_PATH_POISS_PASS_OUT);
+
+			final LocalTime currentTime = EventScheduler.getInstance().getCurrentTime();
+			final LocalTime currentInterval = LocalTime.ofSecondOfDay(
+					currentTime.toSecondOfDay() - (currentTime.toSecondOfDay() % POISSON_RATE_INTERVAL_SEC));
+
+			rate = ratesByTime.get(currentInterval);
+		}
+
+		final int dumpPercentage;
+		if (rate <= 0) {
+			dumpPercentage = 0;
+		} else {
+			final PoissonDistribution poissonDistribution = new PoissonDistribution(rate);
+			// should always be between and 1
+			dumpPercentage = Math.min(Math.max(poissonDistribution.sample(), 0), 1);
+		}
+
+		final int passengersOut = (Math.round(this.numOfPassengers * dumpPercentage));
 		this.numOfPassengers = this.numOfPassengers - passengersOut;
 
 		return passengersOut;
