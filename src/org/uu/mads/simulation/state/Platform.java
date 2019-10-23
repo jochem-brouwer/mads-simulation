@@ -14,7 +14,7 @@ import java.util.Queue;
 import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.uu.mads.simulation.EventScheduler;
-import org.uu.mads.simulation.Performance;
+import org.uu.mads.simulation.PerformanceTracker;
 import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.input.PassengersInReader;
 
@@ -152,7 +152,7 @@ public class Platform {
 							addWaitingPassenger(passenger);
 							final Duration waitingTime = Duration
 									.between(this.lastPassengersCalc.plusSeconds(totalSecondsPassed), currentTime);
-							Performance.getInstance().addPassenger(waitingTime);
+							PerformanceTracker.getInstance().addPassenger(waitingTime);
 						}
 					}
 				}

@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
-import org.uu.mads.simulation.Performance;
+import org.uu.mads.simulation.PerformanceTracker;
 import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.Junction;
@@ -37,9 +37,9 @@ public class FreeJunctionEvent extends Event {
 					this.tram.getJunctionEnteringTime());
 
 			if (this.endStation.getName() == "Centraal Station") {
-				Performance.getInstance().addJunctionWaitingTime(waitingTime, 0);
+				PerformanceTracker.getInstance().addJunctionWaitingTime(waitingTime, 0);
 			} else {
-				Performance.getInstance().addJunctionWaitingTime(waitingTime, 1);
+				PerformanceTracker.getInstance().addJunctionWaitingTime(waitingTime, 1);
 			}
 		}
 

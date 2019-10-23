@@ -5,7 +5,7 @@ import java.time.LocalTime;
 import java.util.Objects;
 
 import org.uu.mads.simulation.EventScheduler;
-import org.uu.mads.simulation.Performance;
+import org.uu.mads.simulation.PerformanceTracker;
 import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
 
@@ -150,9 +150,9 @@ public class EndStation extends Platform {
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
 		if (getName() == "Centraal Station") {
-			Performance.getInstance().addDelay(delay, 0);
+			PerformanceTracker.getInstance().addDelay(delay, 0);
 		} else {
-			Performance.getInstance().addDelay(delay, 1);
+			PerformanceTracker.getInstance().addDelay(delay, 1);
 		}
 	}
 
@@ -170,9 +170,9 @@ public class EndStation extends Platform {
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
 		if (getName() == "Centraal Station") {
-			Performance.getInstance().addDelay(delay, 0);
+			PerformanceTracker.getInstance().addDelay(delay, 0);
 		} else {
-			Performance.getInstance().addDelay(delay, 1);
+			PerformanceTracker.getInstance().addDelay(delay, 1);
 		}
 	}
 

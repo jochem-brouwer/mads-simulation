@@ -11,16 +11,20 @@ import org.uu.mads.simulation.input.InputReader;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
+import org.uu.mads.simulation.state.Performance;
 import org.uu.mads.simulation.state.Platform;
 import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
+	public static final int NUMBER_OF_RUNS = 1000;
+
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0);
 	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
+	public static final Duration AVG_ONE_WAY_DRIVING_TIME = Duration.ofMinutes(17);
 	public static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
 	public static final LocalTime SIMULATION_START_TIME = FIRST_SCHEDULED_LEAVE_TIME_PR
 			.minus(TURN_AROUND_DURATION.plus(JUNCTION_DURATION)); // time where we start to deploy trams
@@ -31,7 +35,7 @@ public class Simulation {
 	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengersOutPoisson.csv"; // TODO
 	public static final int PASSENGER_IN_MULTIPLICATOR = 1; // 1 -> 100%
 
-	public static final Boolean LOG = true; // flag to enable/disable logging
+	public static final Boolean LOG = false; // flag to enable/disable logging
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final Boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
 
@@ -43,7 +47,7 @@ public class Simulation {
 	 * Calculates the first schedules leave time for central station.
 	 */
 	private static void calculateCSLeave() {
-		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(Duration.ofMinutes(17).plus(TURN_AROUND_DURATION));
+		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(AVG_ONE_WAY_DRIVING_TIME.plus(TURN_AROUND_DURATION));
 		while (firstRound.compareTo(FIRST_SCHEDULED_LEAVE_TIME_PR.plus(TRAM_LEAVE_FREQUENCY)) == 1) {
 			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
 		}
@@ -87,7 +91,16 @@ public class Simulation {
 	}
 
 	public static void main(final String[] args) throws IOException {
-		System.out.println("Start simulation");
+		// final List<Performance> performances = new ArrayList<>();
+		for (int i = 1; i <= NUMBER_OF_RUNS; i++) {
+			final Performance performanceOfRun = runSimulation(i);
+			// performances.add(performanceOfRun);
+		}
+		final int i = 0;
+	}
+
+	private static Performance runSimulation(final int run) throws IOException {
+		System.out.println("Simulation run " + run);
 
 		if (ARTIFICIAL_DATA) {
 			final File file1 = new File(
@@ -113,9 +126,7 @@ public class Simulation {
 			EventScheduler.getInstance().fireNextEvent();
 		}
 
-		Performance.getInstance().calculateAverageWaitingTime();
-		Performance.getInstance().calculateJunctionWaitingTime();
-		Performance.getInstance().calculateAveragePunctuality();
+		return PerformanceTracker.getInstance().getPerformance();
 	}
 
 	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the
