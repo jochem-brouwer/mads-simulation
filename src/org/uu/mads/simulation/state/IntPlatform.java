@@ -18,15 +18,6 @@ public class IntPlatform extends Platform {
 		super(name, averageTravelTime);
 	}
 
-	public Tram departTram() {
-		if (this.tram == null) {
-			throw new IllegalStateException("There is no tram on platform " + getName() + " that could depart.");
-		}
-		final Tram departingTram = this.tram;
-		this.tram = null;
-		return departingTram;
-	}
-
 	public Tram getTram() {
 		return this.tram;
 	}
@@ -49,6 +40,9 @@ public class IntPlatform extends Platform {
 			throw new IllegalStateException("There is already a tram on platform " + getName() + ".");
 		}
 
+		this.tram = tram;
+		this.occupied = true;
+
 		// When a tram arrives, we calculate the passengers and load them into the tram.
 		final int passengersOut = this.tram.dumpPassengers();
 		calculatePassengers();
@@ -59,9 +53,15 @@ public class IntPlatform extends Platform {
 				+ passengersIn + " passengers.");
 
 		calculateDwellTime(passengersIn, passengersOut);
+	}
 
-		this.tram = tram;
-		this.occupied = true;
+	public Tram departTram() {
+		if (this.tram == null) {
+			throw new IllegalStateException("There is no tram on platform " + getName() + " that could depart.");
+		}
+		final Tram departingTram = this.tram;
+		this.tram = null;
+		return departingTram;
 	}
 
 	public void calculateDwellTime(final int passengersIn, final int passengersOut) {
