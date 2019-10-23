@@ -29,14 +29,14 @@ public class ArriveWaitingPointEvent extends Event {
 	@Override
 	public void fire() {
 		Simulation.log("Tram " + this.tram.getId() + " arrived at Waiting point of platform "
-				+ this.waitingPoint.getNextPlatform().getName() + " at " + EventScheduler.get().getCurrentTime());
+				+ this.waitingPoint.getNextPlatform().getName() + " at " + EventScheduler.getInstance().getCurrentTime());
 		this.waitingPoint.addTram(this.tram);
 
 		Simulation.logTramPositions();
 
-		if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,30))
 		&& this.waitingPoint.getNextPlatform() instanceof EndStation) {
-			this.tram.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+			this.tram.setJunctionArrivalTime(EventScheduler.getInstance().getCurrentTime());
 		}
 
 		if (this.waitingPoint.isTramWaitingInCorrectOrder()) {
@@ -46,11 +46,11 @@ public class ArriveWaitingPointEvent extends Event {
 			if (this.waitingPoint.getNextPlatform() instanceof EndStation) {
 				final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(
 						(EndStation) this.waitingPoint.getNextPlatform());
-				EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
+				EventScheduler.getInstance().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
 			} else if (!((IntPlatform) this.waitingPoint.getNextPlatform()).isOccupied()) {
 				final TramArrivesIntPlatformEvent tramArrivesIntermediateEvent = new TramArrivesIntPlatformEvent(
 						(IntPlatform) this.waitingPoint.getNextPlatform(), this.waitingPoint.popNextTramWaiting());
-				EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
+				EventScheduler.getInstance().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 			}
 		} else {
 			Simulation.logVerbose("Trams at " + this.waitingPoint + " are not in correct order");

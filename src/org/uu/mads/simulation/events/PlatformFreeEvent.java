@@ -27,7 +27,7 @@ public class PlatformFreeEvent extends Event {
 		if (waitingPoint.isTramWaitingInCorrectOrder()) {
 			final TramArrivesIntPlatformEvent tramArrivesIntermediateEvent = new TramArrivesIntPlatformEvent(
 					this.intPlatform, waitingPoint.popNextTramWaiting());
-			EventScheduler.get().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
+			EventScheduler.getInstance().scheduleEventAhead(tramArrivesIntermediateEvent, Duration.ZERO);
 		}
 	}
 

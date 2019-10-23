@@ -22,7 +22,7 @@ public class EventScheduler {
 		// private constructor because this is a singleton
 	}
 
-	public static EventScheduler get() {
+	public static EventScheduler getInstance() {
 		if (instance == null) {
 			instance = new EventScheduler();
 		}

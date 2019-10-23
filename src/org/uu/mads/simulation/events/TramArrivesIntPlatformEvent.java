@@ -33,7 +33,7 @@ public class TramArrivesIntPlatformEvent extends Event {
 		final int passengersIn = this.tram.loadPassengers(this.intPlatform);
 
 		Simulation.log("Tram " + this.tram.getId() + " is arriving at platform " + this.intPlatform.getName() + " at "
-				+ EventScheduler.get().getCurrentTime() + ", dumps " + passengersOut + " passengers and loads "
+				+ EventScheduler.getInstance().getCurrentTime() + ", dumps " + passengersOut + " passengers and loads "
 				+ passengersIn + " passengers.");
 
 		final Duration dwellTime = IntPlatform.calculateDwellTime(passengersIn, passengersOut);
@@ -42,7 +42,7 @@ public class TramArrivesIntPlatformEvent extends Event {
 
 		final TramLeavesIntPlatformEvent tramLeavesIntStationEvent = new TramLeavesIntPlatformEvent(this.intPlatform);
 
-		EventScheduler.get().scheduleEventAhead(tramLeavesIntStationEvent, dwellTime);
+		EventScheduler.getInstance().scheduleEventAhead(tramLeavesIntStationEvent, dwellTime);
 
 		Simulation.logTramPositions();
 	}

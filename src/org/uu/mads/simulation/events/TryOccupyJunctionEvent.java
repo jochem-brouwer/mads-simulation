@@ -72,8 +72,8 @@ public class TryOccupyJunctionEvent extends Event {
 				// We send the tram from platform A to the junction
 				final Tram tramOnPlatformA = this.endStation.getTramOnPlatformA();
 
-				if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))) {
-					tramOnPlatformA.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+				if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,30))) {
+					tramOnPlatformA.setJunctionArrivalTime(EventScheduler.getInstance().getCurrentTime());
 				}
 
 				junction.setTramOnLaneOutA(tramOnPlatformA);
@@ -85,8 +85,8 @@ public class TryOccupyJunctionEvent extends Event {
 				// We send the tram from platform B to the junction
 				final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
 
-				if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))) {
-					tramOnPlatformB.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+				if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,30))) {
+					tramOnPlatformB.setJunctionArrivalTime(EventScheduler.getInstance().getCurrentTime());
 				}
 
 				junction.setTramOnLaneOutB(tramOnPlatformB);
@@ -100,8 +100,8 @@ public class TryOccupyJunctionEvent extends Event {
 			// We send the tram from platform B to the junction
 			final Tram tramOnPlatformB = this.endStation.getTramOnPlatformB();
 
-			if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))) {
-				tramOnPlatformB.setJunctionArrivalTime(EventScheduler.get().getCurrentTime());
+			if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,30))) {
+				tramOnPlatformB.setJunctionArrivalTime(EventScheduler.getInstance().getCurrentTime());
 			}
 
 			junction.setTramOnLaneOutB(tramOnPlatformB);
@@ -113,7 +113,7 @@ public class TryOccupyJunctionEvent extends Event {
 
 	private void scheduleFreeJunctionEvent(final Tram tram) {
 		final FreeJunctionEvent freeJunctionEvent = new FreeJunctionEvent(this.endStation, tram);
-		EventScheduler.get().scheduleEventAhead(freeJunctionEvent, JUNCTION_DURATION);
+		EventScheduler.getInstance().scheduleEventAhead(freeJunctionEvent, JUNCTION_DURATION);
 
 	}
 

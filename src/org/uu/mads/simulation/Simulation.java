@@ -28,9 +28,12 @@ public class Simulation {
 																				// e.g. when we deploy our trams to the
 																				// network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
+	public static final Boolean ARTIFICIAL_DATA = false;
+	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengerList - outputPoisson.csv";
+	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengerList - outputPoisson.csv"; // TODO
+
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final Boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
-	public static final Boolean ARTIFICIAL_DATA = false;
 
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
@@ -52,7 +55,7 @@ public class Simulation {
 	}
 
 	public static void log(final String log) {
-		System.out.println(EventScheduler.get().getCurrentTime() + ": " + log);
+		System.out.println(EventScheduler.getInstance().getCurrentTime() + ": " + log);
 	}
 
 	public static void logVerbose(final String log) {
@@ -104,18 +107,18 @@ public class Simulation {
 		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationUithofEvent = new ScheduledLeaveEndStationEvent(
 				uithofEndStation);
 
-		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationCentraalEvent, firstScheduledLeaveTimeCS);
-		EventScheduler.get().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
+		EventScheduler.getInstance().scheduleEvent(scheduledLeaveEndStationCentraalEvent, firstScheduledLeaveTimeCS);
+		EventScheduler.getInstance().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
 		// TODO: Schedule initial Event
 
-		while (SIMULATION_END_TIME.isAfter(EventScheduler.get().getCurrentTime())) { // TODO: We need better end
+		while (SIMULATION_END_TIME.isAfter(EventScheduler.getInstance().getCurrentTime())) { // TODO: We need better end
 																						// conditions
-			EventScheduler.get().fireNextEvent();
+			EventScheduler.getInstance().fireNextEvent();
 		}
 
-		Performance.get().calculateAverageWaitingTime();
-		Performance.get().calculateJunctionWaitingTime();
-		Performance.get().calculateAveragePunctuality();
+		Performance.getInstance().calculateAverageWaitingTime();
+		Performance.getInstance().calculateJunctionWaitingTime();
+		Performance.getInstance().calculateAveragePunctuality();
 	}
 
 	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the
@@ -126,13 +129,13 @@ public class Simulation {
 		for (int i = 0; i < (NUMBER_OF_TRAMS / 2); i++) {
 			final Tram newTram = new Tram(tramId, 0);
 			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(cs, newTram);
-			EventScheduler.get().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
+			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
 			tramId += 1;
 		}
 		for (int i = NUMBER_OF_TRAMS / 2; i < NUMBER_OF_TRAMS; i++) {
 			final Tram newTram = new Tram(tramId, 0);
 			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(uit, newTram);
-			EventScheduler.get().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
+			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
 			tramId += 1;
 		}
 	}

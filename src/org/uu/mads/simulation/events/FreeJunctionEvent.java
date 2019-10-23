@@ -29,40 +29,34 @@ public class FreeJunctionEvent extends Event {
 	public void fire() {
 		final Junction junction = this.endStation.getJunction();
 
-		if (EventScheduler.get().getCurrentTime().isAfter(LocalTime.of(7,30))
-			&& this.tram.getJunctionArrivalTime() != null) {
-			this.tram.setJunctionEnteringTime(EventScheduler.get().getCurrentTime().minus(Duration.ofMinutes(1)));
-			Duration waitingTime = Duration.between(
-					this.tram.getJunctionArrivalTime(), this.tram.getJunctionEnteringTime());
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7, 30))
+				&& (this.tram.getJunctionArrivalTime() != null)) {
+			this.tram.setJunctionEnteringTime(EventScheduler.getInstance().getCurrentTime().minus(Duration.ofMinutes(1)));
+			final Duration waitingTime = Duration.between(this.tram.getJunctionArrivalTime(),
+					this.tram.getJunctionEnteringTime());
 
-			/*System.out.println(this.tram.getId());
-			System.out.println(this.tram.getJunctionArrivalTime());
-			System.out.println(this.tram.getJunctionEnteringTime());
-			System.out.println(waitingTime.getSeconds());*/
+			/*
+			 * System.out.println(this.tram.getId());
+			 * System.out.println(this.tram.getJunctionArrivalTime());
+			 * System.out.println(this.tram.getJunctionEnteringTime());
+			 * System.out.println(waitingTime.getSeconds());
+			 */
 
 			if (this.endStation.getName() == "Centraal Station") {
-				Performance.get().addJunctionWaitingTime(waitingTime, 0);
+				Performance.getInstance().addJunctionWaitingTime(waitingTime, 0);
 			} else {
-				Performance.get().addJunctionWaitingTime(waitingTime, 1);
+				Performance.getInstance().addJunctionWaitingTime(waitingTime, 1);
 			}
 		}
 
 		if (this.tram.equals(junction.getTramOnLaneInA())) {
 			junction.removeTramOnLaneInA();
-			if (this.endStation.getTramOnPlatformA() != null) {
-				throw new IllegalStateException(
-						"There is already a tram on platform A while trying to let a new one arrive from the junction.");
-			}
-			this.endStation.setTramOnPlatformA(this.tram);
+			this.endStation.arriveOnPlatformA(this.tram);
 			scheduleScheduledLeaveEndStationEvent();
 			Simulation.logTramPositions();
 		} else if (this.tram.equals(junction.getTramOnLaneInB())) {
 			junction.removeTramOnLaneInB();
-			if (this.endStation.getTramOnPlatformB() != null) {
-				throw new IllegalStateException(
-						"There is already a tram on platform B while trying to let a new one arrive from the junction.");
-			}
-			this.endStation.setTramOnPlatformB(this.tram);
+			this.endStation.arriveOnPlatformB(this.tram);
 			scheduleScheduledLeaveEndStationEvent();
 			Simulation.logTramPositions();
 		} else if (this.tram.equals(junction.getTramOnLaneOutA())) {
@@ -79,19 +73,19 @@ public class FreeJunctionEvent extends Event {
 
 		// Schedule TryOccupyJunction again
 		final TryOccupyJunctionEvent tryOccupyJunctionEvent = new TryOccupyJunctionEvent(this.endStation);
-		EventScheduler.get().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
+		EventScheduler.getInstance().scheduleEventAhead(tryOccupyJunctionEvent, Duration.ZERO);
 	}
 
 	private void scheduleScheduledLeaveEndStationEvent() {
 		final ScheduledLeaveEndStationEvent scheduledLeaveEndStationEvent = new ScheduledLeaveEndStationEvent(
 				this.endStation);
-		EventScheduler.get().scheduleEventAhead(scheduledLeaveEndStationEvent, Duration.ZERO);
+		EventScheduler.getInstance().scheduleEventAhead(scheduledLeaveEndStationEvent, Duration.ZERO);
 	}
 
 	private void scheduleArriveWaitingPointEvent() {
 		final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(
 				this.endStation.getNextWaitingPoint(), this.tram);
-		EventScheduler.get().scheduleEventAhead(arriveWaitingPointEvent, this.endStation.getTravelTimeToNextPlatform());
+		EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, this.endStation.getTravelTimeToNextPlatform());
 	}
 
 	@Override
