@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.uu.mads.simulation.events.ArriveWaitingPointEvent;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
@@ -17,7 +19,7 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
-	public static final int NUMBER_OF_RUNS = 1000;
+	public static final int NUMBER_OF_RUNS = 10;
 
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
@@ -43,60 +45,15 @@ public class Simulation {
 	private static EndStation uithofEndStation;
 	private static LocalTime firstScheduledLeaveTimeCS;
 
-	/**
-	 * Calculates the first schedules leave time for central station.
-	 */
-	private static void calculateCSLeave() {
-		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(AVG_ONE_WAY_DRIVING_TIME.plus(TURN_AROUND_DURATION));
-		while (firstRound.compareTo(FIRST_SCHEDULED_LEAVE_TIME_PR.plus(TRAM_LEAVE_FREQUENCY)) == 1) {
-			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
-		}
-		firstScheduledLeaveTimeCS = firstRound;
-	}
-
-	public static void log(final String log) {
-		if (LOG) {
-			System.out.println(EventScheduler.getInstance().getCurrentTime() + ": " + log);
-		}
-	}
-
-	public static void logVerbose(final String log) {
-		if (LOG_VERBOSE) {
-			log(log);
-		}
-	}
-
-	public static void logTramPositions() {
-		if (LOG_TRAM_POSITIONS) {
-			Platform platform = uithofEndStation;
-			do {
-				if (platform instanceof EndStation) {
-					final EndStation endStation = (EndStation) platform;
-					final Junction junction = endStation.getJunction();
-					log("Trams on junction for end station " + endStation.getName() + ": " + junction.getTramOnLaneInA()
-							+ " (In-A), " + junction.getTramOnLaneInB() + " (In-B), " + junction.getTramOnLaneOutA()
-							+ " (Out-A), " + junction.getTramOnLaneOutB() + " (Out-B).");
-					log("Trams on end station " + endStation.getName() + ": " + endStation.getTramOnPlatformA()
-							+ " (Platform A), " + endStation.getTramOnPlatformB() + " (Platform B).");
-				} else {
-					final IntPlatform intPlatform = (IntPlatform) platform;
-					log("Tram on platform " + intPlatform.getName() + ": " + intPlatform.getTram());
-				}
-				final WaitingPoint nextWaitingPoint = platform.getNextWaitingPoint();
-				log("Trams on waiting point for platform " + nextWaitingPoint.getNextPlatform().getName() + ": "
-						+ nextWaitingPoint.getWaitingTrams());
-				platform = nextWaitingPoint.getNextPlatform();
-			} while (!platform.equals(uithofEndStation)); // until the circle is complete
-		}
-	}
-
 	public static void main(final String[] args) throws IOException {
-		// final List<Performance> performances = new ArrayList<>();
+		final List<Performance> performances = new ArrayList<>();
 		for (int i = 1; i <= NUMBER_OF_RUNS; i++) {
 			final Performance performanceOfRun = runSimulation(i);
-			// performances.add(performanceOfRun);
+			performances.add(performanceOfRun);
+			EventScheduler.reset();
+			PerformanceTracker.reset();
 		}
-		final int i = 0;
+		PerformanceTracker.printPerformanceReport(performances);
 	}
 
 	private static Performance runSimulation(final int run) throws IOException {
@@ -129,23 +86,15 @@ public class Simulation {
 		return PerformanceTracker.getInstance().getPerformance();
 	}
 
-	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the
-	// waiting point at Uithof before the junction at the given
-	// SIMULATION_START_TIME
-	private static void tramFactory(final WaitingPoint cs, final WaitingPoint uit) {
-		int tramId = 1;
-		for (int i = 0; i < (NUMBER_OF_TRAMS / 2); i++) {
-			final Tram newTram = new Tram(tramId, 0);
-			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(cs, newTram);
-			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
-			tramId += 1;
+	/**
+	 * Calculates the first schedules leave time for central station.
+	 */
+	private static void calculateCSLeave() {
+		LocalTime firstRound = FIRST_SCHEDULED_LEAVE_TIME_PR.plus(AVG_ONE_WAY_DRIVING_TIME.plus(TURN_AROUND_DURATION));
+		while (firstRound.compareTo(FIRST_SCHEDULED_LEAVE_TIME_PR.plus(TRAM_LEAVE_FREQUENCY)) == 1) {
+			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
 		}
-		for (int i = NUMBER_OF_TRAMS / 2; i < NUMBER_OF_TRAMS; i++) {
-			final Tram newTram = new Tram(tramId, 0);
-			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(uit, newTram);
-			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
-			tramId += 1;
-		}
+		firstScheduledLeaveTimeCS = firstRound;
 	}
 
 	private static void initializeState() {
@@ -233,4 +182,60 @@ public class Simulation {
 
 		tramFactory(centraalWaitingPoint, uithofWaitingPoint);
 	}
+
+	// this function creates NUMBER_OF_TRAMS trams and dumps them all into the
+	// waiting point at Uithof before the junction at the given
+	// SIMULATION_START_TIME
+	private static void tramFactory(final WaitingPoint cs, final WaitingPoint uit) {
+		int tramId = 1;
+		for (int i = 0; i < (NUMBER_OF_TRAMS / 2); i++) {
+			final Tram newTram = new Tram(tramId, 0);
+			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(cs, newTram);
+			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
+			tramId += 1;
+		}
+		for (int i = NUMBER_OF_TRAMS / 2; i < NUMBER_OF_TRAMS; i++) {
+			final Tram newTram = new Tram(tramId, 0);
+			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(uit, newTram);
+			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
+			tramId += 1;
+		}
+	}
+
+	public static void log(final String log) {
+		if (LOG) {
+			System.out.println(EventScheduler.getInstance().getCurrentTime() + ": " + log);
+		}
+	}
+
+	public static void logVerbose(final String log) {
+		if (LOG_VERBOSE) {
+			log(log);
+		}
+	}
+
+	public static void logTramPositions() {
+		if (LOG_TRAM_POSITIONS) {
+			Platform platform = uithofEndStation;
+			do {
+				if (platform instanceof EndStation) {
+					final EndStation endStation = (EndStation) platform;
+					final Junction junction = endStation.getJunction();
+					log("Trams on junction for end station " + endStation.getName() + ": " + junction.getTramOnLaneInA()
+							+ " (In-A), " + junction.getTramOnLaneInB() + " (In-B), " + junction.getTramOnLaneOutA()
+							+ " (Out-A), " + junction.getTramOnLaneOutB() + " (Out-B).");
+					log("Trams on end station " + endStation.getName() + ": " + endStation.getTramOnPlatformA()
+							+ " (Platform A), " + endStation.getTramOnPlatformB() + " (Platform B).");
+				} else {
+					final IntPlatform intPlatform = (IntPlatform) platform;
+					log("Tram on platform " + intPlatform.getName() + ": " + intPlatform.getTram());
+				}
+				final WaitingPoint nextWaitingPoint = platform.getNextWaitingPoint();
+				log("Trams on waiting point for platform " + nextWaitingPoint.getNextPlatform().getName() + ": "
+						+ nextWaitingPoint.getWaitingTrams());
+				platform = nextWaitingPoint.getNextPlatform();
+			} while (!platform.equals(uithofEndStation)); // until the circle is complete
+		}
+	}
+
 }

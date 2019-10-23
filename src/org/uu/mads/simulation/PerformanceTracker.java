@@ -1,6 +1,7 @@
 package org.uu.mads.simulation;
 
 import java.time.Duration;
+import java.util.List;
 
 import org.uu.mads.simulation.state.Performance;
 
@@ -49,6 +50,86 @@ public class PerformanceTracker {
 			instance = new PerformanceTracker();
 		}
 		return instance;
+	}
+
+	public static void reset() {
+		instance = null;
+	}
+
+	public static void printPerformanceReport(final List<Performance> performances) {
+
+		long total_passengers = 0;
+		Duration total_waiting_time = Duration.ZERO;
+		Duration max_waiting_time = Duration.ZERO;
+		Duration average_waiting_time = Duration.ZERO;
+
+		for (final Performance performance : performances) {
+			total_passengers += performance.getTotal_passengers();
+			total_waiting_time = total_waiting_time.plus(performance.getTotal_waiting_time());
+			max_waiting_time = performance.getMax_waiting_time().compareTo(max_waiting_time) > 0
+					? performance.getMax_waiting_time()
+					: max_waiting_time;
+
+		}
+		average_waiting_time = total_waiting_time.dividedBy(total_passengers);
+
+		System.out.println("");
+		System.out.println("Total passengers: " + total_passengers);
+		System.out.println("Total waiting time in seconds: " + total_waiting_time.getSeconds());
+
+		System.out.println("Maximum waiting time of a passenger: " + max_waiting_time.getSeconds());
+
+		System.out.println("Average waiting time: (passengers / waiting time) " + average_waiting_time.getSeconds());
+
+//		System.out.println("");
+//		System.out.println("Total waiting time for junction at Centraal Station: "
+//				+ this.cs_total_junction_waitingTime.getSeconds());
+//		System.out.println("Total junction arrivals: " + this.cs_junction_arrivals);
+//		System.out.println("Maximum waiting time: " + this.cs_maximum_junction_waitingTime.getSeconds());
+//		System.out.println("Average waiting time at junction Centraal Station: "
+//				+ this.cs_average_junction_waitingTime.getSeconds());
+//
+//		System.out.println("");
+//		System.out.println(
+//				"Total waiting time for junction at P+R Uithof: " + this.pr_total_junction_waitingTime.getSeconds());
+//		System.out.println("Total junction arrivals: " + this.pr_junction_arrivals);
+//		System.out.println("Maximum waiting time: " + this.pr_maximum_junction_waitingTime.getSeconds());
+//		System.out.println(
+//				"Average waiting time at junction P+R Uithof: " + this.pr_average_junction_waitingTime.getSeconds());
+
+//		System.out.println("");
+//		System.out.println("PERFORMANCE MEASURES FOR CENTRAAL STATION:");
+//		System.out.println("Total departure delays: " + this.cs_total_delays);
+//		System.out.println("Total delay amount: " + this.cs_total_delay_time.getSeconds());
+//
+//		System.out.println(
+//				"Average delay time: (total delay amount / total delays): " + this.cs_average_delay.getSeconds());
+//
+//		System.out.println("Maximum delay: " + this.cs_maximum_delay.toSeconds());
+//
+//		System.out.println("Total departure delays: " + this.cs_total_delays);
+//		System.out.println("Total departures: " + this.cs_total_departures);
+//
+//		System.out.println("Delay percentage: (delays / total departures): " + this.cs_percentage_of_delays + "%");
+//		System.out.println("==================================================================");
+//		System.out.println("");
+
+//		System.out.println("");
+//		System.out.println("PERFORMANCE MEASURES FOR P+R UITHOF:");
+//		System.out.println("Total departure delays: " + this.pr_total_delays);
+//		System.out.println("Total delay amount: " + this.pr_total_delay_time.getSeconds());
+//
+//		System.out.println(
+//				"Average delay time: (total delay amount / total delays): " + this.pr_average_delay.getSeconds());
+//
+//		System.out.println("Maximum delay: " + this.pr_maximum_delay.toSeconds());
+//
+//		System.out.println("Total departure delays: " + this.pr_total_delays);
+//		System.out.println("Total departures: " + this.pr_total_departures);
+//
+//		System.out.println("Delay percentage: (delays / total departures): " + this.pr_percentage_of_delays + "%");
+//		System.out.println("==================================================================");
+//		System.out.println("");
 	}
 
 	public void addPassenger(final Duration waitingTime) {
@@ -126,41 +207,14 @@ public class PerformanceTracker {
 	}
 
 	private void calculateAverageWaitingTime() {
-
 		if (this.total_passengers != 0) {
 			this.average_waiting_time = this.total_waiting_time.dividedBy(this.total_passengers);
 		}
-
-//		System.out.println("");
-//		System.out.println("Total passengers: " + this.total_passengers);
-//		System.out.println("Total waiting time in seconds: " + this.total_waiting_time.getSeconds());
-//
-//		System.out.println("Maximum waiting time of a passenger: " + this.max_waiting_time.getSeconds());
-//
-//		System.out
-//				.println("Average waiting time: (passengers / waiting time) " + this.average_waiting_time.getSeconds());
 	}
 
 	private void calculateJunctionWaitingTime() {
-
 		this.cs_average_junction_waitingTime = this.cs_total_junction_waitingTime.dividedBy(this.cs_junction_arrivals);
 		this.pr_average_junction_waitingTime = this.pr_total_junction_waitingTime.dividedBy(this.pr_junction_arrivals);
-
-//		System.out.println("");
-//		System.out.println("Total waiting time for junction at Centraal Station: "
-//				+ this.cs_total_junction_waitingTime.getSeconds());
-//		System.out.println("Total junction arrivals: " + this.cs_junction_arrivals);
-//		System.out.println("Maximum waiting time: " + this.cs_maximum_junction_waitingTime.getSeconds());
-//		System.out.println("Average waiting time at junction Centraal Station: "
-//				+ this.cs_average_junction_waitingTime.getSeconds());
-//
-//		System.out.println("");
-//		System.out.println(
-//				"Total waiting time for junction at P+R Uithof: " + this.pr_total_junction_waitingTime.getSeconds());
-//		System.out.println("Total junction arrivals: " + this.pr_junction_arrivals);
-//		System.out.println("Maximum waiting time: " + this.pr_maximum_junction_waitingTime.getSeconds());
-//		System.out.println(
-//				"Average waiting time at junction P+R Uithof: " + this.pr_average_junction_waitingTime.getSeconds());
 	}
 
 	private void calculateAveragePunctuality() {
@@ -173,23 +227,6 @@ public class PerformanceTracker {
 		}
 		this.cs_percentage_of_delays = ((float) this.cs_total_delays / (float) this.cs_total_departures) * 100;
 
-//		System.out.println("");
-//		System.out.println("PERFORMANCE MEASURES FOR CENTRAAL STATION:");
-//		System.out.println("Total departure delays: " + this.cs_total_delays);
-//		System.out.println("Total delay amount: " + this.cs_total_delay_time.getSeconds());
-//
-//		System.out.println(
-//				"Average delay time: (total delay amount / total delays): " + this.cs_average_delay.getSeconds());
-//
-//		System.out.println("Maximum delay: " + this.cs_maximum_delay.toSeconds());
-//
-//		System.out.println("Total departure delays: " + this.cs_total_delays);
-//		System.out.println("Total departures: " + this.cs_total_departures);
-//
-//		System.out.println("Delay percentage: (delays / total departures): " + this.cs_percentage_of_delays + "%");
-//		System.out.println("==================================================================");
-//		System.out.println("");
-
 		// We do the same for P+R:
 		if (this.pr_total_delays != 0) {
 			this.pr_average_delay = this.pr_total_delay_time.dividedBy(this.pr_total_delays);
@@ -197,22 +234,5 @@ public class PerformanceTracker {
 			this.pr_average_delay = Duration.ZERO;
 		}
 		this.pr_percentage_of_delays = ((float) this.pr_total_delays / (float) this.pr_total_departures) * 100;
-
-//		System.out.println("");
-//		System.out.println("PERFORMANCE MEASURES FOR P+R UITHOF:");
-//		System.out.println("Total departure delays: " + this.pr_total_delays);
-//		System.out.println("Total delay amount: " + this.pr_total_delay_time.getSeconds());
-//
-//		System.out.println(
-//				"Average delay time: (total delay amount / total delays): " + this.pr_average_delay.getSeconds());
-//
-//		System.out.println("Maximum delay: " + this.pr_maximum_delay.toSeconds());
-//
-//		System.out.println("Total departure delays: " + this.pr_total_delays);
-//		System.out.println("Total departures: " + this.pr_total_departures);
-//
-//		System.out.println("Delay percentage: (delays / total departures): " + this.pr_percentage_of_delays + "%");
-//		System.out.println("==================================================================");
-//		System.out.println("");
 	}
 }

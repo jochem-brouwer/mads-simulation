@@ -28,6 +28,10 @@ public class EventScheduler {
 		return instance;
 	}
 
+	public static void reset() {
+		instance = null;
+	}
+
 	public double getPassengerRate() {
 		return this.passengerRate;
 	}
