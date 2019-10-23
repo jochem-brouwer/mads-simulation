@@ -2,6 +2,7 @@ package org.uu.mads.simulation.state;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
+import java.io.File;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayDeque;
@@ -115,8 +116,18 @@ public class Platform {
 	}
 
 	public void calculatePassengers() {
+		// final Map<LocalTime, Double> passengerInRatesByTime = PassengersInReader.getInstance()
+				// .getRatesByTimeForPlatform(this.name, Simulation.CSV_PATH_POISS_PASS_IN);
+
+		String path;
+		if (Simulation.ARTIFICIAL_DATA) {
+			path = Simulation.CSV_PATH_POISS_PASS_IN_ART1;
+		} else {
+			path = Simulation.CSV_PATH_POISS_PASS_IN;
+		}
+
 		final Map<LocalTime, Double> passengerInRatesByTime = PassengersInReader.getInstance()
-				.getRatesByTimeForPlatform(this.name, Simulation.CSV_PATH_POISS_PASS_IN);
+				.getRatesByTimeForPlatform(this.name, path);
 
 		final LocalTime currentTime = EventScheduler.getInstance().getCurrentTime();
 

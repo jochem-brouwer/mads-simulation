@@ -24,11 +24,12 @@ public class Simulation {
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
 	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
-	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(5, 20); // time where we start the simulation,
+	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(6, 00); // time where we start the simulation,
 																				// e.g. when we deploy our trams to the
 																				// network
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
-	public static final Boolean ARTIFICIAL_DATA = false;
+	public static final Boolean ARTIFICIAL_DATA = true;
+	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-01.csv";
 	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengerList - outputPoisson.csv";
 	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengerList - outputPoisson.csv"; // TODO
 

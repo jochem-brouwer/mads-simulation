@@ -1,5 +1,7 @@
 package org.uu.mads.simulation.input;
 
+import org.uu.mads.simulation.Simulation;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -8,16 +10,22 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import static java.time.temporal.ChronoUnit.HOURS;
 
 abstract class PoissonReader {
 	private static final String DELIMITER = ",";
+	private static final String DELIMITER_ART = ";";
 
 	private LinkedHashMap<String, Map<LocalTime, Double>> ratesByTimeByPlatform = null;
 
 	public Map<LocalTime, Double> getRatesByTimeForPlatform(final String platformName, final String csvPath) {
 		if (this.ratesByTimeByPlatform == null) {
 			try {
-				readData(csvPath);
+				if (Simulation.ARTIFICIAL_DATA) {
+					readDataArtificial(csvPath);
+				} else {
+					readData(csvPath);
+				}
 			} catch (final IOException exception) {
 				throw new RuntimeException(exception);
 			}
@@ -53,6 +61,68 @@ abstract class PoissonReader {
 		csvReader.close();
 
 		this.ratesByTimeByPlatform = ratesByTimeByPlatform;
+	}
+
+	private void readDataArtificial(final String csvPath) throws IOException {
+		final BufferedReader csvReader = new BufferedReader(new FileReader(csvPath));
+		final LinkedHashMap<String, Map<LocalTime, Double>> ratesByTimeByPlatform = new LinkedHashMap<>();
+
+		String row;
+		csvReader.readLine();
+
+		while ((row = csvReader.readLine()) != null) {
+			final String[] data = row.split(DELIMITER_ART);
+
+			String name = data[0];
+			int direction = Integer.parseInt(data[1]);
+			int hour1 = (int) Float.parseFloat(data[2]);
+			int hour2 = 0;
+			if (hour1 == 21) {
+				hour2 = 30;
+			}
+
+			if ((name.equals("P+R De Uithof") && direction == 1)
+				|| name.equals("Centraal Station") && direction == 0){
+				break;
+			}
+
+			LocalTime time1 = LocalTime.of(hour1, hour2);
+			hour1 = (int) Float.parseFloat(data[3]);
+			hour2 = 0;
+			if (hour1 == 21) {
+				hour2 = 30;
+			}
+			LocalTime time2 = LocalTime.of(hour1, hour2);
+
+			float passIn = Float.parseFloat(data[4]);
+			float passOut = Float.parseFloat(data[5]);
+
+			if (direction == 0) {
+				if (!name.equals("P+R De Uithof") && !name.equals("Centraal Station")) {
+					name = name + "-A";
+				}
+			} else if (!name.equals("P+R De Uithof") && !name.equals("Centraal Station")){
+				name = name + "-B";
+			}
+
+			if (!ratesByTimeByPlatform.containsKey(name)) {
+				ratesByTimeByPlatform.put(name, new TreeMap<>());
+			}
+
+			float timeInterval = (time1.until(time2, HOURS));
+			double passengerInput = (((passIn / timeInterval) / 60) * 15) / 60;
+
+			LocalTime timeStamp = time1;
+			final Map<LocalTime, Double> ratesByTime = ratesByTimeByPlatform.get(name);
+
+			while (timeStamp.isBefore(time2)) {
+				ratesByTime.put(timeStamp, passengerInput);
+				timeStamp = timeStamp.plusMinutes(15);
+			}
+
+			this.ratesByTimeByPlatform = ratesByTimeByPlatform;
+		}
+
 	}
 
 }
