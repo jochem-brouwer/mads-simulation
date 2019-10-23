@@ -32,7 +32,7 @@ public class FreeJunctionEvent extends Event {
 		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7, 30))
 				&& (this.tram.getJunctionArrivalTime() != null)) {
 			this.tram.setJunctionEnteringTime(
-					EventScheduler.getInstance().getCurrentTime().minus(Duration.ofMinutes(1)));
+					EventScheduler.getInstance().getCurrentTime().minus(Simulation.JUNCTION_DURATION));
 			final Duration waitingTime = Duration.between(this.tram.getJunctionArrivalTime(),
 					this.tram.getJunctionEnteringTime());
 

@@ -16,23 +16,21 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
-
-	// public static final int TRAMS_PER_HOUR = 16; // This is fixed during our
-	// simulation run.
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
-	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0); // TODO: Adapt
+	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0);
 	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
-	public static final LocalTime SIMULATION_START_TIME = LocalTime.of(6, 00); // time where we start the simulation,
-																				// e.g. when we deploy our trams to the
-																				// network
+	public static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
+	public static final LocalTime SIMULATION_START_TIME = FIRST_SCHEDULED_LEAVE_TIME_PR
+			.minus(TURN_AROUND_DURATION.plus(JUNCTION_DURATION)); // time where we start to deploy trams
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
 	public static final Boolean ARTIFICIAL_DATA = true;
 	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-01.csv";
 	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengerList - outputPoisson.csv";
 	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengerList - outputPoisson.csv"; // TODO
 
+	public static final Boolean LOG = true; // flag to enable/disable logging
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final Boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
 
@@ -48,15 +46,13 @@ public class Simulation {
 		while (firstRound.compareTo(FIRST_SCHEDULED_LEAVE_TIME_PR.plus(TRAM_LEAVE_FREQUENCY)) == 1) {
 			firstRound = firstRound.minus(TRAM_LEAVE_FREQUENCY);
 		}
-
-		// System.out.println("First scheduled leave at PR: " +
-		// FIRST_SCHEDULED_LEAVE_TIME_PR);
-		// System.out.println("First scheduled leave at CS: " + firstRound);
 		firstScheduledLeaveTimeCS = firstRound;
 	}
 
 	public static void log(final String log) {
-		System.out.println(EventScheduler.getInstance().getCurrentTime() + ": " + log);
+		if (LOG) {
+			System.out.println(EventScheduler.getInstance().getCurrentTime() + ": " + log);
+		}
 	}
 
 	public static void logVerbose(final String log) {
@@ -110,10 +106,9 @@ public class Simulation {
 
 		EventScheduler.getInstance().scheduleEvent(scheduledLeaveEndStationCentraalEvent, firstScheduledLeaveTimeCS);
 		EventScheduler.getInstance().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
-		// TODO: Schedule initial Event
 
 		while (SIMULATION_END_TIME.isAfter(EventScheduler.getInstance().getCurrentTime())) { // TODO: We need better end
-																						// conditions
+																								// conditions
 			EventScheduler.getInstance().fireNextEvent();
 		}
 
@@ -223,12 +218,6 @@ public class Simulation {
 		gwPlatformB.setNextWaitingPoint(vrWaitingPointPlB);
 		vrPlatformB.setLastWaitingPoint(vrWaitingPointPlB);
 		vrPlatformB.setNextWaitingPoint(centraalWaitingPoint);
-
-		// Add trams
-		// int tramId = 1;
-		// uithofEndStation.setTramOnPlatformA(new Tram(tramId++, 0));
-		// uithofEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
-		// centraalEndStation.setTramOnPlatformB(new Tram(tramId++, 0));
 
 		tramFactory(centraalWaitingPoint, uithofWaitingPoint);
 	}

@@ -9,23 +9,23 @@ public class Tram {
 	private final int id;
 	private int numOfPassengers;
 
-	private LocalTime JunctionArrivalTime;
-	private LocalTime JunctionEnteringTime;
+	private LocalTime junctionArrivalTime;
+	private LocalTime junctionEnteringTime;
 
 	public LocalTime getJunctionArrivalTime() {
-		return this.JunctionArrivalTime;
+		return this.junctionArrivalTime;
 	}
 
 	public LocalTime getJunctionEnteringTime() {
-		return this.JunctionEnteringTime;
+		return this.junctionEnteringTime;
 	}
 
 	public void setJunctionArrivalTime(final LocalTime time) {
-		this.JunctionArrivalTime = time;
+		this.junctionArrivalTime = time;
 	}
 
 	public void setJunctionEnteringTime(final LocalTime time) {
-		this.JunctionEnteringTime = time;
+		this.junctionEnteringTime = time;
 	}
 
 	public Tram(final int id, final int numOfPassengers) {
