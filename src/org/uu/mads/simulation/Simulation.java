@@ -29,6 +29,7 @@ public class Simulation {
 	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-01.csv";
 	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengerList - outputPoisson.csv";
 	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengerList - outputPoisson.csv"; // TODO
+	public static final int PASSENGER_IN_MULTIPLICATOR = 2; // 1 -> 100%
 
 	public static final Boolean LOG = true; // flag to enable/disable logging
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging

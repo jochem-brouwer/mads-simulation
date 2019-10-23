@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
-import java.util.Set;
 
 import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
@@ -105,14 +104,8 @@ public class Platform {
 		return passengers;
 	}
 
-	public void addWaitingPassenger(final Passenger waitingPassenger) {
+	private void addWaitingPassenger(final Passenger waitingPassenger) {
 		this.waitingPassengers.add(waitingPassenger);
-	}
-
-	public void addWaitingPassengers(final Set<Passenger> waitingPassengers) {
-		for (final Passenger waitingPassenger : waitingPassengers) {
-			addWaitingPassenger(waitingPassenger);
-		}
 	}
 
 	public void calculatePassengers() {
@@ -143,7 +136,7 @@ public class Platform {
 				// calulation ends in this interval)
 				final LocalTime endTime = currentTime.isAfter(nextInterval) ? nextInterval : currentTime;
 				final long secondsInInterval = SECONDS.between(startTime, endTime);
-				final double rate = passengerInRatesByTime.get(currentInterval);
+				final double rate = passengerInRatesByTime.get(currentInterval) * Simulation.PASSENGER_IN_MULTIPLICATOR;
 
 				if (rate != 0) { // rate 0 means no passengers arrive
 					final PoissonDistribution poissonDistribution = new PoissonDistribution(rate);
