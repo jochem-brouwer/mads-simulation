@@ -74,6 +74,8 @@ abstract class PoissonReader {
 			final String[] data = row.split(DELIMITER_ART);
 
 			String name = data[0];
+
+
 			int direction = Integer.parseInt(data[1]);
 			int hour1 = (int) Float.parseFloat(data[2]);
 			int hour2 = 0;
@@ -82,8 +84,8 @@ abstract class PoissonReader {
 			}
 
 			if ((name.equals("P+R De Uithof") && direction == 1)
-				|| name.equals("Centraal Station") && direction == 0){
-				break;
+					|| (name.equals("Centraal Station") && direction == 0)){
+				continue;
 			}
 
 			LocalTime time1 = LocalTime.of(hour1, hour2);
@@ -110,7 +112,7 @@ abstract class PoissonReader {
 			}
 
 			float timeInterval = (time1.until(time2, HOURS));
-			double passengerInput = (((passIn / timeInterval) / 60) * 15) / 60;
+			double passengerInput = (((passIn / timeInterval) / 60) / 60);
 
 			LocalTime timeStamp = time1;
 			final Map<LocalTime, Double> ratesByTime = ratesByTimeByPlatform.get(name);
