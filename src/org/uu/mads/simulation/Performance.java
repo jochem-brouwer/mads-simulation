@@ -113,7 +113,9 @@ public class Performance {
 
 	public Duration calculateAverageWaitingTime() {
 
-		this.average_waiting_time = this.total_waiting_time.dividedBy(this.total_passengers);
+		if (this.total_passengers != 0) {
+			this.average_waiting_time = this.total_waiting_time.dividedBy(this.total_passengers);
+		}
 
 		System.out.println("");
 		System.out.println("Total passengers: " + this.total_passengers);
