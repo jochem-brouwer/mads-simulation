@@ -13,8 +13,7 @@ public class EventScheduler {
 	private static EventScheduler instance = null;
 
 	private final SortedMap<LocalTime, List<Event>> scheduledEventsByTime = new TreeMap<>();
-	private LocalTime currentTime = Simulation.FIRST_SCHEDULED_LEAVE_TIME_PR
-			.minus(Simulation.TURN_AROUND_DURATION.plus(Duration.ofMinutes(1)));
+	private LocalTime currentTime = Simulation.SIMULATION_START_TIME;
 
 	private final double passengerRate = 0.1;
 

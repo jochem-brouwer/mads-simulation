@@ -143,14 +143,11 @@ public class EndStation extends Platform {
 		this.tramOnPlatformA = null;
 		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.getInstance().getCurrentTime());
 
-		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
-		System.out.println("We leave at current time: " + EventScheduler.getInstance().getCurrentTime());
-		System.out.println("Delay: " + delay.toSeconds());
+		Simulation.logVerbose("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		Simulation.logVerbose("We leave at current time: " + EventScheduler.getInstance().getCurrentTime());
+		Simulation.logVerbose("Delay: " + delay.toSeconds());
 
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
-
-		// System.out.println("Next scheduled leave: " +
-		// this.nextScheduledLeave.toString());
 
 		if (getName() == "Centraal Station") {
 			Performance.getInstance().addDelay(delay, 0);
@@ -166,14 +163,11 @@ public class EndStation extends Platform {
 		this.tramOnPlatformB = null;
 		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.getInstance().getCurrentTime());
 
-		System.out.println("Next scheduled leave: " + this.nextScheduledLeave.toString());
-		System.out.println("We leave at current time: " + EventScheduler.getInstance().getCurrentTime());
-		System.out.println("Delay: " + delay.toSeconds());
+		Simulation.logVerbose("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		Simulation.logVerbose("We leave at current time: " + EventScheduler.getInstance().getCurrentTime());
+		Simulation.logVerbose("Delay: " + delay.toSeconds());
 
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
-
-		// System.out.println("Next scheduled leave: " +
-		// this.nextScheduledLeave.toString());
 
 		if (getName() == "Centraal Station") {
 			Performance.getInstance().addDelay(delay, 0);
