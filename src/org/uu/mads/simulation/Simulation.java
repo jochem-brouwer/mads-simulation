@@ -39,8 +39,8 @@ public class Simulation {
 	public static final boolean LOG = false; // flag to enable/disable logging
 	public static final boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
-	public static final boolean SERIALIZE_PERFORMANCES = false; // flag to enable/disable performance objects
-																// serialization
+	public static final boolean SERIALIZE_PERFORMANCES = false; // flag to enable/disable performance serialization
+	public static final boolean PERSIST_PERFORMANCE_TABLE = true; // flag to enable/disable performance table generation
 
 	private static EndStation centraalEndStation;
 	private static EndStation uithofEndStation;
@@ -66,9 +66,14 @@ public class Simulation {
 		PerformanceTracker.printPerformanceReport(dayPerformances, "Day");
 		PerformanceTracker.printPerformanceReport(peakPerformances, "Peak");
 
+		final LocalTime simEndTime = LocalTime.now();
 		if (SERIALIZE_PERFORMANCES) {
-			PerformanceTracker.serializePerformances(dayPerformances, "Day");
-			PerformanceTracker.serializePerformances(peakPerformances, "Peak");
+			PerformanceTracker.serializePerformances(dayPerformances, simEndTime, "Day");
+			PerformanceTracker.serializePerformances(peakPerformances, simEndTime, "Peak");
+		}
+		if (PERSIST_PERFORMANCE_TABLE) {
+			PerformanceTracker.persistPerformanceTable(dayPerformances, simEndTime, "Day");
+			PerformanceTracker.persistPerformanceTable(peakPerformances, simEndTime, "Peak");
 		}
 	}
 

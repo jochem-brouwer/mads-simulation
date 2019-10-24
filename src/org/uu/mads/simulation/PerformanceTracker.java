@@ -2,10 +2,13 @@ package org.uu.mads.simulation;
 
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 import org.uu.mads.simulation.state.DayAndPeakPerformances;
@@ -16,6 +19,7 @@ public class PerformanceTracker {
 	private static final LocalTime DAY_END_TIME = LocalTime.of(19, 0);
 	private static final LocalTime PEAK_START_TIME = LocalTime.of(7, 30);
 	private static final LocalTime PEAK_END_TIME = LocalTime.of(9, 30);
+	private static final String CSV_DELIMITER = ",";
 
 	private static PerformanceTracker dayPerformanceTracker = new PerformanceTracker(DAY_START_TIME, DAY_END_TIME);
 	private static PerformanceTracker peakPerformanceTracker = new PerformanceTracker(PEAK_START_TIME, PEAK_END_TIME);
@@ -372,21 +376,20 @@ public class PerformanceTracker {
 		System.out.println("");
 	}
 
-	public static void serializePerformances(final List<Performance> performanceList, final String type) {
-		// save the object to file
-		FileOutputStream fileStream = null;
-		ObjectOutputStream objectStream = null;
+	public static void serializePerformances(final List<Performance> performances, final LocalTime simEndTime,
+			final String type) {
 		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
+		final File directory = new File(
+				System.getProperty("user.dir") + "/output/output-data-" + simEndTime.format(dtf));
+		directory.mkdirs();
 
-		for (int i = 0; i < performanceList.size(); i++) {
+		for (int i = 0; i < performances.size(); i++) {
 			final String fileName = (type + "PerformanceNr" + (i + 1));
-			final Performance performance = performanceList.get(i);
-			final File directory = new File(
-					System.getProperty("user.dir") + "/output/output-data-" + LocalTime.now().format(dtf));
-			directory.mkdirs();
+			final Performance performance = performances.get(i);
+
 			try {
-				fileStream = new FileOutputStream(directory + "/" + fileName);
-				objectStream = new ObjectOutputStream(fileStream);
+				final FileOutputStream fileStream = new FileOutputStream(directory + "/" + fileName);
+				final ObjectOutputStream objectStream = new ObjectOutputStream(fileStream);
 				objectStream.writeObject(performance);
 
 				objectStream.close();
@@ -395,4 +398,60 @@ public class PerformanceTracker {
 			}
 		}
 	}
+
+	public static void persistPerformanceTable(final List<Performance> performances, final LocalTime simEndTime,
+			final String type) throws IOException {
+
+		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
+		final String directory = System.getProperty("user.dir") + "/output/output-data-" + simEndTime.format(dtf);
+
+		final List<String> columns = Arrays.asList("run", //
+				"totalPassengers", "totalWaitingTime", "averageWaitingTime", "maxWaitingTime", //
+				"csTotalDepartures", "csTotalDelays", "csTotalDelayTime", "csMaximumDelay", //
+				"csAverageDelay", "csPercentageOfDelays", "csTotalJunctionWaitingTime", //
+				"csAverageJunctionWaitingTime", "csMaximumJunctionWaitingTime", "csJunctionArrivals", //
+				"prTotalDepartures", "prTotalDelays", "prTotalDelayTime", "prMaximumDelay", //
+				"prAverageDelay", "prPercentageOfDelays", "prTotalJunctionWaitingTime", //
+				"prAverageJunctionWaitingTime", "prMaximumJunctionWaitingTime", "prJunctionArrivals" //
+		);
+
+		final String fileName = type + "PerformanceTable.csv";
+		final FileWriter csvWriter = new FileWriter(directory + "/" + fileName);
+		csvWriter.append(String.join(CSV_DELIMITER, columns));
+		csvWriter.append("\n");
+
+		for (int i = 1; i <= performances.size(); i++) {
+			final Performance performance = performances.get(i);
+			csvWriter.append(i + CSV_DELIMITER);
+			csvWriter.append(performance.getTotalPassengers() + CSV_DELIMITER);
+			csvWriter.append(performance.getTotalWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getAverageWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getMaxWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsTotalDepartures() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsTotalDelays() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsTotalDelayTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsMaximumDelay() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsAverageDelay() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsPercentageOfDelays() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsTotalJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsAverageJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsMaximumJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsJunctionArrivals() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrTotalDepartures() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrTotalDelays() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrTotalDelayTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrMaximumDelay() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrAverageDelay() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrPercentageOfDelays() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrTotalJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrAverageJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrMaximumJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrJunctionArrivals() + CSV_DELIMITER);
+			csvWriter.append("\n");
+		}
+
+		csvWriter.flush();
+		csvWriter.close();
+	}
+
 }
