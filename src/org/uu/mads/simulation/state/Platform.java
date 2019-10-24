@@ -64,7 +64,7 @@ public class Platform {
 			int rng = rand.nextInt(10);
 			
 			if (rng < 4) {
-				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 0.9));
+				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 0.8));
 			} else if (rng < 7) {
 				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1));
 			} else if (rng < 9) {
