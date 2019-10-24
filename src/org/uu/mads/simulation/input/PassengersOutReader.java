@@ -50,7 +50,7 @@ public class PassengersOutReader extends PoissonReader {
 
 		String row;
 		csvReader.readLine();
-		
+
 		float passIn0 = 0;
 		float passIn1 = 0;
 
@@ -96,27 +96,25 @@ public class PassengersOutReader extends PoissonReader {
 
 			final float timeInterval = (time1.until(time2, HOURS));
 			double passengersLeavingRatio = 0;
-			
+
 			if (passOut > 0) {
 				if (direction == 0) {
 					passengersLeavingRatio = passOut / passIn0;
 				} else {
-					passengersLeavingRatio = passOut / passIn1; 
+					passengersLeavingRatio = passOut / passIn1;
 				}
 			}
-			
+
 			passengersLeavingRatio = Math.max(Math.min(passengersLeavingRatio, 1), 0);
-			
-			System.out.println(passengersLeavingRatio);
-			
-			double diff = passIn - passOut;
-			
+
+			final double diff = passIn - passOut;
+
 			if (direction == 0) {
 				passIn0 += diff;
 			} else {
 				passIn1 += diff;
 			}
-			
+
 			LocalTime timeStamp = time1;
 			final Map<LocalTime, Double> ratesByTime = ratesByTimeByPlatform.get(name);
 
