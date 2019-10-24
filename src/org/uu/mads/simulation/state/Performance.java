@@ -3,196 +3,189 @@ package org.uu.mads.simulation.state;
 import java.time.Duration;
 
 public class Performance {
-	private final long waiting_passengers_x_minutes; // TODO: split passengers up in categories?
+	private final long totalPassengers;
+	private final Duration totalWaitingTime;
+	private final Duration averageWaitingTime;
+	private final Duration maxWaitingTime;
 
-	private final long total_passengers;
-	private final Duration total_waiting_time;
-	private final Duration average_waiting_time;
-	private final Duration max_waiting_time;
+	private final long csTotalDelays;
+	private final long csTotalDepartures;
 
-	private final long cs_total_delays;
-	private final long cs_total_departures;
+	private final long prTotalDelays;
+	private final long prTotalDepartures;
 
-	private final long pr_total_delays;
-	private final long pr_total_departures;
+	private final Duration csTotalDelayTime;
+	private final Duration csAverageDelay;
+	private final Duration csMaximumDelay;
 
-	private final Duration cs_total_delay_time;
-	private final Duration cs_average_delay;
-	private final Duration cs_maximum_delay;
+	private final Duration prTotalDelayTime;
+	private final Duration prAverageDelay;
+	private final Duration prMaximumDelay;
 
-	private final Duration pr_total_delay_time;
-	private final Duration pr_average_delay;
-	private final Duration pr_maximum_delay;
+	private final float csPercentageOfDelays;
+	private final float prPercentageOfDelays;
 
-	private final float cs_percentage_of_delays;
-	private final float pr_percentage_of_delays;
+	private final Duration csTotalJunctionWaitingTime;
+	private final Duration prTotalJunctionWaitingTime;
+	private final Duration csAverageJunctionWaitingTime;
+	private final Duration prAverageJunctionWaitingTime;
+	private final Duration csMaximumJunctionWaitingTime;
+	private final Duration prMaximumJunctionWaitingTime;
+	private final long csJunctionArrivals;
+	private final long prJunctionArrivals;
 
-	private final Duration cs_total_junction_waitingTime;
-	private final Duration pr_total_junction_waitingTime;
-	private final Duration cs_average_junction_waitingTime;
-	private final Duration pr_average_junction_waitingTime;
-	private final Duration cs_maximum_junction_waitingTime;
-	private final Duration pr_maximum_junction_waitingTime;
-	private final long cs_junction_arrivals;
-	private final long pr_junction_arrivals;
-
-	public Performance(final long waiting_passengers_x_minutes, final long total_passengers,
-			final Duration total_waiting_time, final Duration average_waiting_time, final Duration max_waiting_time,
-			final long cs_total_delays, final long cs_total_departures, final long pr_total_delays,
-			final long pr_total_departures, final Duration cs_total_delay_time, final Duration cs_average_delay,
-			final Duration cs_maximum_delay, final Duration pr_total_delay_time, final Duration pr_average_delay,
-			final Duration pr_maximum_delay, final float cs_percentage_of_delays, final float pr_percentage_of_delays,
+	public Performance(final long total_passengers, final Duration total_waiting_time,
+			final Duration average_waiting_time, final Duration max_waiting_time, final long cs_total_delays,
+			final long cs_total_departures, final long pr_total_delays, final long pr_total_departures,
+			final Duration cs_total_delay_time, final Duration cs_average_delay, final Duration cs_maximum_delay,
+			final Duration pr_total_delay_time, final Duration pr_average_delay, final Duration pr_maximum_delay,
+			final float cs_percentage_of_delays, final float pr_percentage_of_delays,
 			final Duration cs_total_junction_waitingTime, final Duration pr_total_junction_waitingTime,
 			final Duration cs_average_junction_waitingTime, final Duration pr_average_junction_waitingTime,
 			final Duration cs_maximum_junction_waitingTime, final Duration pr_maximum_junction_waitingTime,
 			final long cs_junction_arrivals, final long pr_junction_arrivals) {
 		super();
-		this.waiting_passengers_x_minutes = waiting_passengers_x_minutes;
-		this.total_passengers = total_passengers;
-		this.total_waiting_time = total_waiting_time;
-		this.average_waiting_time = average_waiting_time;
-		this.max_waiting_time = max_waiting_time;
-		this.cs_total_delays = cs_total_delays;
-		this.cs_total_departures = cs_total_departures;
-		this.pr_total_delays = pr_total_delays;
-		this.pr_total_departures = pr_total_departures;
-		this.cs_total_delay_time = cs_total_delay_time;
-		this.cs_average_delay = cs_average_delay;
-		this.cs_maximum_delay = cs_maximum_delay;
-		this.pr_total_delay_time = pr_total_delay_time;
-		this.pr_average_delay = pr_average_delay;
-		this.pr_maximum_delay = pr_maximum_delay;
-		this.cs_percentage_of_delays = cs_percentage_of_delays;
-		this.pr_percentage_of_delays = pr_percentage_of_delays;
-		this.cs_total_junction_waitingTime = cs_total_junction_waitingTime;
-		this.pr_total_junction_waitingTime = pr_total_junction_waitingTime;
-		this.cs_average_junction_waitingTime = cs_average_junction_waitingTime;
-		this.pr_average_junction_waitingTime = pr_average_junction_waitingTime;
-		this.cs_maximum_junction_waitingTime = cs_maximum_junction_waitingTime;
-		this.pr_maximum_junction_waitingTime = pr_maximum_junction_waitingTime;
-		this.cs_junction_arrivals = cs_junction_arrivals;
-		this.pr_junction_arrivals = pr_junction_arrivals;
+		this.totalPassengers = total_passengers;
+		this.totalWaitingTime = total_waiting_time;
+		this.averageWaitingTime = average_waiting_time;
+		this.maxWaitingTime = max_waiting_time;
+		this.csTotalDelays = cs_total_delays;
+		this.csTotalDepartures = cs_total_departures;
+		this.prTotalDelays = pr_total_delays;
+		this.prTotalDepartures = pr_total_departures;
+		this.csTotalDelayTime = cs_total_delay_time;
+		this.csAverageDelay = cs_average_delay;
+		this.csMaximumDelay = cs_maximum_delay;
+		this.prTotalDelayTime = pr_total_delay_time;
+		this.prAverageDelay = pr_average_delay;
+		this.prMaximumDelay = pr_maximum_delay;
+		this.csPercentageOfDelays = cs_percentage_of_delays;
+		this.prPercentageOfDelays = pr_percentage_of_delays;
+		this.csTotalJunctionWaitingTime = cs_total_junction_waitingTime;
+		this.prTotalJunctionWaitingTime = pr_total_junction_waitingTime;
+		this.csAverageJunctionWaitingTime = cs_average_junction_waitingTime;
+		this.prAverageJunctionWaitingTime = pr_average_junction_waitingTime;
+		this.csMaximumJunctionWaitingTime = cs_maximum_junction_waitingTime;
+		this.prMaximumJunctionWaitingTime = pr_maximum_junction_waitingTime;
+		this.csJunctionArrivals = cs_junction_arrivals;
+		this.prJunctionArrivals = pr_junction_arrivals;
 	}
 
-	public long getWaiting_passengers_x_minutes() {
-		return this.waiting_passengers_x_minutes;
+	public long getTotalPassengers() {
+		return this.totalPassengers;
 	}
 
-	public long getTotal_passengers() {
-		return this.total_passengers;
+	public Duration getTotalWaitingTime() {
+		return this.totalWaitingTime;
 	}
 
-	public Duration getTotal_waiting_time() {
-		return this.total_waiting_time;
+	public Duration getAverageWaitingTime() {
+		return this.averageWaitingTime;
 	}
 
-	public Duration getAverage_waiting_time() {
-		return this.average_waiting_time;
+	public Duration getMaxWaitingTime() {
+		return this.maxWaitingTime;
 	}
 
-	public Duration getMax_waiting_time() {
-		return this.max_waiting_time;
+	public long getCsTotalDelays() {
+		return this.csTotalDelays;
 	}
 
-	public long getCs_total_delays() {
-		return this.cs_total_delays;
+	public long getCsTotalDepartures() {
+		return this.csTotalDepartures;
 	}
 
-	public long getCs_total_departures() {
-		return this.cs_total_departures;
+	public long getPrTotalDelays() {
+		return this.prTotalDelays;
 	}
 
-	public long getPr_total_delays() {
-		return this.pr_total_delays;
+	public long getPrTotalDepartures() {
+		return this.prTotalDepartures;
 	}
 
-	public long getPr_total_departures() {
-		return this.pr_total_departures;
+	public Duration getCsTotalDelayTime() {
+		return this.csTotalDelayTime;
 	}
 
-	public Duration getCs_total_delay_time() {
-		return this.cs_total_delay_time;
+	public Duration getCsAverageDelay() {
+		return this.csAverageDelay;
 	}
 
-	public Duration getCs_average_delay() {
-		return this.cs_average_delay;
+	public Duration getCsMaximumDelay() {
+		return this.csMaximumDelay;
 	}
 
-	public Duration getCs_maximum_delay() {
-		return this.cs_maximum_delay;
+	public Duration getPrTotalDelayTime() {
+		return this.prTotalDelayTime;
 	}
 
-	public Duration getPr_total_delay_time() {
-		return this.pr_total_delay_time;
+	public Duration getPrAverageDelay() {
+		return this.prAverageDelay;
 	}
 
-	public Duration getPr_average_delay() {
-		return this.pr_average_delay;
+	public Duration getPrMaximumDelay() {
+		return this.prMaximumDelay;
 	}
 
-	public Duration getPr_maximum_delay() {
-		return this.pr_maximum_delay;
+	public float getCsPercentageOfDelays() {
+		return this.csPercentageOfDelays;
 	}
 
-	public float getCs_percentage_of_delays() {
-		return this.cs_percentage_of_delays;
+	public float getPrPercentageOfDelays() {
+		return this.prPercentageOfDelays;
 	}
 
-	public float getPr_percentage_of_delays() {
-		return this.pr_percentage_of_delays;
+	public Duration getCsTotalJunctionWaitingTime() {
+		return this.csTotalJunctionWaitingTime;
 	}
 
-	public Duration getCs_total_junction_waitingTime() {
-		return this.cs_total_junction_waitingTime;
+	public Duration getPrTotalJunctionWaitingTime() {
+		return this.prTotalJunctionWaitingTime;
 	}
 
-	public Duration getPr_total_junction_waitingTime() {
-		return this.pr_total_junction_waitingTime;
+	public Duration getCsAverageJunctionWaitingTime() {
+		return this.csAverageJunctionWaitingTime;
 	}
 
-	public Duration getCs_average_junction_waitingTime() {
-		return this.cs_average_junction_waitingTime;
+	public Duration getPrAverageJunctionWaitingTime() {
+		return this.prAverageJunctionWaitingTime;
 	}
 
-	public Duration getPr_average_junction_waitingTime() {
-		return this.pr_average_junction_waitingTime;
+	public Duration getCsMaximumJunctionWaitingTime() {
+		return this.csMaximumJunctionWaitingTime;
 	}
 
-	public Duration getCs_maximum_junction_waitingTime() {
-		return this.cs_maximum_junction_waitingTime;
+	public Duration getPrMaximumJunctionWaitingTime() {
+		return this.prMaximumJunctionWaitingTime;
 	}
 
-	public Duration getPr_maximum_junction_waitingTime() {
-		return this.pr_maximum_junction_waitingTime;
+	public long getCsJunctionArrivals() {
+		return this.csJunctionArrivals;
 	}
 
-	public long getCs_junction_arrivals() {
-		return this.cs_junction_arrivals;
-	}
-
-	public long getPr_junction_arrivals() {
-		return this.pr_junction_arrivals;
+	public long getPrJunctionArrivals() {
+		return this.prJunctionArrivals;
 	}
 
 	@Override
 	public String toString() {
-		return "Performance [waiting_passengers_x_minutes=" + this.waiting_passengers_x_minutes + ", total_passengers="
-				+ this.total_passengers + ", total_waiting_time=" + this.total_waiting_time + ", average_waiting_time="
-				+ this.average_waiting_time + ", max_waiting_time=" + this.max_waiting_time + ", cs_total_delays="
-				+ this.cs_total_delays + ", cs_total_departures=" + this.cs_total_departures + ", pr_total_delays="
-				+ this.pr_total_delays + ", pr_total_departures=" + this.pr_total_departures + ", cs_total_delay_time="
-				+ this.cs_total_delay_time + ", cs_average_delay=" + this.cs_average_delay + ", cs_maximum_delay="
-				+ this.cs_maximum_delay + ", pr_total_delay_time=" + this.pr_total_delay_time + ", pr_average_delay="
-				+ this.pr_average_delay + ", pr_maximum_delay=" + this.pr_maximum_delay + ", cs_percentage_of_delays="
-				+ this.cs_percentage_of_delays + ", pr_percentage_of_delays=" + this.pr_percentage_of_delays
-				+ ", cs_total_junction_waitingTime=" + this.cs_total_junction_waitingTime
-				+ ", pr_total_junction_waitingTime=" + this.pr_total_junction_waitingTime
-				+ ", cs_average_junction_waitingTime=" + this.cs_average_junction_waitingTime
-				+ ", pr_average_junction_waitingTime=" + this.pr_average_junction_waitingTime
-				+ ", cs_maximum_junction_waitingTime=" + this.cs_maximum_junction_waitingTime
-				+ ", pr_maximum_junction_waitingTime=" + this.pr_maximum_junction_waitingTime
-				+ ", cs_junction_arrivals=" + this.cs_junction_arrivals + ", pr_junction_arrivals="
-				+ this.pr_junction_arrivals + "]";
+		return "Performance [total_passengers=" + this.totalPassengers + ", total_waiting_time="
+				+ this.totalWaitingTime + ", average_waiting_time=" + this.averageWaitingTime
+				+ ", max_waiting_time=" + this.maxWaitingTime + ", cs_total_delays=" + this.csTotalDelays
+				+ ", cs_total_departures=" + this.csTotalDepartures + ", pr_total_delays=" + this.prTotalDelays
+				+ ", pr_total_departures=" + this.prTotalDepartures + ", cs_total_delay_time="
+				+ this.csTotalDelayTime + ", cs_average_delay=" + this.csAverageDelay + ", cs_maximum_delay="
+				+ this.csMaximumDelay + ", pr_total_delay_time=" + this.prTotalDelayTime + ", pr_average_delay="
+				+ this.prAverageDelay + ", pr_maximum_delay=" + this.prMaximumDelay + ", cs_percentage_of_delays="
+				+ this.csPercentageOfDelays + ", pr_percentage_of_delays=" + this.prPercentageOfDelays
+				+ ", cs_total_junction_waitingTime=" + this.csTotalJunctionWaitingTime
+				+ ", pr_total_junction_waitingTime=" + this.prTotalJunctionWaitingTime
+				+ ", cs_average_junction_waitingTime=" + this.csAverageJunctionWaitingTime
+				+ ", pr_average_junction_waitingTime=" + this.prAverageJunctionWaitingTime
+				+ ", cs_maximum_junction_waitingTime=" + this.csMaximumJunctionWaitingTime
+				+ ", pr_maximum_junction_waitingTime=" + this.prMaximumJunctionWaitingTime
+				+ ", cs_junction_arrivals=" + this.csJunctionArrivals + ", pr_junction_arrivals="
+				+ this.prJunctionArrivals + "]";
 	}
 
 }
