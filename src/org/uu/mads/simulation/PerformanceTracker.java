@@ -8,6 +8,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.uu.mads.simulation.state.DayAndPeakPerformances;
 import org.uu.mads.simulation.state.Performance;
 
 public class PerformanceTracker {
@@ -19,7 +20,7 @@ public class PerformanceTracker {
 	private static PerformanceTracker dayPerformanceTracker = new PerformanceTracker(DAY_START_TIME, DAY_END_TIME);
 	private static PerformanceTracker peakPerformanceTracker = new PerformanceTracker(PEAK_START_TIME, PEAK_END_TIME);
 
-	private final LocalTime starTime;
+	private final LocalTime startTime;
 	private final LocalTime endTime;
 
 	private long totalPassengers = 0;
@@ -55,7 +56,7 @@ public class PerformanceTracker {
 
 	private PerformanceTracker(final LocalTime starTime, final LocalTime endTime) {
 		// private constructor because this is a singleton
-		this.starTime = starTime;
+		this.startTime = starTime;
 		this.endTime = endTime;
 	}
 
@@ -70,7 +71,7 @@ public class PerformanceTracker {
 	}
 
 	private void addPassengerToInstance(final Duration waitingTime) {
-		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.starTime)
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.startTime)
 				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
 			this.totalPassengers += 1;
 			this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
@@ -80,10 +81,15 @@ public class PerformanceTracker {
 		}
 	}
 
-	public void addJunctionWaitingTime(final Duration waitingTime, final int junction) {
+	public static void addJunctionWaitingTime(final Duration waitingTime, final int junction) {
+	    dayPerformanceTracker.addJunctionWaitingTimeToInstance(waitingTime, junction);
+	    peakPerformanceTracker.addJunctionWaitingTimeToInstance(waitingTime, junction);
+    }
 
-		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7, 0))
-				&& EventScheduler.getInstance().getCurrentTime().isBefore(LocalTime.of(19, 0))) {
+	private void addJunctionWaitingTimeToInstance(final Duration waitingTime, final int junction) {
+
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.startTime)
+				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
 
 			// junction denotes the junction. 0 for CS, 1 for P+R.
 			if (junction == 0) {
@@ -104,7 +110,12 @@ public class PerformanceTracker {
 		}
 	}
 
-	public void addDelay(final Duration delay, final int endStation) {
+	public static void addDelay(final Duration delay, final int endStation) {
+	    dayPerformanceTracker.addDelayToInstance(delay, endStation);
+	    peakPerformanceTracker.addDelayToInstance(delay, endStation);
+    }
+
+	private void addDelayToInstance(final Duration delay, final int endStation) {
 		// We add one departure to total departures.
 		// We check if the delay is bigger than 1 minute. If so, we add one delay to
 		// total_delays and add the amount
@@ -112,8 +123,8 @@ public class PerformanceTracker {
 
 		// endStation denotes the end station. 0 for CS, 1 for P+R.
 
-		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7, 0))
-				&& EventScheduler.getInstance().getCurrentTime().isBefore(LocalTime.of(19, 0))) {
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.startTime)
+				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
 			if (endStation == 0) {
 				this.csTotalDepartures += 1;
 
@@ -343,6 +354,11 @@ public class PerformanceTracker {
 		System.out.println("==================================================================");
 		System.out.println("");
 	}
+
+	public static DayAndPeakPerformances getDayAndPeakPerformances() {
+	    return new DayAndPeakPerformances(
+	            dayPerformanceTracker.getPerformance(), peakPerformanceTracker.getPerformance());
+    }
 
 	public static void serializePerformances(final List<Performance> performanceList) {
 		// save the object to file
