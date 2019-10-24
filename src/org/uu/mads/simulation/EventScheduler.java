@@ -44,22 +44,33 @@ public class EventScheduler {
 		return this.scheduledEventsByTime;
 	}
 
-	public void fireNextEvent() {
+	/**
+	 * @return true if next event time is smaller than simulation end time and will
+	 *         be executed, false otherwise
+	 */
+	public boolean fireNextEvent() {
 		this.currentTime = this.scheduledEventsByTime.firstKey();
-		final List<Event> eventsForCurrentTime = this.scheduledEventsByTime.get(this.currentTime);
-		final Event nextEvent = eventsForCurrentTime.get(0);
-		eventsForCurrentTime.remove(0);
 
-		if (eventsForCurrentTime.isEmpty()) {
-			// No more events for current time
-			this.scheduledEventsByTime.remove(this.currentTime);
+		if (!this.currentTime.isAfter(Simulation.SIMULATION_END_TIME)) {
+			final List<Event> eventsForCurrentTime = this.scheduledEventsByTime.get(this.currentTime);
+			final Event nextEvent = eventsForCurrentTime.get(0);
+			eventsForCurrentTime.remove(0);
+
+			if (eventsForCurrentTime.isEmpty()) {
+				// No more events for current time
+				this.scheduledEventsByTime.remove(this.currentTime);
+			} else {
+				// Additional events at current time (multiple events at the same time)
+				this.scheduledEventsByTime.put(this.currentTime, eventsForCurrentTime);
+			}
+
+			nextEvent.fire();
+			Simulation.logVerbose("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
+			return true;
 		} else {
-			// Additional events at current time (multiple events at the same time)
-			this.scheduledEventsByTime.put(this.currentTime, eventsForCurrentTime);
+			Simulation.log("Next event would be after simulation end time. Stopping simualion.");
+			return false;
 		}
-
-		nextEvent.fire();
-		Simulation.logVerbose("Event " + nextEvent + " scheduled at time " + this.currentTime + " has been fired.");
 	}
 
 	public void scheduleEvent(final Event event, final LocalTime eventTime) {
