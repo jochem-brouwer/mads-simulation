@@ -12,38 +12,36 @@ import java.util.List;
 import org.uu.mads.simulation.state.Performance;
 
 public class PerformanceTracker {
-	private long waiting_passengers_x_minutes; // TODO: split passengers up in categories?
+	private long totalPassengers = 0;
+	private Duration totalWaitingTime = Duration.ZERO;
+	private Duration averageWaitingTime = Duration.ZERO;
+	private Duration maxWaitingTime = Duration.ZERO;
 
-	private long total_passengers = 0;
-	private Duration total_waiting_time = Duration.ZERO;
-	private Duration average_waiting_time = Duration.ZERO;
-	private Duration max_waiting_time = Duration.ZERO;
+	private long csTotalDelays = 0;
+	private long csTotalDepartures = 0;
 
-	private long cs_total_delays = 0;
-	private long cs_total_departures = 0;
+	private long prTotalDelays = 0;
+	private long prTotalDepartures = 0;
 
-	private long pr_total_delays = 0;
-	private long pr_total_departures = 0;
+	private Duration csTotalDelayTime = Duration.ZERO;
+	private Duration csAverageDelay = Duration.ZERO;
+	private Duration csMaximumDelay = Duration.ZERO;
 
-	private Duration cs_total_delay_time = Duration.ZERO;
-	private Duration cs_average_delay = Duration.ZERO;
-	private Duration cs_maximum_delay = Duration.ZERO;
+	private Duration prTotalDelayTime = Duration.ZERO;
+	private Duration prAverageDelay = Duration.ZERO;
+	private Duration prMaximumDelay = Duration.ZERO;
 
-	private Duration pr_total_delay_time = Duration.ZERO;
-	private Duration pr_average_delay = Duration.ZERO;
-	private Duration pr_maximum_delay = Duration.ZERO;
+	private float csPercentageOfDelays;
+	private float prPercentageOfDelays;
 
-	private float cs_percentage_of_delays;
-	private float pr_percentage_of_delays;
-
-	private Duration cs_total_junction_waitingTime = Duration.ZERO;
-	private Duration pr_total_junction_waitingTime = Duration.ZERO;
-	private Duration cs_average_junction_waitingTime = Duration.ZERO;
-	private Duration pr_average_junction_waitingTime = Duration.ZERO;
-	private Duration cs_maximum_junction_waitingTime = Duration.ZERO;
-	private Duration pr_maximum_junction_waitingTime = Duration.ZERO;
-	private long cs_junction_arrivals = 0;
-	private long pr_junction_arrivals = 0;
+	private Duration csTotalJunctionWaitingTime = Duration.ZERO;
+	private Duration prTotalJunctionWaitingTime = Duration.ZERO;
+	private Duration csAverageJunctionWaitingTime = Duration.ZERO;
+	private Duration prAverageJunctionWaitingTime = Duration.ZERO;
+	private Duration csMaximumJunctionWaitingTime = Duration.ZERO;
+	private Duration prMaximumJunctionWaitingTime = Duration.ZERO;
+	private long csJunctionArrivals = 0;
+	private long prJunctionArrivals = 0;
 
 	private static PerformanceTracker instance = null;
 
@@ -64,37 +62,59 @@ public class PerformanceTracker {
 
 	public static void printPerformanceReport(final List<Performance> performances) {
 
-		long total_passengers = 0;
-		Duration total_waiting_time = Duration.ZERO;
-		Duration max_waiting_time = Duration.ZERO;
-		Duration average_waiting_time = Duration.ZERO;
+		// Passengers
+		long totalPassengers = 0;
+		Duration totalWaitingTime = Duration.ZERO;
+		Duration maxWaitingTime = Duration.ZERO;
+		Duration averageWaitingTime = Duration.ZERO;
+
+		// CS Junction
+		final Duration csTotalJunctionWaitingTime = Duration.ZERO;
+		final long totalCsJunctionArrivals = 0;
+		final Duration csMaximumJunctionWaitingTime = Duration.ZERO;
+		final Duration csAverageJunctionWaitingTime = Duration.ZERO;
 
 		for (final Performance performance : performances) {
-			total_passengers += performance.getTotal_passengers();
-			total_waiting_time = total_waiting_time.plus(performance.getTotal_waiting_time());
-			max_waiting_time = performance.getMax_waiting_time().compareTo(max_waiting_time) > 0
-					? performance.getMax_waiting_time()
-					: max_waiting_time;
+			// Passengers
+			totalPassengers += performance.getTotalPassengers();
+			totalWaitingTime = totalWaitingTime.plus(performance.getTotalWaitingTime());
+			maxWaitingTime = performance.getMaxWaitingTime().compareTo(maxWaitingTime) > 0
+					? performance.getMaxWaitingTime()
+					: maxWaitingTime;
+
+			// CS Junction
+			// cs_total_junction_waitingTime +=
+			// performance.getCs_total_junction_waitingTime()
 
 		}
-		average_waiting_time = total_waiting_time.dividedBy(total_passengers);
+		averageWaitingTime = totalWaitingTime.dividedBy(totalPassengers);
 
 		System.out.println("");
-		System.out.println("Total passengers: " + total_passengers);
-		System.out.println("Total waiting time in seconds: " + total_waiting_time.getSeconds());
+		System.out.println("==================================================================");
+		System.out.println("");
 
-		System.out.println("Maximum waiting time of a passenger: " + max_waiting_time.getSeconds());
+		System.out.println("Total passengers: " + totalPassengers);
+		System.out.println("Total waiting time in seconds: " + totalWaitingTime.getSeconds());
 
-		System.out.println("Average waiting time: (passengers / waiting time) " + average_waiting_time.getSeconds());
+		System.out.println("Maximum waiting time of a passenger: " + maxWaitingTime.getSeconds());
 
-//		System.out.println("");
-//		System.out.println("Total waiting time for junction at Centraal Station: "
-//				+ this.cs_total_junction_waitingTime.getSeconds());
-//		System.out.println("Total junction arrivals: " + this.cs_junction_arrivals);
-//		System.out.println("Maximum waiting time: " + this.cs_maximum_junction_waitingTime.getSeconds());
-//		System.out.println("Average waiting time at junction Centraal Station: "
-//				+ this.cs_average_junction_waitingTime.getSeconds());
-//
+		System.out.println("Average waiting time: (passengers / waiting time) " + averageWaitingTime.getSeconds());
+
+		System.out.println("");
+		System.out.println("==================================================================");
+		System.out.println("");
+
+		System.out.println(
+				"Total waiting time for junction at Centraal Station: " + csTotalJunctionWaitingTime.getSeconds());
+		System.out.println("Total junction arrivals: " + totalCsJunctionArrivals);
+		System.out.println("Maximum waiting time: " + csMaximumJunctionWaitingTime.getSeconds());
+		System.out.println(
+				"Average waiting time at junction Centraal Station: " + csAverageJunctionWaitingTime.getSeconds());
+
+		System.out.println("");
+		System.out.println("==================================================================");
+		System.out.println("");
+
 //		System.out.println("");
 //		System.out.println(
 //				"Total waiting time for junction at P+R Uithof: " + this.pr_total_junction_waitingTime.getSeconds());
@@ -139,10 +159,10 @@ public class PerformanceTracker {
 	}
 
 	public void addPassenger(final Duration waitingTime) {
-		this.total_passengers += 1;
-		this.total_waiting_time = this.total_waiting_time.plus(waitingTime);
-		if (this.max_waiting_time.getSeconds() < waitingTime.getSeconds()) {
-			this.max_waiting_time = waitingTime;
+		this.totalPassengers += 1;
+		this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
+		if (this.maxWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+			this.maxWaitingTime = waitingTime;
 		}
 	}
 
@@ -150,18 +170,18 @@ public class PerformanceTracker {
 
 		// junction denotes the junction. 0 for CS, 1 for P+R.
 		if (junction == 0) {
-			this.cs_junction_arrivals += 1;
-			this.cs_total_junction_waitingTime = this.cs_total_junction_waitingTime.plus(waitingTime);
+			this.csJunctionArrivals += 1;
+			this.csTotalJunctionWaitingTime = this.csTotalJunctionWaitingTime.plus(waitingTime);
 
-			if (this.cs_maximum_junction_waitingTime.getSeconds() < waitingTime.getSeconds()) {
-				this.cs_maximum_junction_waitingTime = waitingTime;
+			if (this.csMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+				this.csMaximumJunctionWaitingTime = waitingTime;
 			}
 		} else {
-			this.pr_junction_arrivals += 1;
-			this.pr_total_junction_waitingTime = this.pr_total_junction_waitingTime.plus(waitingTime);
+			this.prJunctionArrivals += 1;
+			this.prTotalJunctionWaitingTime = this.prTotalJunctionWaitingTime.plus(waitingTime);
 
-			if (this.pr_maximum_junction_waitingTime.getSeconds() < waitingTime.getSeconds()) {
-				this.pr_maximum_junction_waitingTime = waitingTime;
+			if (this.prMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+				this.prMaximumJunctionWaitingTime = waitingTime;
 			}
 		}
 	}
@@ -175,24 +195,24 @@ public class PerformanceTracker {
 		// endStation denotes the end station. 0 for CS, 1 for P+R.
 
 		if (endStation == 0) {
-			this.cs_total_departures += 1;
+			this.csTotalDepartures += 1;
 
 			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
-				this.cs_total_delay_time = this.cs_total_delay_time.plus(delay);
-				if (delay.compareTo(this.cs_maximum_delay) >= 0) {
-					this.cs_maximum_delay = delay;
+				this.csTotalDelayTime = this.csTotalDelayTime.plus(delay);
+				if (delay.compareTo(this.csMaximumDelay) >= 0) {
+					this.csMaximumDelay = delay;
 				}
-				this.cs_total_delays += 1;
+				this.csTotalDelays += 1;
 			}
 
 		} else {
-			this.pr_total_departures += 1;
+			this.prTotalDepartures += 1;
 			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
-				this.pr_total_delay_time = this.pr_total_delay_time.plus(delay);
-				if (delay.compareTo(this.pr_maximum_delay) >= 0) {
-					this.pr_maximum_delay = delay;
+				this.prTotalDelayTime = this.prTotalDelayTime.plus(delay);
+				if (delay.compareTo(this.prMaximumDelay) >= 0) {
+					this.prMaximumDelay = delay;
 				}
-				this.pr_total_delays += 1;
+				this.prTotalDelays += 1;
 			}
 		}
 	}
@@ -202,44 +222,43 @@ public class PerformanceTracker {
 		calculateJunctionWaitingTime();
 		calculateAveragePunctuality();
 
-		return new Performance(this.waiting_passengers_x_minutes, this.total_passengers, this.total_waiting_time,
-				this.average_waiting_time, this.max_waiting_time, this.cs_total_delays, this.cs_total_departures,
-				this.pr_total_delays, this.pr_total_departures, this.cs_total_delay_time, this.cs_average_delay,
-				this.cs_maximum_delay, this.pr_total_delay_time, this.pr_average_delay, this.pr_maximum_delay,
-				this.cs_percentage_of_delays, this.pr_percentage_of_delays, this.cs_total_junction_waitingTime,
-				this.pr_total_junction_waitingTime, this.cs_average_junction_waitingTime,
-				this.pr_average_junction_waitingTime, this.cs_maximum_junction_waitingTime,
-				this.pr_maximum_junction_waitingTime, this.cs_junction_arrivals, this.pr_junction_arrivals);
+		return new Performance(this.totalPassengers, this.totalWaitingTime, this.averageWaitingTime,
+				this.maxWaitingTime, this.csTotalDelays, this.csTotalDepartures, this.prTotalDelays,
+				this.prTotalDepartures, this.csTotalDelayTime, this.csAverageDelay, this.csMaximumDelay,
+				this.prTotalDelayTime, this.prAverageDelay, this.prMaximumDelay, this.csPercentageOfDelays,
+				this.prPercentageOfDelays, this.csTotalJunctionWaitingTime, this.prTotalJunctionWaitingTime,
+				this.csAverageJunctionWaitingTime, this.prAverageJunctionWaitingTime, this.csMaximumJunctionWaitingTime,
+				this.prMaximumJunctionWaitingTime, this.csJunctionArrivals, this.prJunctionArrivals);
 	}
 
 	private void calculateAverageWaitingTime() {
-		if (this.total_passengers != 0) {
-			this.average_waiting_time = this.total_waiting_time.dividedBy(this.total_passengers);
+		if (this.totalPassengers != 0) {
+			this.averageWaitingTime = this.totalWaitingTime.dividedBy(this.totalPassengers);
 		}
 	}
 
 	private void calculateJunctionWaitingTime() {
-		this.cs_average_junction_waitingTime = this.cs_total_junction_waitingTime.dividedBy(this.cs_junction_arrivals);
-		this.pr_average_junction_waitingTime = this.pr_total_junction_waitingTime.dividedBy(this.pr_junction_arrivals);
+		this.csAverageJunctionWaitingTime = this.csTotalJunctionWaitingTime.dividedBy(this.csJunctionArrivals);
+		this.prAverageJunctionWaitingTime = this.prTotalJunctionWaitingTime.dividedBy(this.prJunctionArrivals);
 	}
 
 	private void calculateAveragePunctuality() {
 
 		// Calculate average punctuality for CS:
-		if (this.cs_total_delays != 0) {
-			this.cs_average_delay = this.cs_total_delay_time.dividedBy(this.cs_total_delays);
+		if (this.csTotalDelays != 0) {
+			this.csAverageDelay = this.csTotalDelayTime.dividedBy(this.csTotalDelays);
 		} else {
-			this.cs_average_delay = Duration.ZERO;
+			this.csAverageDelay = Duration.ZERO;
 		}
-		this.cs_percentage_of_delays = ((float) this.cs_total_delays / (float) this.cs_total_departures) * 100;
+		this.csPercentageOfDelays = ((float) this.csTotalDelays / (float) this.csTotalDepartures) * 100;
 
 		// We do the same for P+R:
-		if (this.pr_total_delays != 0) {
-			this.pr_average_delay = this.pr_total_delay_time.dividedBy(this.pr_total_delays);
+		if (this.prTotalDelays != 0) {
+			this.prAverageDelay = this.prTotalDelayTime.dividedBy(this.prTotalDelays);
 		} else {
-			this.pr_average_delay = Duration.ZERO;
+			this.prAverageDelay = Duration.ZERO;
 		}
-		this.pr_percentage_of_delays = ((float) this.pr_total_delays / (float) this.pr_total_departures) * 100;
+		this.prPercentageOfDelays = ((float) this.prTotalDelays / (float) this.prTotalDepartures) * 100;
 	}
 
 	public static void serializePerformances(List<Performance> performanceList) {
