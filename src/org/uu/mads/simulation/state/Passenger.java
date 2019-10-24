@@ -1,5 +1,6 @@
 package org.uu.mads.simulation.state;
 
+import java.time.Duration;
 import java.time.LocalTime;
 import java.util.Objects;
 
@@ -9,6 +10,22 @@ public class Passenger {
 	private LocalTime leaveTimePlatform;
 	private final Platform platform;
 
+	public void setLeaveTimePlatform(LocalTime leaveTimePlatform) {
+		this.leaveTimePlatform = leaveTimePlatform;
+	}
+
+	public LocalTime getArrivalTimePlatform() {
+		return arrivalTimePlatform;
+	}
+
+	public LocalTime getLeaveTimePlatform() {
+		return leaveTimePlatform;
+	}
+
+	public Platform getPlatform() {
+		return platform;
+	}
+
 	public Passenger(final LocalTime arrivalTimePlatform, final Platform platform) {
 		super();
 
@@ -17,6 +34,10 @@ public class Passenger {
 
 		this.arrivalTimePlatform = arrivalTimePlatform;
 		this.platform = platform;
+	}
+
+	public Duration getWaitingTime() {
+		return Duration.between(this.arrivalTimePlatform, this.leaveTimePlatform);
 	}
 
 	@Override

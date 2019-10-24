@@ -18,13 +18,13 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
-	public static final int NUMBER_OF_RUNS = 1000;
+	public static final int NUMBER_OF_RUNS = 100;
 
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
-	public static final int PASSENGER_IN_MULTIPLICATOR = 1; // 1 -> 100%
+	public static final double PASSENGER_IN_MULTIPLICATOR = 4; // 1 -> 100%
 	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 
-	public static final boolean ARTIFICIAL_DATA = true;
+	public static final boolean ARTIFICIAL_DATA = false;
 	public static final boolean ARTIFICIAL_DRIVING_TIME = false;
 	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-02.csv";
 
@@ -32,7 +32,7 @@ public class Simulation {
 	public static final boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
 
-	public static final boolean SERIALIZE_PERFORMANCES = true; // flag to enable/disable performance serialization
+	public static final boolean SERIALIZE_PERFORMANCES = false; // flag to enable/disable performance serialization
 	public static final boolean PERSIST_PERFORMANCE_TABLE = true; // flag to enable/disable performance table generation
 
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0);

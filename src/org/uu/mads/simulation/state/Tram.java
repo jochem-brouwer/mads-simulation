@@ -1,11 +1,14 @@
 package org.uu.mads.simulation.state;
 
+import java.time.Duration;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
 import org.apache.commons.math3.distribution.PoissonDistribution;
 import org.uu.mads.simulation.EventScheduler;
+import org.uu.mads.simulation.PerformanceTracker;
 import org.uu.mads.simulation.Simulation;
 import org.uu.mads.simulation.input.PassengersOutReader;
 
@@ -67,12 +70,20 @@ public class Tram {
 		final int noOfWaitingPassengers = platform.getNoOfWaitingPassengers();
 
 		int passengersIn;
+
+		List<Passenger> passengers;
+
 		if (remainingCapacity >= noOfWaitingPassengers) {
-			platform.popFirstWaitingPassengers(noOfWaitingPassengers);
+			passengers = platform.popFirstWaitingPassengers(noOfWaitingPassengers);
 			passengersIn = noOfWaitingPassengers;
 		} else {
-			platform.popFirstWaitingPassengers(remainingCapacity);
+			passengers = platform.popFirstWaitingPassengers(remainingCapacity);
 			passengersIn = remainingCapacity;
+		}
+
+		for (Passenger passenger:passengers) {
+			passenger.setLeaveTimePlatform(EventScheduler.getInstance().getCurrentTime());
+			PerformanceTracker.addPassenger(passenger.getWaitingTime());
 		}
 
 		this.numOfPassengers += passengersIn;

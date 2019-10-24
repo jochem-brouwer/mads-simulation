@@ -163,9 +163,6 @@ public class Platform {
 							final Passenger passenger = new Passenger(
 									this.lastPassengersCalc.plusSeconds(totalSecondsPassed), this);
 							addWaitingPassenger(passenger);
-							final Duration waitingTime = Duration
-									.between(this.lastPassengersCalc.plusSeconds(totalSecondsPassed), currentTime);
-							PerformanceTracker.addPassenger(waitingTime);
 						}
 					}
 				}
