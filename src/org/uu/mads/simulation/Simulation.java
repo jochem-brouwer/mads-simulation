@@ -22,7 +22,7 @@ public class Simulation {
 
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final double PASSENGER_IN_MULTIPLICATOR = 1; // 1 -> 100%
-	public static final int NUMBER_OF_TRAMS = 22; // number of trams we want to deploy
+	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 
 	public static final boolean ARTIFICIAL_DATA = false;
 	public static final boolean ARTIFICIAL_DRIVING_TIME = false;
