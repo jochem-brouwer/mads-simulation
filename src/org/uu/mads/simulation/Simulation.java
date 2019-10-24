@@ -18,7 +18,7 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
-	public static final int NUMBER_OF_RUNS = 100;
+	public static final int NUMBER_OF_RUNS = 1000;
 
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final int PASSENGER_IN_MULTIPLICATOR = 1; // 1 -> 100%
@@ -26,7 +26,7 @@ public class Simulation {
 
 	public static final boolean ARTIFICIAL_DATA = true;
 	public static final boolean ARTIFICIAL_DRIVING_TIME = false;
-	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-03.csv";
+	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-02.csv";
 
 	public static final boolean LOG = false; // flag to enable/disable logging
 	public static final boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
@@ -37,8 +37,8 @@ public class Simulation {
 
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0);
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0);
-	public static final int INITIAL_NUMBER_OF_TRAMS_CS = (NUMBER_OF_TRAMS % 2) == 0 ? (((NUMBER_OF_TRAMS / 2) - 1))
-			: ((NUMBER_OF_TRAMS / 2));
+	public static final int INITIAL_NUMBER_OF_TRAMS_CS = (NUMBER_OF_TRAMS % 2) == 0 ? (NUMBER_OF_TRAMS / 2) - 1
+			: NUMBER_OF_TRAMS / 2;
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
 	public static final Duration AVG_ONE_WAY_DRIVING_TIME = Duration.ofMinutes(17);
 	public static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
@@ -69,8 +69,8 @@ public class Simulation {
 			peakPerformances.add(dayAndPeakPerformance.getPeakPerformance());
 		}
 
-		PerformanceTracker.printPerformanceReport(dayPerformances, "Day");
 		PerformanceTracker.printPerformanceReport(peakPerformances, "Peak");
+		PerformanceTracker.printPerformanceReport(dayPerformances, "Day");
 
 		final LocalTime simEndTime = LocalTime.now();
 		if (SERIALIZE_PERFORMANCES) {
