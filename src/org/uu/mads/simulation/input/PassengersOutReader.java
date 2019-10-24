@@ -99,15 +99,13 @@ public class PassengersOutReader extends PoissonReader {
 			
 			if (passOut > 0) {
 				if (direction == 0) {
-					passengersLeavingRatio = passIn0 / passOut;
+					passengersLeavingRatio = passOut / passIn0;
 				} else {
-					passengersLeavingRatio = passIn1 / passOut; 
+					passengersLeavingRatio = passOut / passIn1; 
 				}
 			}
 			
-			if (passengersLeavingRatio < 0) {
-				passengersLeavingRatio = 0;
-			}
+			passengersLeavingRatio = Math.max(Math.min(passengersLeavingRatio, 1), 0);
 			
 			System.out.println(passengersLeavingRatio);
 			
