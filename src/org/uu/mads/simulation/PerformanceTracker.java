@@ -82,9 +82,9 @@ public class PerformanceTracker {
 	}
 
 	public static void addJunctionWaitingTime(final Duration waitingTime, final int junction) {
-	    dayPerformanceTracker.addJunctionWaitingTimeToInstance(waitingTime, junction);
-	    peakPerformanceTracker.addJunctionWaitingTimeToInstance(waitingTime, junction);
-    }
+		dayPerformanceTracker.addJunctionWaitingTimeToInstance(waitingTime, junction);
+		peakPerformanceTracker.addJunctionWaitingTimeToInstance(waitingTime, junction);
+	}
 
 	private void addJunctionWaitingTimeToInstance(final Duration waitingTime, final int junction) {
 
@@ -111,9 +111,9 @@ public class PerformanceTracker {
 	}
 
 	public static void addDelay(final Duration delay, final int endStation) {
-	    dayPerformanceTracker.addDelayToInstance(delay, endStation);
-	    peakPerformanceTracker.addDelayToInstance(delay, endStation);
-    }
+		dayPerformanceTracker.addDelayToInstance(delay, endStation);
+		peakPerformanceTracker.addDelayToInstance(delay, endStation);
+	}
 
 	private void addDelayToInstance(final Duration delay, final int endStation) {
 		// We add one departure to total departures.
@@ -175,6 +175,11 @@ public class PerformanceTracker {
 		this.prAverageJunctionWaitingTime = this.prTotalJunctionWaitingTime.dividedBy(this.prJunctionArrivals);
 	}
 
+	public static DayAndPeakPerformances getDayAndPeakPerformances() {
+		return new DayAndPeakPerformances(dayPerformanceTracker.getPerformance(),
+				peakPerformanceTracker.getPerformance());
+	}
+
 	private void calculateAveragePunctuality() {
 
 		// Calculate average punctuality for CS:
@@ -194,7 +199,7 @@ public class PerformanceTracker {
 		this.prPercentageOfDelays = ((float) this.prTotalDelays / (float) this.prTotalDepartures) * 100;
 	}
 
-	public static void printPerformanceReport(final List<Performance> performances) {
+	public static void printPerformanceReport(final List<Performance> performances, final String type) {
 		// Passengers
 		long totalPassengers = 0;
 		Duration totalWaitingTime = Duration.ZERO;
@@ -298,6 +303,8 @@ public class PerformanceTracker {
 
 		System.out.println("");
 		System.out.println("==================================================================");
+		System.out.println(type + " Performance Report");
+		System.out.println("==================================================================");
 		System.out.println("");
 
 		System.out.println("Average total passengers: " + averageTotalPassengers);
@@ -365,19 +372,14 @@ public class PerformanceTracker {
 		System.out.println("");
 	}
 
-	public static DayAndPeakPerformances getDayAndPeakPerformances() {
-	    return new DayAndPeakPerformances(
-	            dayPerformanceTracker.getPerformance(), peakPerformanceTracker.getPerformance());
-    }
-
-	public static void serializePerformances(final List<Performance> performanceList) {
+	public static void serializePerformances(final List<Performance> performanceList, final String type) {
 		// save the object to file
 		FileOutputStream fileStream = null;
 		ObjectOutputStream objectStream = null;
 		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
 
 		for (int i = 0; i < performanceList.size(); i++) {
-			final String fileName = ("PerformanceNr" + (i + 1));
+			final String fileName = (type + "PerformanceNr" + (i + 1));
 			final Performance performance = performanceList.get(i);
 			final File directory = new File(
 					System.getProperty("user.dir") + "/output/output-data-" + LocalTime.now().format(dtf));

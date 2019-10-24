@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.uu.mads.simulation.events.ArriveWaitingPointEvent;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
+import org.uu.mads.simulation.state.DayAndPeakPerformances;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
@@ -17,7 +18,7 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
-	public static final int NUMBER_OF_RUNS = 100;
+	public static final int NUMBER_OF_RUNS = 10;
 
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
@@ -46,22 +47,32 @@ public class Simulation {
 	private static LocalTime firstScheduledLeaveTimeCS;
 
 	public static void main(final String[] args) throws IOException {
-		final List<Performance> performances = new ArrayList<>();
+		final List<DayAndPeakPerformances> dayAndPeakPerformances = new ArrayList<>();
 
 		for (int i = 1; i <= NUMBER_OF_RUNS; i++) {
-			final Performance performanceOfRun = runSimulation(i);
-			performances.add(performanceOfRun);
+			final DayAndPeakPerformances performanceOfRun = runSimulation(i);
+			dayAndPeakPerformances.add(performanceOfRun);
 			EventScheduler.reset();
 			PerformanceTracker.reset();
 		}
-		PerformanceTracker.printPerformanceReport(performances);
+
+		final List<Performance> dayPerformances = new ArrayList<>();
+		final List<Performance> peakPerformances = new ArrayList<>();
+		for (final DayAndPeakPerformances dayAndPeakPerformance : dayAndPeakPerformances) {
+			dayPerformances.add(dayAndPeakPerformance.getDailyPerformance());
+			peakPerformances.add(dayAndPeakPerformance.getPeakPerformance());
+		}
+
+		PerformanceTracker.printPerformanceReport(dayPerformances, "Day");
+		PerformanceTracker.printPerformanceReport(peakPerformances, "Peak");
 
 		if (SERIALIZE_PERFORMANCES) {
-			PerformanceTracker.serializePerformances((performances));
+			PerformanceTracker.serializePerformances(dayPerformances, "Day");
+			PerformanceTracker.serializePerformances(peakPerformances, "Peak");
 		}
 	}
 
-	private static Performance runSimulation(final int run) throws IOException {
+	private static DayAndPeakPerformances runSimulation(final int run) throws IOException {
 		System.out.println("Simulation run " + run);
 
 		calculateCSLeave();
@@ -80,7 +91,7 @@ public class Simulation {
 			// Next event is fired
 		}
 
-		return PerformanceTracker.getPerformance();
+		return PerformanceTracker.getDayAndPeakPerformances();
 	}
 
 	/**
