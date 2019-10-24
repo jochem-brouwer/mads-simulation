@@ -6,7 +6,7 @@ import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class InputReader {
+/*public class InputReader {
 
     public BufferedReader reader;
     BufferedReader reader2;
@@ -29,25 +29,26 @@ public class InputReader {
                 String[] data = row.split(";");
                 String name = data[0];
                 int direction = Integer.parseInt(data[1]);
-                int hour1 = (int) Float.parseFloat(data[2]);
-                int hour2 = 0;
-                if (hour1 == 21) {
-                    hour2 = 30;
-                }
+                double timeStart = (double) Float.parseFloat(data[2]);
+                double timeEnd = (double) Float.parseFloat(data[3]);
+                
+                int hourStart  = (int) Math.floor(timeStart);
+                int minStart = (int) ((timeStart - hourStart) * 60);
 
-                LocalTime time1 = LocalTime.of(hour1, hour2);
-                hour1 = (int) Float.parseFloat(data[3]);
-                hour2 = 0;
-                if (hour1 == 21) {
-                    hour2 = 30;
-                }
-                LocalTime time2 = LocalTime.of(hour1, hour2);
+                LocalTime time1 = LocalTime.of(hourStart, minStart);
+                
+                int hourEnd =  (int) Math.floor(timeEnd);
+                int minEnd  =  (int) ((timeEnd - hourEnd) * 60);
+                
+                LocalTime time2 = LocalTime.of(hourEnd, minEnd);
 
                 float passIn = Float.parseFloat(data[4]);
                 float passOut = Float.parseFloat(data[5]);
 
                 dataList.add(new InputStationData(name, direction, time1, time2, passIn, passOut));
             }
+            
+            throw(new Error());
         }
 
 
@@ -60,4 +61,4 @@ public class InputReader {
     public InputReader(FileReader fileReader, char c) throws FileNotFoundException {
         System.out.println("File not found! " + fileReader);
     }
-}
+} */
