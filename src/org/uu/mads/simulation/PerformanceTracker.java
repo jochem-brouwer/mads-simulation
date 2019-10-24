@@ -203,28 +203,28 @@ public class PerformanceTracker {
 		// CS Junction
 		Duration csTotalJunctionWaitingTime = Duration.ZERO;
 		long totalCsJunctionArrivals = 0;
-		Duration csMaximumJunctionWaitingTime = Duration.ZERO;
 		Duration csAverageJunctionWaitingTime;
+		Duration totalCsJunctionMaxWaitingTime = Duration.ZERO;
 
 		// PR Junction
 		Duration prTotalJunctionWaitingTime = Duration.ZERO;
 		long totalPrJunctionArrivals = 0;
-		Duration prMaximumJunctionWaitingTime = Duration.ZERO;
 		Duration prAverageJunctionWaitingTime;
+		Duration totalPrJunctionMaxWaitingTime = Duration.ZERO;
 
 		// Performance Measures CS
 		long csTotalDelays = 0;
 		Duration csTotalDelayTime = Duration.ZERO;
-		Duration csMaximumDelay = Duration.ZERO;
 		long csTotalDepartures = 0;
-		float csPercentageOfDelays = 0;
+		double totalCsPercentageOfDelays = 0;
+		Duration totalCsMaxDelays = Duration.ZERO;
 
 		// Performance Measures PR
 		long prTotalDelays = 0;
 		Duration prTotalDelayTime = Duration.ZERO;
-		Duration prMaximumDelay = Duration.ZERO;
 		long prTotalDepartures = 0;
-		float prPercentageOfDelays = 0;
+		double totalPrPercentageOfDelays = 0;
+		Duration totalPrMaxDelays = Duration.ZERO;
 
 		for (final Performance performance : performances) {
 			// Passengers
@@ -235,53 +235,66 @@ public class PerformanceTracker {
 			// CS Junction
 			csTotalJunctionWaitingTime = csTotalJunctionWaitingTime.plus(performance.getCsTotalJunctionWaitingTime());
 			totalCsJunctionArrivals += performance.getCsJunctionArrivals();
-			csMaximumJunctionWaitingTime = csMaximumJunctionWaitingTime
-					.compareTo(performance.getCsMaximumJunctionWaitingTime()) < 0
-							? performance.getCsMaximumJunctionWaitingTime()
-							: csMaximumJunctionWaitingTime;
+			totalCsJunctionMaxWaitingTime = totalCsJunctionMaxWaitingTime
+					.plus(performance.getCsMaximumJunctionWaitingTime());
 
 			// PR Junction
 			prTotalJunctionWaitingTime = prTotalJunctionWaitingTime.plus(performance.getPrTotalJunctionWaitingTime());
 			totalPrJunctionArrivals += performance.getPrJunctionArrivals();
-			prMaximumJunctionWaitingTime = prMaximumJunctionWaitingTime
-					.compareTo(performance.getPrMaximumJunctionWaitingTime()) < 0
-							? performance.getPrMaximumJunctionWaitingTime()
-							: prMaximumJunctionWaitingTime;
+			totalPrJunctionMaxWaitingTime = totalPrJunctionMaxWaitingTime
+					.plus(performance.getPrMaximumJunctionWaitingTime());
 
 			// Performance Measures CS
 			csTotalDelays += performance.getCsTotalDelays();
 			csTotalDelayTime = csTotalDelayTime.plus(performance.getCsTotalDelayTime());
-			csMaximumDelay = csMaximumDelay.compareTo(performance.getCsMaximumDelay()) < 0
-					? performance.getCsMaximumDelay()
-					: csMaximumDelay;
 			csTotalDepartures += performance.getCsTotalDepartures();
-			csPercentageOfDelays = ((float) csTotalDelays / (float) csTotalDepartures) * 100;
+			totalCsPercentageOfDelays += performance.getCsPercentageOfDelays();
+			totalCsMaxDelays = totalCsMaxDelays.plus(performance.getCsMaximumDelay());
 
 			// Performance Measures PR
 			prTotalDelays += performance.getPrTotalDelays();
 			prTotalDelayTime = prTotalDelayTime.plus(performance.getPrTotalDelayTime());
-			prMaximumDelay = prMaximumDelay.compareTo(performance.getPrMaximumDelay()) < 0
-					? performance.getPrMaximumDelay()
-					: prMaximumDelay;
 			prTotalDepartures += performance.getPrTotalDepartures();
-			prPercentageOfDelays = ((float) prTotalDelays / (float) prTotalDepartures) * 100;
+			totalPrPercentageOfDelays += performance.getPrPercentageOfDelays();
+			totalPrMaxDelays = totalPrMaxDelays.plus(performance.getPrMaximumDelay());
 		}
 
-		// Passengers Averages
+		// Passengers averages
 		final int averageTotalPassengers = (int) (totalPassengers / performances.size());
 		final Duration averageTotalWaitingTime = totalWaitingTime.dividedBy(performances.size());
 		final Duration averageMaxWaitingTime = totalMaxWaitingTime.dividedBy(performances.size());
 		final Duration averageWaitingTime = totalPassengers == 0 ? Duration.ZERO
 				: totalWaitingTime.dividedBy(totalPassengers);
 
-		// Junction averages
+		// CS Junction averages
 		final Duration averageCsTotalJunctionWaitingTime = csTotalJunctionWaitingTime.dividedBy(performances.size());
+		final long averageTotalCsJunctionArrivals = totalCsJunctionArrivals / performances.size();
+		final Duration averageCsMaxJunctionWaitingTime = totalCsJunctionMaxWaitingTime.dividedBy(performances.size());
 		csAverageJunctionWaitingTime = totalCsJunctionArrivals == 0 ? Duration.ZERO
 				: csTotalJunctionWaitingTime.dividedBy(totalCsJunctionArrivals);
+
+		// PR Junction averages
+		final Duration averagePrTotalJunctionWaitingTime = prTotalJunctionWaitingTime.dividedBy(performances.size());
+		final long averageTotalPrJunctionArrivals = totalPrJunctionArrivals / performances.size();
+		final Duration averagePrMaxJunctionWaitingTime = totalPrJunctionMaxWaitingTime.dividedBy(performances.size());
 		prAverageJunctionWaitingTime = totalPrJunctionArrivals == 0 ? Duration.ZERO
 				: prTotalJunctionWaitingTime.dividedBy(totalPrJunctionArrivals);
-		this.csAverageDelay = csTotalDelays == 0 ? Duration.ZERO : csTotalDelayTime.dividedBy(csTotalDelays);
-		this.prAverageDelay = prTotalDelays == 0 ? Duration.ZERO : prTotalDelayTime.dividedBy(prTotalDelays);
+
+		// Performance Measures CS averages
+		final Duration csAverageDelay = csTotalDelays == 0 ? Duration.ZERO : csTotalDelayTime.dividedBy(csTotalDelays);
+		final Duration averageCsMaximumDelay = totalCsMaxDelays.dividedBy(performances.size());
+		final int averageCsTotalDepartures = (int) (csTotalDepartures / performances.size());
+		final int averageCsTotalDelays = (int) (csTotalDelays / performances.size());
+		final Duration averageCsTotalDelayTime = csTotalDelayTime.dividedBy(performances.size());
+		final float averageCsPercentageOfDelays = (float) (totalCsPercentageOfDelays / performances.size());
+
+		// Performance Measures PR averages
+		final Duration prAverageDelay = prTotalDelays == 0 ? Duration.ZERO : prTotalDelayTime.dividedBy(prTotalDelays);
+		final Duration averagePrMaximumDelay = totalPrMaxDelays.dividedBy(performances.size());
+		final int averagePrTotalDepartures = (int) (prTotalDepartures / performances.size());
+		final int averagePrTotalDelays = (int) (prTotalDelays / performances.size());
+		final Duration averagePrTotalDelayTime = prTotalDelayTime.dividedBy(performances.size());
+		final float averagePrPercentageOfDelays = (float) (totalPrPercentageOfDelays / performances.size());
 
 		System.out.println("");
 		System.out.println("==================================================================");
@@ -300,8 +313,8 @@ public class PerformanceTracker {
 
 		System.out.println("Average total waiting time for junction at Centraal Station: "
 				+ averageCsTotalJunctionWaitingTime.getSeconds());
-		System.out.println("Total junction arrivals: " + averageTotalCsJunctionArrivals);
-		System.out.println("Maximum waiting time: " + csMaximumJunctionWaitingTime.getSeconds());
+		System.out.println("Average total junction arrivals: " + averageTotalCsJunctionArrivals);
+		System.out.println("Average maximum waiting time: " + averageCsMaxJunctionWaitingTime.getSeconds());
 		System.out.println(
 				"Average waiting time at junction Centraal Station: " + csAverageJunctionWaitingTime.getSeconds());
 
@@ -309,9 +322,10 @@ public class PerformanceTracker {
 		System.out.println("==================================================================");
 		System.out.println("");
 
-		System.out.println("Total waiting time for junction at P+R Uithof: " + prTotalJunctionWaitingTime.getSeconds());
-		System.out.println("Total junction arrivals: " + totalPrJunctionArrivals);
-		System.out.println("Maximum waiting time: " + prMaximumJunctionWaitingTime.getSeconds());
+		System.out.println("Average total waiting time for junction at P+R Uithof: "
+				+ averagePrTotalJunctionWaitingTime.getSeconds());
+		System.out.println("Average total junction arrivals: " + averageTotalPrJunctionArrivals);
+		System.out.println("Average maximum waiting time: " + averagePrMaxJunctionWaitingTime.getSeconds());
 		System.out.println("Average waiting time at junction P+R Uithof: " + prAverageJunctionWaitingTime.getSeconds());
 
 		System.out.println("");
@@ -319,36 +333,32 @@ public class PerformanceTracker {
 		System.out.println("");
 
 		System.out.println("PERFORMANCE MEASURES FOR CENTRAAL STATION:");
-		System.out.println("Total departure delays: " + csTotalDelays);
-		System.out.println("Total delay amount: " + csTotalDelayTime.getSeconds());
+		System.out.println("Average total departures: " + averageCsTotalDepartures);
+		System.out.println("Average total departure delays: " + averageCsTotalDelays);
+		System.out.println("Average total delay amount: " + averageCsTotalDelayTime.getSeconds());
 
-		System.out.println(
-				"Average delay time: (total delay amount / total delays): " + this.csAverageDelay.getSeconds());
+		System.out.println("Average delay time: (total delay amount / total delays): " + csAverageDelay.getSeconds());
 
-		System.out.println("Maximum delay: " + csMaximumDelay.toSeconds());
+		System.out.println("Average maximum delay: " + averageCsMaximumDelay.toSeconds());
 
-		System.out.println("Total departure delays: " + csTotalDelays);
-		System.out.println("Total departures: " + csTotalDepartures);
-
-		System.out.println("Delay percentage: (delays / total departures): " + csPercentageOfDelays + "%");
+		System.out
+				.println("Average delay percentage: (delays / total departures): " + averageCsPercentageOfDelays + "%");
 
 		System.out.println("");
 		System.out.println("==================================================================");
 		System.out.println("");
 
 		System.out.println("PERFORMANCE MEASURES FOR P+R UITHOF:");
-		System.out.println("Total departure delays: " + prTotalDelays);
-		System.out.println("Total delay amount: " + prTotalDelayTime.getSeconds());
+		System.out.println("Average total departures: " + averagePrTotalDepartures);
+		System.out.println("Average total departure delays: " + averagePrTotalDelays);
+		System.out.println("Average total delay amount: " + averagePrTotalDelayTime.getSeconds());
 
-		System.out.println(
-				"Average delay time: (total delay amount / total delays): " + this.prAverageDelay.getSeconds());
+		System.out.println("Average delay time: (total delay amount / total delays): " + prAverageDelay.getSeconds());
 
-		System.out.println("Maximum delay: " + prMaximumDelay.toSeconds());
+		System.out.println("Average maximum delay: " + averagePrMaximumDelay.toSeconds());
 
-		System.out.println("Total departure delays: " + prTotalDelays);
-		System.out.println("Total departures: " + prTotalDepartures);
-
-		System.out.println("Delay percentage: (delays / total departures): " + prPercentageOfDelays + "%");
+		System.out
+				.println("Average delay percentage: (delays / total departures): " + averagePrPercentageOfDelays + "%");
 
 		System.out.println("");
 		System.out.println("==================================================================");
