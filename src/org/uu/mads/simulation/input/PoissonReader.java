@@ -124,11 +124,11 @@ abstract class PoissonReader {
 			} else if (!name.equals("P+R De Uithof") && !name.equals("Centraal Station")) {
 				name = name + "-B";
 			}
-			
-			
-			
-			
-			
+
+
+
+
+
 
 			if (!ratesByTimeByPlatform.containsKey(name)) {
 				ratesByTimeByPlatform.put(name, new TreeMap<>());
