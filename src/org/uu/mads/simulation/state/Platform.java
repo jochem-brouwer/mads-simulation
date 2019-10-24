@@ -79,6 +79,7 @@ public class Platform {
 					+ travelTimeToNextPlatf.toSeconds() + " seconds.");
 			return travelTimeToNextPlatf;
 		}
+
 	}
 
 	public WaitingPoint getNextWaitingPoint() {

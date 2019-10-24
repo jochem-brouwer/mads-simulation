@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 import java.util.List;
 
 import org.uu.mads.simulation.state.Performance;
@@ -58,6 +57,109 @@ public class PerformanceTracker {
 
 	public static void reset() {
 		instance = null;
+	}
+
+	public void addPassenger(final Duration waitingTime) {
+		this.totalPassengers += 1;
+		this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
+		if (this.maxWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+			this.maxWaitingTime = waitingTime;
+		}
+	}
+
+	public void addJunctionWaitingTime(final Duration waitingTime, final int junction) {
+
+		// junction denotes the junction. 0 for CS, 1 for P+R.
+		if (junction == 0) {
+			this.csJunctionArrivals += 1;
+			this.csTotalJunctionWaitingTime = this.csTotalJunctionWaitingTime.plus(waitingTime);
+
+			if (this.csMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+				this.csMaximumJunctionWaitingTime = waitingTime;
+			}
+		} else {
+			this.prJunctionArrivals += 1;
+			this.prTotalJunctionWaitingTime = this.prTotalJunctionWaitingTime.plus(waitingTime);
+
+			if (this.prMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+				this.prMaximumJunctionWaitingTime = waitingTime;
+			}
+		}
+	}
+
+	public void addDelay(final Duration delay, final int endStation) {
+		// We add one departure to total departures.
+		// We check if the delay is bigger than 1 minute. If so, we add one delay to
+		// total_delays and add the amount
+		// to total_delay_time.
+
+		// endStation denotes the end station. 0 for CS, 1 for P+R.
+
+		if (endStation == 0) {
+			this.csTotalDepartures += 1;
+
+			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
+				this.csTotalDelayTime = this.csTotalDelayTime.plus(delay);
+				if (delay.compareTo(this.csMaximumDelay) >= 0) {
+					this.csMaximumDelay = delay;
+				}
+				this.csTotalDelays += 1;
+			}
+
+		} else {
+			this.prTotalDepartures += 1;
+			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
+				this.prTotalDelayTime = this.prTotalDelayTime.plus(delay);
+				if (delay.compareTo(this.prMaximumDelay) >= 0) {
+					this.prMaximumDelay = delay;
+				}
+				this.prTotalDelays += 1;
+			}
+		}
+	}
+
+	public Performance getPerformance() {
+		calculateAverageWaitingTime();
+		calculateJunctionWaitingTime();
+		calculateAveragePunctuality();
+
+		return new Performance(this.totalPassengers, this.totalWaitingTime, this.averageWaitingTime,
+				this.maxWaitingTime, this.csTotalDelays, this.csTotalDepartures, this.prTotalDelays,
+				this.prTotalDepartures, this.csTotalDelayTime, this.csAverageDelay, this.csMaximumDelay,
+				this.prTotalDelayTime, this.prAverageDelay, this.prMaximumDelay, this.csPercentageOfDelays,
+				this.prPercentageOfDelays, this.csTotalJunctionWaitingTime, this.prTotalJunctionWaitingTime,
+				this.csAverageJunctionWaitingTime, this.prAverageJunctionWaitingTime, this.csMaximumJunctionWaitingTime,
+				this.prMaximumJunctionWaitingTime, this.csJunctionArrivals, this.prJunctionArrivals);
+	}
+
+	private void calculateAverageWaitingTime() {
+		if (this.totalPassengers != 0) {
+			this.averageWaitingTime = this.totalWaitingTime.dividedBy(this.totalPassengers);
+		}
+	}
+
+	private void calculateJunctionWaitingTime() {
+		this.csAverageJunctionWaitingTime = this.csTotalJunctionWaitingTime.dividedBy(this.csJunctionArrivals);
+		this.prAverageJunctionWaitingTime = this.prTotalJunctionWaitingTime.dividedBy(this.prJunctionArrivals);
+	}
+
+	private void calculateAveragePunctuality() {
+
+		// Calculate average punctuality for CS:
+		if (this.csTotalDelays != 0) {
+			this.csAverageDelay = this.csTotalDelayTime.dividedBy(this.csTotalDelays);
+		} else {
+			this.csAverageDelay = Duration.ZERO;
+		}
+		this.csPercentageOfDelays = ((float) this.csTotalDelays / (float) this.csTotalDepartures) * 100;
+
+		// We do the same for P+R:
+		if (this.prTotalDelays != 0) {
+			this.prAverageDelay = this.prTotalDelayTime.dividedBy(this.prTotalDelays);
+		} else {
+			this.prAverageDelay = Duration.ZERO;
+		}
+		this.prPercentageOfDelays = ((float) this.prTotalDelays / (float) this.prTotalDepartures) * 100;
 	}
 
 	public static void printPerformanceReport(final List<Performance> performances) {
@@ -215,128 +317,25 @@ public class PerformanceTracker {
 		System.out.println("");
 	}
 
-	public void addPassenger(final Duration waitingTime) {
-		this.totalPassengers += 1;
-		this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
-		if (this.maxWaitingTime.getSeconds() < waitingTime.getSeconds()) {
-			this.maxWaitingTime = waitingTime;
-		}
-	}
-
-	public void addJunctionWaitingTime(final Duration waitingTime, final int junction) {
-
-		// junction denotes the junction. 0 for CS, 1 for P+R.
-		if (junction == 0) {
-			this.csJunctionArrivals += 1;
-			this.csTotalJunctionWaitingTime = this.csTotalJunctionWaitingTime.plus(waitingTime);
-
-			if (this.csMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
-				this.csMaximumJunctionWaitingTime = waitingTime;
-			}
-		} else {
-			this.prJunctionArrivals += 1;
-			this.prTotalJunctionWaitingTime = this.prTotalJunctionWaitingTime.plus(waitingTime);
-
-			if (this.prMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
-				this.prMaximumJunctionWaitingTime = waitingTime;
-			}
-		}
-	}
-
-	public void addDelay(final Duration delay, final int endStation) {
-		// We add one departure to total departures.
-		// We check if the delay is bigger than 1 minute. If so, we add one delay to
-		// total_delays and add the amount
-		// to total_delay_time.
-
-		// endStation denotes the end station. 0 for CS, 1 for P+R.
-
-		if (endStation == 0) {
-			this.csTotalDepartures += 1;
-
-			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
-				this.csTotalDelayTime = this.csTotalDelayTime.plus(delay);
-				if (delay.compareTo(this.csMaximumDelay) >= 0) {
-					this.csMaximumDelay = delay;
-				}
-				this.csTotalDelays += 1;
-			}
-
-		} else {
-			this.prTotalDepartures += 1;
-			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
-				this.prTotalDelayTime = this.prTotalDelayTime.plus(delay);
-				if (delay.compareTo(this.prMaximumDelay) >= 0) {
-					this.prMaximumDelay = delay;
-				}
-				this.prTotalDelays += 1;
-			}
-		}
-	}
-
-	public Performance getPerformance() {
-		calculateAverageWaitingTime();
-		calculateJunctionWaitingTime();
-		calculateAveragePunctuality();
-
-		return new Performance(this.totalPassengers, this.totalWaitingTime, this.averageWaitingTime,
-				this.maxWaitingTime, this.csTotalDelays, this.csTotalDepartures, this.prTotalDelays,
-				this.prTotalDepartures, this.csTotalDelayTime, this.csAverageDelay, this.csMaximumDelay,
-				this.prTotalDelayTime, this.prAverageDelay, this.prMaximumDelay, this.csPercentageOfDelays,
-				this.prPercentageOfDelays, this.csTotalJunctionWaitingTime, this.prTotalJunctionWaitingTime,
-				this.csAverageJunctionWaitingTime, this.prAverageJunctionWaitingTime, this.csMaximumJunctionWaitingTime,
-				this.prMaximumJunctionWaitingTime, this.csJunctionArrivals, this.prJunctionArrivals);
-	}
-
-	private void calculateAverageWaitingTime() {
-		if (this.totalPassengers != 0) {
-			this.averageWaitingTime = this.totalWaitingTime.dividedBy(this.totalPassengers);
-		}
-	}
-
-	private void calculateJunctionWaitingTime() {
-		this.csAverageJunctionWaitingTime = this.csTotalJunctionWaitingTime.dividedBy(this.csJunctionArrivals);
-		this.prAverageJunctionWaitingTime = this.prTotalJunctionWaitingTime.dividedBy(this.prJunctionArrivals);
-	}
-
-	private void calculateAveragePunctuality() {
-
-		// Calculate average punctuality for CS:
-		if (this.csTotalDelays != 0) {
-			this.csAverageDelay = this.csTotalDelayTime.dividedBy(this.csTotalDelays);
-		} else {
-			this.csAverageDelay = Duration.ZERO;
-		}
-		this.csPercentageOfDelays = ((float) this.csTotalDelays / (float) this.csTotalDepartures) * 100;
-
-		// We do the same for P+R:
-		if (this.prTotalDelays != 0) {
-			this.prAverageDelay = this.prTotalDelayTime.dividedBy(this.prTotalDelays);
-		} else {
-			this.prAverageDelay = Duration.ZERO;
-		}
-		this.prPercentageOfDelays = ((float) this.prTotalDelays / (float) this.prTotalDepartures) * 100;
-	}
-
-	public static void serializePerformances(List<Performance> performanceList) {
+	public static void serializePerformances(final List<Performance> performanceList) {
 		// save the object to file
 		FileOutputStream fileStream = null;
 		ObjectOutputStream objectStream = null;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
+		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
 
 		for (int i = 0; i < performanceList.size(); i++) {
-			String fileName = ("PerformanceNr" + (i+1));
-			Performance performance = performanceList.get(i);
-            File directory = new File(System.getProperty("user.dir") + "/output-data-"
-					+ LocalTime.now().format(dtf));
-            directory.mkdirs();
+			final String fileName = ("PerformanceNr" + (i + 1));
+			final Performance performance = performanceList.get(i);
+			final File directory = new File(
+					System.getProperty("user.dir") + "/output/output-data-" + LocalTime.now().format(dtf));
+			directory.mkdirs();
 			try {
 				fileStream = new FileOutputStream(directory + "/" + fileName);
 				objectStream = new ObjectOutputStream(fileStream);
 				objectStream.writeObject(performance);
 
 				objectStream.close();
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				ex.printStackTrace();
 			}
 		}
