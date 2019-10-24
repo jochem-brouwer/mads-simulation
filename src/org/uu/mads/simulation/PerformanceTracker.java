@@ -404,6 +404,7 @@ public class PerformanceTracker {
 
 		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
 		final String directory = System.getProperty("user.dir") + "/output/output-data-" + simEndTime.format(dtf);
+		new File(directory).mkdirs();
 
 		final List<String> columns = Arrays.asList("run", //
 				"totalPassengers", "totalWaitingTime", "averageWaitingTime", "maxWaitingTime", //
@@ -421,7 +422,7 @@ public class PerformanceTracker {
 		csvWriter.append("\n");
 
 		for (int i = 1; i <= performances.size(); i++) {
-			final Performance performance = performances.get(i);
+			final Performance performance = performances.get(i - 1);
 			csvWriter.append(i + CSV_DELIMITER);
 			csvWriter.append(performance.getTotalPassengers() + CSV_DELIMITER);
 			csvWriter.append(performance.getTotalWaitingTime() + CSV_DELIMITER);
