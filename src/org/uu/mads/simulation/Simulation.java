@@ -38,7 +38,7 @@ public class Simulation {
 	public static final boolean LOG = true; // flag to enable/disable logging
 	public static final boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
-	public static final boolean SERIALIZE_PERFORMANCES = true;// flag to enable/disable performance objects
+	public static final boolean SERIALIZE_PERFORMANCES = false; // flag to enable/disable performance objects
 																// serialization
 
 	private static EndStation centraalEndStation;
