@@ -73,7 +73,7 @@ public class IntPlatform extends Platform {
 
 		this.dwellTime = Duration.ofSeconds(Math.round(Math.max(minimum, dwellTimeDist.sample())));
 
-		Simulation.log("The dwell time is " + this.dwellTime.getSeconds() + " seconds.");
+		Simulation.log("The dwell time is " + this.dwellTime.toSeconds() + " seconds.");
 	}
 
 	@Override
