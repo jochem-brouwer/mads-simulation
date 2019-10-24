@@ -17,25 +17,25 @@ import org.uu.mads.simulation.state.Tram;
 import org.uu.mads.simulation.state.WaitingPoint;
 
 public class Simulation {
-	public static final int NUMBER_OF_RUNS = 10;
+	public static final int NUMBER_OF_RUNS = 1;
 
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0);
-	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
+	public static final int NUMBER_OF_TRAMS = 6; // number of trams we want to deploy
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
 	public static final Duration AVG_ONE_WAY_DRIVING_TIME = Duration.ofMinutes(17);
 	public static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
 	public static final LocalTime SIMULATION_START_TIME = FIRST_SCHEDULED_LEAVE_TIME_PR
 			.minus(TURN_AROUND_DURATION.plus(JUNCTION_DURATION)); // time where we start to deploy trams
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(19, 00); // time where we end the simulation;
-	public static final Boolean ARTIFICIAL_DATA = true;
+	public static final Boolean ARTIFICIAL_DATA = false;
 	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-01.csv";
 	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengersInPoisson.csv";
 	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengersOutPoisson.csv"; // TODO
-	public static final int PASSENGER_IN_MULTIPLICATOR = 1; // 1 -> 100%
+	public static final int PASSENGER_IN_MULTIPLICATOR = 0; // 1 -> 100%
 
-	public static final Boolean LOG = false; // flag to enable/disable logging
+	public static final Boolean LOG = true; // flag to enable/disable logging
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final Boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
 
@@ -180,13 +180,13 @@ public class Simulation {
 	// SIMULATION_START_TIME
 	private static void tramFactory(final WaitingPoint cs, final WaitingPoint uit) {
 		int tramId = 1;
-		for (int i = 0; i < (NUMBER_OF_TRAMS / 2); i++) {
+		for (int i = 0; i < ((NUMBER_OF_TRAMS / 2) - 1); i++) {
 			final Tram newTram = new Tram(tramId, 0);
 			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(cs, newTram);
 			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
 			tramId += 1;
 		}
-		for (int i = NUMBER_OF_TRAMS / 2; i < NUMBER_OF_TRAMS; i++) {
+		for (int i = (NUMBER_OF_TRAMS / 2) - 1; i < NUMBER_OF_TRAMS; i++) {
 			final Tram newTram = new Tram(tramId, 0);
 			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(uit, newTram);
 			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);

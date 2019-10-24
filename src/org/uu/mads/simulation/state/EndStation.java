@@ -137,14 +137,16 @@ public class EndStation extends Platform {
 	}
 
 	public void departFromPlatformA() {
-		Simulation.log("Tram " + this.tramOnPlatformA.getId() + " leaves " + getName() + " platform A at "
-				+ EventScheduler.getInstance().getCurrentTime());
 		this.lastTramLeftId = this.tramOnPlatformA.getId();
 		this.tramOnPlatformA = null;
 		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.getInstance().getCurrentTime());
 
-		Simulation.logVerbose("Next scheduled leave: " + this.nextScheduledLeave.toString());
-		Simulation.logVerbose("We leave at current time: " + EventScheduler.getInstance().getCurrentTime());
+		Simulation.log("Tram " + this.lastTramLeftId + " has left " + getName() + " - platform A at "
+				+ EventScheduler.getInstance().getCurrentTime() + " with a delay of " + delay.toSeconds()
+				+ " seconds.");
+
+		Simulation.log("Next scheduled leave: " + this.nextScheduledLeave.toString());
+		Simulation.log("We leave at current time: " + EventScheduler.getInstance().getCurrentTime());
 		Simulation.logVerbose("Delay: " + delay.toSeconds());
 
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
@@ -157,11 +159,13 @@ public class EndStation extends Platform {
 	}
 
 	public void departFromPlatformB() {
-		Simulation.log("Tram " + this.tramOnPlatformB.getId() + " leaves " + getName() + " platform B at "
-				+ EventScheduler.getInstance().getCurrentTime());
 		this.lastTramLeftId = this.tramOnPlatformB.getId();
 		this.tramOnPlatformB = null;
 		final Duration delay = Duration.between(this.nextScheduledLeave, EventScheduler.getInstance().getCurrentTime());
+
+		Simulation.log("Tram " + this.lastTramLeftId + " has left " + getName() + " - platform B at "
+				+ EventScheduler.getInstance().getCurrentTime() + " with a delay of " + delay.toSeconds()
+				+ " seconds.");
 
 		Simulation.logVerbose("Next scheduled leave: " + this.nextScheduledLeave.toString());
 		Simulation.logVerbose("We leave at current time: " + EventScheduler.getInstance().getCurrentTime());
