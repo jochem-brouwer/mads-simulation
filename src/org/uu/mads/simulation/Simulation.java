@@ -28,6 +28,8 @@ public class Simulation {
 	public static final boolean ARTIFICIAL_DRIVING_TIME = false;
 	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-02.csv";
 
+	public static final double TRAM_PASSG_DWELL_TIME_FACTOR = 0.1;
+
 	public static final boolean LOG = false; // flag to enable/disable logging
 	public static final boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging

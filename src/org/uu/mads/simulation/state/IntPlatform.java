@@ -65,7 +65,8 @@ public class IntPlatform extends Platform {
 	}
 
 	public void calculateDwellTime(final int passengersIn, final int passengersOut) {
-		final double mean = 12.5 + (0.22 * passengersIn) + (0.13 * passengersOut);
+		final double mean = 12.5 + (0.22 * passengersIn) + (0.13 * passengersOut)
+				+ (Simulation.TRAM_PASSG_DWELL_TIME_FACTOR * this.tram.getNumOfPassengers());
 		final double scale = Math.pow(mean / Math.sqrt(DWELL_TIME__DIRST_SHAPE), 2) / mean;
 		final double minimum = 0.8 * mean;
 
