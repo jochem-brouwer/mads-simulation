@@ -216,29 +216,36 @@ public class PerformanceTracker {
 	}
 
 	public void addPassenger(final Duration waitingTime) {
-		this.totalPassengers += 1;
-		this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
-		if (this.maxWaitingTime.getSeconds() < waitingTime.getSeconds()) {
-			this.maxWaitingTime = waitingTime;
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,0))
+		&& EventScheduler.getInstance().getCurrentTime().isBefore(LocalTime.of(19,0))) {
+			this.totalPassengers += 1;
+			this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
+			if (this.maxWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+				this.maxWaitingTime = waitingTime;
+			}
 		}
 	}
 
 	public void addJunctionWaitingTime(final Duration waitingTime, final int junction) {
 
-		// junction denotes the junction. 0 for CS, 1 for P+R.
-		if (junction == 0) {
-			this.csJunctionArrivals += 1;
-			this.csTotalJunctionWaitingTime = this.csTotalJunctionWaitingTime.plus(waitingTime);
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,0))
+				&& EventScheduler.getInstance().getCurrentTime().isBefore(LocalTime.of(19,0))) {
 
-			if (this.csMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
-				this.csMaximumJunctionWaitingTime = waitingTime;
-			}
-		} else {
-			this.prJunctionArrivals += 1;
-			this.prTotalJunctionWaitingTime = this.prTotalJunctionWaitingTime.plus(waitingTime);
+			// junction denotes the junction. 0 for CS, 1 for P+R.
+			if (junction == 0) {
+				this.csJunctionArrivals += 1;
+				this.csTotalJunctionWaitingTime = this.csTotalJunctionWaitingTime.plus(waitingTime);
 
-			if (this.prMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
-				this.prMaximumJunctionWaitingTime = waitingTime;
+				if (this.csMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+					this.csMaximumJunctionWaitingTime = waitingTime;
+				}
+			} else {
+				this.prJunctionArrivals += 1;
+				this.prTotalJunctionWaitingTime = this.prTotalJunctionWaitingTime.plus(waitingTime);
+
+				if (this.prMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+					this.prMaximumJunctionWaitingTime = waitingTime;
+				}
 			}
 		}
 	}
@@ -251,26 +258,30 @@ public class PerformanceTracker {
 
 		// endStation denotes the end station. 0 for CS, 1 for P+R.
 
-		if (endStation == 0) {
-			this.csTotalDepartures += 1;
+		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,0))
+				&& EventScheduler.getInstance().getCurrentTime().isBefore(LocalTime.of(19,0))) {
+			if (endStation == 0) {
+				this.csTotalDepartures += 1;
 
-			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
-				this.csTotalDelayTime = this.csTotalDelayTime.plus(delay);
-				if (delay.compareTo(this.csMaximumDelay) >= 0) {
-					this.csMaximumDelay = delay;
+				if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
+					this.csTotalDelayTime = this.csTotalDelayTime.plus(delay);
+					if (delay.compareTo(this.csMaximumDelay) >= 0) {
+						this.csMaximumDelay = delay;
+					}
+					this.csTotalDelays += 1;
 				}
-				this.csTotalDelays += 1;
+
+			} else {
+				this.prTotalDepartures += 1;
+				if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
+					this.prTotalDelayTime = this.prTotalDelayTime.plus(delay);
+					if (delay.compareTo(this.prMaximumDelay) >= 0) {
+						this.prMaximumDelay = delay;
+					}
+					this.prTotalDelays += 1;
+				}
 			}
 
-		} else {
-			this.prTotalDepartures += 1;
-			if ((delay.compareTo(Duration.ofMinutes(1)) >= 0) && (delay.isNegative() == false)) {
-				this.prTotalDelayTime = this.prTotalDelayTime.plus(delay);
-				if (delay.compareTo(this.prMaximumDelay) >= 0) {
-					this.prMaximumDelay = delay;
-				}
-				this.prTotalDelays += 1;
-			}
 		}
 	}
 
