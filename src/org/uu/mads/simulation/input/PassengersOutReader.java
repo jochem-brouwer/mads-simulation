@@ -105,6 +105,12 @@ public class PassengersOutReader extends PoissonReader {
 				}
 			}
 			
+			if (passengersLeavingRatio < 0) {
+				passengersLeavingRatio = 0;
+			}
+			
+			System.out.println(passengersLeavingRatio);
+			
 			double diff = passIn - passOut;
 			
 			if (direction == 0) {
