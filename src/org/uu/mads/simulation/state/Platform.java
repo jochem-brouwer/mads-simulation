@@ -167,7 +167,7 @@ public class Platform {
 							addWaitingPassenger(passenger);
 							final Duration waitingTime = Duration
 									.between(this.lastPassengersCalc.plusSeconds(totalSecondsPassed), currentTime);
-							PerformanceTracker.getInstance().addPassenger(waitingTime);
+							PerformanceTracker.addPassenger(waitingTime);
 						}
 					}
 				}

@@ -37,9 +37,9 @@ public class FreeJunctionEvent extends Event {
 					this.tram.getJunctionEnteringTime());
 
 			if (this.endStation.getName() == "Centraal Station") {
-				PerformanceTracker.getInstance().addJunctionWaitingTime(waitingTime, 0);
+				PerformanceTracker.addJunctionWaitingTime(waitingTime, 0);
 			} else {
-				PerformanceTracker.getInstance().addJunctionWaitingTime(waitingTime, 1);
+				PerformanceTracker.addJunctionWaitingTime(waitingTime, 1);
 			}
 		}
 

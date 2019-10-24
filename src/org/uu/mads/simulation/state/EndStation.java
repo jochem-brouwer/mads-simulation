@@ -152,9 +152,9 @@ public class EndStation extends Platform {
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
 		if (getName() == "Centraal Station") {
-			PerformanceTracker.getInstance().addDelay(delay, 0);
+			PerformanceTracker.addDelay(delay, 0);
 		} else {
-			PerformanceTracker.getInstance().addDelay(delay, 1);
+			PerformanceTracker.addDelay(delay, 1);
 		}
 	}
 
@@ -174,9 +174,9 @@ public class EndStation extends Platform {
 		this.nextScheduledLeave = this.nextScheduledLeave.plus(Simulation.TRAM_LEAVE_FREQUENCY);
 
 		if (getName() == "Centraal Station") {
-			PerformanceTracker.getInstance().addDelay(delay, 0);
+			PerformanceTracker.addDelay(delay, 0);
 		} else {
-			PerformanceTracker.getInstance().addDelay(delay, 1);
+			PerformanceTracker.addDelay(delay, 1);
 		}
 	}
 
