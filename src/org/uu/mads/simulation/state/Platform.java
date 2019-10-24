@@ -59,7 +59,7 @@ public class Platform {
 	 */
 	public Duration getTravelTimeToNextPlatform() {
 		final Duration travelTimeToNextPlatform;
-		if (Simulation.ARTIFICIAL_DATA) {
+		if (Simulation.ARTIFICIAL_DRIVING_TIME) {
 			final Random rand = new Random();
 			final int rng = rand.nextInt(10);
 
