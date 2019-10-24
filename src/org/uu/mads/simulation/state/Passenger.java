@@ -10,20 +10,20 @@ public class Passenger {
 	private LocalTime leaveTimePlatform;
 	private final Platform platform;
 
-	public void setLeaveTimePlatform(LocalTime leaveTimePlatform) {
-		this.leaveTimePlatform = leaveTimePlatform;
-	}
-
 	public LocalTime getArrivalTimePlatform() {
-		return arrivalTimePlatform;
+		return this.arrivalTimePlatform;
 	}
 
 	public LocalTime getLeaveTimePlatform() {
-		return leaveTimePlatform;
+		return this.leaveTimePlatform;
+	}
+
+	public void setLeaveTimePlatform(final LocalTime leaveTimePlatform) {
+		this.leaveTimePlatform = leaveTimePlatform;
 	}
 
 	public Platform getPlatform() {
-		return platform;
+		return this.platform;
 	}
 
 	public Passenger(final LocalTime arrivalTimePlatform, final Platform platform) {
