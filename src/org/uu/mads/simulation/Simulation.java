@@ -1,9 +1,6 @@
 package org.uu.mads.simulation;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -25,13 +22,13 @@ public class Simulation {
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0);
-	public static final int NUMBER_OF_TRAMS = 1; // number of trams we want to deploy
+	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
 	public static final Duration AVG_ONE_WAY_DRIVING_TIME = Duration.ofMinutes(17);
 	public static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
 	public static final LocalTime SIMULATION_START_TIME = FIRST_SCHEDULED_LEAVE_TIME_PR
 			.minus(TURN_AROUND_DURATION.plus(JUNCTION_DURATION)); // time where we start to deploy trams
-	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
+	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(19, 00); // time where we end the simulation;
 	public static final Boolean ARTIFICIAL_DATA = true;
 	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-01.csv";
 	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengersInPoisson.csv";
@@ -62,13 +59,6 @@ public class Simulation {
 	private static Performance runSimulation(final int run) throws IOException {
 		System.out.println("Simulation run " + run);
 
-		/*if (ARTIFICIAL_DATA) {
-			final File file1 = new File(
-					System.getProperty("user.dir") + "/" + "articifial-data/artificial-input-data-passengers-01.csv");
-			final InputReader reader = new InputReader(file1);
-			reader.outPut();
-		}*/
-
 		calculateCSLeave();
 
 		initializeState();
@@ -81,9 +71,8 @@ public class Simulation {
 		EventScheduler.getInstance().scheduleEvent(scheduledLeaveEndStationCentraalEvent, firstScheduledLeaveTimeCS);
 		EventScheduler.getInstance().scheduleEvent(scheduledLeaveEndStationUithofEvent, FIRST_SCHEDULED_LEAVE_TIME_PR);
 
-		while (SIMULATION_END_TIME.isAfter(EventScheduler.getInstance().getCurrentTime())) { // TODO: We need better end
-																								// conditions
-			EventScheduler.getInstance().fireNextEvent();
+		while (EventScheduler.getInstance().fireNextEvent()) {
+			// Next event is fired
 		}
 
 		return PerformanceTracker.getInstance().getPerformance();
