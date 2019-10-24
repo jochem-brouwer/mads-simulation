@@ -2,8 +2,6 @@ package org.uu.mads.simulation.state;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
-import java.util.Random;
-
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayDeque;
@@ -12,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Queue;
+import java.util.Random;
 
 import org.apache.commons.math3.distribution.LogNormalDistribution;
 import org.apache.commons.math3.distribution.PoissonDistribution;
@@ -58,28 +57,27 @@ public class Platform {
 	/**
 	 * @return travel duration of this platform to the next platform
 	 */
-	public Duration getTravelTimeToNextPlatform() {		
+	public Duration getTravelTimeToNextPlatform() {
+		final Duration travelTimeToNextPlatform;
 		if (Simulation.ARTIFICIAL_DATA) {
-			Random rand = new Random();
-			int rng = rand.nextInt(10);
-			
-			if (rng < 4) {
-				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 0.8));
-			} else if (rng < 7) {
-				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1));
-			} else if (rng < 9) {
-				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1.2));
-			} else {
-				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1.4));
-			}
-			
-		} else {
-			final Duration travelTimeToNextPlatf = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
-			Simulation.log("Platform " + this.name + ": Travel time to next platform is "
-					+ travelTimeToNextPlatf.toSeconds() + " seconds.");
-			return travelTimeToNextPlatf;
-		}
+			final Random rand = new Random();
+			final int rng = rand.nextInt(10);
 
+			if (rng < 4) {
+				travelTimeToNextPlatform = Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 0.8));
+			} else if (rng < 7) {
+				travelTimeToNextPlatform = Duration.ofSeconds(this.avgTravelTimeToNextPlatf.toSeconds() * 1);
+			} else if (rng < 9) {
+				travelTimeToNextPlatform = Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1.2));
+			} else {
+				travelTimeToNextPlatform = Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1.4));
+			}
+		} else {
+			travelTimeToNextPlatform = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
+		}
+		Simulation.log("Platform " + this.name + ": Travel time to next platform is "
+				+ travelTimeToNextPlatform.toSeconds() + " seconds.");
+		return travelTimeToNextPlatform;
 	}
 
 	public WaitingPoint getNextWaitingPoint() {
