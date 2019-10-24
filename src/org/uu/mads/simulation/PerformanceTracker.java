@@ -79,7 +79,7 @@ public class PerformanceTracker {
 				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
 			this.totalPassengers += 1;
 			this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
-			if (this.maxWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+			if (this.maxWaitingTime.toSeconds() < waitingTime.toSeconds()) {
 				this.maxWaitingTime = waitingTime;
 			}
 		}
@@ -100,14 +100,14 @@ public class PerformanceTracker {
 				this.csJunctionArrivals += 1;
 				this.csTotalJunctionWaitingTime = this.csTotalJunctionWaitingTime.plus(waitingTime);
 
-				if (this.csMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+				if (this.csMaximumJunctionWaitingTime.toSeconds() < waitingTime.toSeconds()) {
 					this.csMaximumJunctionWaitingTime = waitingTime;
 				}
 			} else {
 				this.prJunctionArrivals += 1;
 				this.prTotalJunctionWaitingTime = this.prTotalJunctionWaitingTime.plus(waitingTime);
 
-				if (this.prMaximumJunctionWaitingTime.getSeconds() < waitingTime.getSeconds()) {
+				if (this.prMaximumJunctionWaitingTime.toSeconds() < waitingTime.toSeconds()) {
 					this.prMaximumJunctionWaitingTime = waitingTime;
 				}
 			}
@@ -312,32 +312,32 @@ public class PerformanceTracker {
 		System.out.println("");
 
 		System.out.println("Average total passengers: " + averageTotalPassengers);
-		System.out.println("Average total waiting time in seconds: " + averageTotalWaitingTime.getSeconds());
+		System.out.println("Average total waiting time in seconds: " + averageTotalWaitingTime.toSeconds());
 
-		System.out.println("Average maximum waiting time of a passenger: " + averageMaxWaitingTime.getSeconds());
+		System.out.println("Average maximum waiting time of a passenger: " + averageMaxWaitingTime.toSeconds());
 
-		System.out.println("Average waiting time: (passengers / waiting time) " + averageWaitingTime.getSeconds());
+		System.out.println("Average waiting time: (passengers / waiting time) " + averageWaitingTime.toSeconds());
 
 		System.out.println("");
 		System.out.println("==================================================================");
 		System.out.println("");
 
 		System.out.println("Average total waiting time for junction at Centraal Station: "
-				+ averageCsTotalJunctionWaitingTime.getSeconds());
+				+ averageCsTotalJunctionWaitingTime.toSeconds());
 		System.out.println("Average total junction arrivals: " + averageTotalCsJunctionArrivals);
-		System.out.println("Average maximum waiting time: " + averageCsMaxJunctionWaitingTime.getSeconds());
+		System.out.println("Average maximum waiting time: " + averageCsMaxJunctionWaitingTime.toSeconds());
 		System.out.println(
-				"Average waiting time at junction Centraal Station: " + csAverageJunctionWaitingTime.getSeconds());
+				"Average waiting time at junction Centraal Station: " + csAverageJunctionWaitingTime.toSeconds());
 
 		System.out.println("");
 		System.out.println("==================================================================");
 		System.out.println("");
 
 		System.out.println("Average total waiting time for junction at P+R Uithof: "
-				+ averagePrTotalJunctionWaitingTime.getSeconds());
+				+ averagePrTotalJunctionWaitingTime.toSeconds());
 		System.out.println("Average total junction arrivals: " + averageTotalPrJunctionArrivals);
-		System.out.println("Average maximum waiting time: " + averagePrMaxJunctionWaitingTime.getSeconds());
-		System.out.println("Average waiting time at junction P+R Uithof: " + prAverageJunctionWaitingTime.getSeconds());
+		System.out.println("Average maximum waiting time: " + averagePrMaxJunctionWaitingTime.toSeconds());
+		System.out.println("Average waiting time at junction P+R Uithof: " + prAverageJunctionWaitingTime.toSeconds());
 
 		System.out.println("");
 		System.out.println("==================================================================");
@@ -346,9 +346,9 @@ public class PerformanceTracker {
 		System.out.println("PERFORMANCE MEASURES FOR CENTRAAL STATION:");
 		System.out.println("Average total departures: " + averageCsTotalDepartures);
 		System.out.println("Average total departure delays: " + averageCsTotalDelays);
-		System.out.println("Average total delay amount: " + averageCsTotalDelayTime.getSeconds());
+		System.out.println("Average total delay amount: " + averageCsTotalDelayTime.toSeconds());
 
-		System.out.println("Average delay time: (total delay amount / total delays): " + csAverageDelay.getSeconds());
+		System.out.println("Average delay time: (total delay amount / total delays): " + csAverageDelay.toSeconds());
 
 		System.out.println("Average maximum delay: " + averageCsMaximumDelay.toSeconds());
 
@@ -362,9 +362,9 @@ public class PerformanceTracker {
 		System.out.println("PERFORMANCE MEASURES FOR P+R UITHOF:");
 		System.out.println("Average total departures: " + averagePrTotalDepartures);
 		System.out.println("Average total departure delays: " + averagePrTotalDelays);
-		System.out.println("Average total delay amount: " + averagePrTotalDelayTime.getSeconds());
+		System.out.println("Average total delay amount: " + averagePrTotalDelayTime.toSeconds());
 
-		System.out.println("Average delay time: (total delay amount / total delays): " + prAverageDelay.getSeconds());
+		System.out.println("Average delay time: (total delay amount / total delays): " + prAverageDelay.toSeconds());
 
 		System.out.println("Average maximum delay: " + averagePrMaximumDelay.toSeconds());
 
@@ -425,28 +425,28 @@ public class PerformanceTracker {
 			final Performance performance = performances.get(i - 1);
 			csvWriter.append(i + CSV_DELIMITER);
 			csvWriter.append(performance.getTotalPassengers() + CSV_DELIMITER);
-			csvWriter.append(performance.getTotalWaitingTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getAverageWaitingTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getMaxWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getTotalWaitingTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getAverageWaitingTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getMaxWaitingTime().toSeconds() + CSV_DELIMITER);
 			csvWriter.append(performance.getCsTotalDepartures() + CSV_DELIMITER);
 			csvWriter.append(performance.getCsTotalDelays() + CSV_DELIMITER);
-			csvWriter.append(performance.getCsTotalDelayTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getCsMaximumDelay() + CSV_DELIMITER);
-			csvWriter.append(performance.getCsAverageDelay() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsTotalDelayTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsMaximumDelay().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsAverageDelay().toSeconds() + CSV_DELIMITER);
 			csvWriter.append(performance.getCsPercentageOfDelays() + CSV_DELIMITER);
-			csvWriter.append(performance.getCsTotalJunctionWaitingTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getCsAverageJunctionWaitingTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getCsMaximumJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsTotalJunctionWaitingTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsAverageJunctionWaitingTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getCsMaximumJunctionWaitingTime().toSeconds() + CSV_DELIMITER);
 			csvWriter.append(performance.getCsJunctionArrivals() + CSV_DELIMITER);
 			csvWriter.append(performance.getPrTotalDepartures() + CSV_DELIMITER);
 			csvWriter.append(performance.getPrTotalDelays() + CSV_DELIMITER);
-			csvWriter.append(performance.getPrTotalDelayTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getPrMaximumDelay() + CSV_DELIMITER);
-			csvWriter.append(performance.getPrAverageDelay() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrTotalDelayTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrMaximumDelay().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrAverageDelay().toSeconds() + CSV_DELIMITER);
 			csvWriter.append(performance.getPrPercentageOfDelays() + CSV_DELIMITER);
-			csvWriter.append(performance.getPrTotalJunctionWaitingTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getPrAverageJunctionWaitingTime() + CSV_DELIMITER);
-			csvWriter.append(performance.getPrMaximumJunctionWaitingTime() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrTotalJunctionWaitingTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrAverageJunctionWaitingTime().toSeconds() + CSV_DELIMITER);
+			csvWriter.append(performance.getPrMaximumJunctionWaitingTime().toSeconds() + CSV_DELIMITER);
 			csvWriter.append(performance.getPrJunctionArrivals() + CSV_DELIMITER);
 			csvWriter.append("\n");
 		}
