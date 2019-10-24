@@ -1,12 +1,13 @@
 package org.uu.mads.simulation.state;
 
 import java.time.Duration;
+import java.io.Serializable;
 
-public class Performance {
-	private final long totalPassengers;
-	private final Duration totalWaitingTime;
-	private final Duration averageWaitingTime;
-	private final Duration maxWaitingTime;
+public class Performance implements Serializable{
+    private final long totalPassengers;
+    private final Duration totalWaitingTime;
+    private final Duration averageWaitingTime;
+    private final Duration maxWaitingTime;
 
 	private final long csTotalDelays;
 	private final long csTotalDepartures;
