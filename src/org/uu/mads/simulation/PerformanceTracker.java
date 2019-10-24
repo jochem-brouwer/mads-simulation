@@ -226,7 +226,7 @@ public class PerformanceTracker {
 	}
 
 	public void addJunctionWaitingTime(final Duration waitingTime, final int junction) {
-
+ 
 		if (EventScheduler.getInstance().getCurrentTime().isAfter(LocalTime.of(7,0))
 				&& EventScheduler.getInstance().getCurrentTime().isBefore(LocalTime.of(19,0))) {
 
