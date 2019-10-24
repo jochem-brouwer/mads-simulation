@@ -57,10 +57,11 @@ public class Platform {
 	 * @return travel duration of this platform to the next platform
 	 */
 	public Duration getTravelTimeToNextPlatform() {
-		final Duration travelTimeToNextPlatf = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
-		Simulation.log("Platform " + this.name + ": Travel time to next platform is "
-				+ travelTimeToNextPlatf.toSeconds() + " seconds.");
-		return travelTimeToNextPlatf;
+//		final Duration travelTimeToNextPlatf = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
+//		Simulation.log("Platform " + this.name + ": Travel time to next platform is "
+//				+ travelTimeToNextPlatf.toSeconds() + " seconds.");
+//		return travelTimeToNextPlatf;
+		return Duration.ofMinutes(3);
 	}
 
 	public WaitingPoint getNextWaitingPoint() {
@@ -108,10 +109,6 @@ public class Platform {
 	}
 
 	public void calculatePassengers() {
-		// final Map<LocalTime, Double> passengerInRatesByTime =
-		// PassengersInReader.getInstance()
-		// .getRatesByTimeForPlatform(this.name, Simulation.CSV_PATH_POISS_PASS_IN);
-
 		String path;
 		if (Simulation.ARTIFICIAL_DATA) {
 			path = Simulation.CSV_PATH_POISS_PASS_IN_ART1;
@@ -156,7 +153,6 @@ public class Platform {
 						}
 					}
 				}
-
 				startTime = endTime;
 				currentInterval = nextInterval;
 			} while (startTime != currentTime);

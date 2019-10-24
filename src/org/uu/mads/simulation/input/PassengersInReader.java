@@ -77,7 +77,6 @@ public class PassengersInReader extends PoissonReader {
 			final LocalTime time2 = LocalTime.of(hourEnd, minEnd);
 
 			final float passIn = Float.parseFloat(data[4]);
-			final float passOut = Float.parseFloat(data[5]);
 
 			if (direction == 0) {
 				if (!name.equals("P+R De Uithof") && !name.equals("Centraal Station")) {
