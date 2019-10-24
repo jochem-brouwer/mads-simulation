@@ -153,9 +153,8 @@ public class PerformanceTracker {
 
 	private boolean isWithinTimeFrame() {
 		final LocalTime currentTime = EventScheduler.getInstance().getCurrentTime();
-		return currentTime.isAfter(this.startTime)
-				|| (currentTime.equals(this.startTime) && currentTime.isBefore(this.endTime))
-				|| currentTime.equals(this.endTime);
+		return (currentTime.isAfter(this.startTime) || currentTime.equals(this.startTime))
+				&& (currentTime.isBefore(this.endTime) || currentTime.equals(this.endTime));
 	}
 
 	private Performance getPerformance() {
