@@ -9,7 +9,6 @@ import java.util.List;
 
 import org.uu.mads.simulation.events.ArriveWaitingPointEvent;
 import org.uu.mads.simulation.events.ScheduledLeaveEndStationEvent;
-import org.uu.mads.simulation.input.InputReader;
 import org.uu.mads.simulation.state.EndStation;
 import org.uu.mads.simulation.state.IntPlatform;
 import org.uu.mads.simulation.state.Junction;
@@ -59,12 +58,12 @@ public class Simulation {
 	private static Performance runSimulation(final int run) throws IOException {
 		System.out.println("Simulation run " + run);
 
-		if (ARTIFICIAL_DATA) {
+		/*if (ARTIFICIAL_DATA) {
 			final File file1 = new File(
 					System.getProperty("user.dir") + "/" + "articifial-data/artificial-input-data-passengers-01.csv");
 			final InputReader reader = new InputReader(file1);
 			reader.outPut();
-		}
+		}*/
 
 		calculateCSLeave();
 

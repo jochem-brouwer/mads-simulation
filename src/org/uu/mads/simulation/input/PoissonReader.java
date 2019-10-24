@@ -77,24 +77,25 @@ abstract class PoissonReader {
 			String name = data[0];
 
 			final int direction = Integer.parseInt(data[1]);
-			int hour1 = (int) Float.parseFloat(data[2]);
-			int hour2 = 0;
-			if (hour1 == 21) {
-				hour2 = 30;
-			}
+
 
 			if ((name.equals("P+R De Uithof") && (direction == 1))
 					|| (name.equals("Centraal Station") && (direction == 0))) {
 				continue;
 			}
 
-			final LocalTime time1 = LocalTime.of(hour1, hour2);
-			hour1 = (int) Float.parseFloat(data[3]);
-			hour2 = 0;
-			if (hour1 == 21) {
-				hour2 = 30;
-			}
-			final LocalTime time2 = LocalTime.of(hour1, hour2);
+			double timeStart = (double) Float.parseFloat(data[2]);
+            double timeEnd = (double) Float.parseFloat(data[3]);
+            
+            int hourStart  = (int) Math.floor(timeStart);
+            int minStart = (int) ((timeStart - hourStart) * 60);
+
+            final LocalTime time1 = LocalTime.of(hourStart, minStart);
+            
+            int hourEnd =  (int) Math.floor(timeEnd);
+            int minEnd  =  (int) ((timeEnd - hourEnd) * 60);
+            
+            final LocalTime time2 = LocalTime.of(hourEnd, minEnd);
 
 			final float passIn = Float.parseFloat(data[4]);
 			final float passOut = Float.parseFloat(data[5]);
