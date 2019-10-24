@@ -22,7 +22,7 @@ public class Simulation {
 	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
 	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0); // TODO: Adapt
 	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0);
-	public static final int NUMBER_OF_TRAMS = 6; // number of trams we want to deploy
+	public static final int NUMBER_OF_TRAMS = 16; // number of trams we want to deploy
 	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
 	public static final Duration AVG_ONE_WAY_DRIVING_TIME = Duration.ofMinutes(17);
 	public static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
@@ -35,7 +35,7 @@ public class Simulation {
 	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengersOutPoisson.csv"; // TODO
 	public static final int PASSENGER_IN_MULTIPLICATOR = 0; // 1 -> 100%
 
-	public static final Boolean LOG = true; // flag to enable/disable logging
+	public static final Boolean LOG = false; // flag to enable/disable logging
 	public static final Boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
 	public static final Boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
 
@@ -107,7 +107,7 @@ public class Simulation {
 
 		// Platforms Direction B -> Centraal
 		uithofEndStation = new EndStation("P+R De Uithof", uithofJunction, FIRST_SCHEDULED_LEAVE_TIME_PR,
-				Duration.ofSeconds(110), NUMBER_OF_TRAMS / 2);
+				Duration.ofSeconds(110), ((NUMBER_OF_TRAMS / 2) -1));
 		final IntPlatform wkzPlatformB = new IntPlatform("WKZ-B", Duration.ofSeconds(78));
 		final IntPlatform umcPlatformB = new IntPlatform("UMC-B", Duration.ofSeconds(82));
 		final IntPlatform hlPlatformB = new IntPlatform("Heidelberglaan-B", Duration.ofSeconds(60));
@@ -124,16 +124,16 @@ public class Simulation {
 		final WaitingPoint hlWaitingPointPlA = new WaitingPoint(hlPlatformA, NUMBER_OF_TRAMS);
 		final WaitingPoint umcWaitingPointPlA = new WaitingPoint(umcPlatformA, NUMBER_OF_TRAMS);
 		final WaitingPoint wkzWaitingPointPlA = new WaitingPoint(wkzPlatformA, NUMBER_OF_TRAMS);
-		final WaitingPoint uithofWaitingPoint = new WaitingPoint(uithofEndStation, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint uithofWaitingPoint = new WaitingPoint(uithofEndStation, ((NUMBER_OF_TRAMS / 2)-1));
 
 		// Waiting Points Direction B -> Centraal
-		final WaitingPoint wkzWaitingPointPlB = new WaitingPoint(wkzPlatformB, NUMBER_OF_TRAMS / 2);
-		final WaitingPoint umcWaitingPointPlB = new WaitingPoint(umcPlatformB, NUMBER_OF_TRAMS / 2);
-		final WaitingPoint hlWaitingPointPlB = new WaitingPoint(hlPlatformB, NUMBER_OF_TRAMS / 2);
-		final WaitingPoint plWaitingPointPlB = new WaitingPoint(plPlatformB, NUMBER_OF_TRAMS / 2);
-		final WaitingPoint krWaitingPointPlB = new WaitingPoint(krPlatformB, NUMBER_OF_TRAMS / 2);
-		final WaitingPoint gwWaitingPointPlB = new WaitingPoint(gwPlatformB, NUMBER_OF_TRAMS / 2);
-		final WaitingPoint vrWaitingPointPlB = new WaitingPoint(vrPlatformB, NUMBER_OF_TRAMS / 2);
+		final WaitingPoint wkzWaitingPointPlB = new WaitingPoint(wkzPlatformB, ((NUMBER_OF_TRAMS / 2)-1));
+		final WaitingPoint umcWaitingPointPlB = new WaitingPoint(umcPlatformB, ((NUMBER_OF_TRAMS / 2)-1));
+		final WaitingPoint hlWaitingPointPlB = new WaitingPoint(hlPlatformB, ((NUMBER_OF_TRAMS / 2)-1));
+		final WaitingPoint plWaitingPointPlB = new WaitingPoint(plPlatformB, ((NUMBER_OF_TRAMS / 2)-1));
+		final WaitingPoint krWaitingPointPlB = new WaitingPoint(krPlatformB, ((NUMBER_OF_TRAMS / 2)-1));
+		final WaitingPoint gwWaitingPointPlB = new WaitingPoint(gwPlatformB, ((NUMBER_OF_TRAMS / 2)-1));
+		final WaitingPoint vrWaitingPointPlB = new WaitingPoint(vrPlatformB, ((NUMBER_OF_TRAMS / 2)-1));
 		final WaitingPoint centraalWaitingPoint = new WaitingPoint(centraalEndStation, NUMBER_OF_TRAMS);
 
 		// Waiting Point Chain at Platforms Direction A -> Uithof
@@ -180,13 +180,13 @@ public class Simulation {
 	// SIMULATION_START_TIME
 	private static void tramFactory(final WaitingPoint cs, final WaitingPoint uit) {
 		int tramId = 1;
-		for (int i = 0; i < ((NUMBER_OF_TRAMS / 2) - 1); i++) {
+		for (int i = 0; i < ((NUMBER_OF_TRAMS / 2)-1); i++) {
 			final Tram newTram = new Tram(tramId, 0);
 			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(cs, newTram);
 			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
 			tramId += 1;
 		}
-		for (int i = (NUMBER_OF_TRAMS / 2) - 1; i < NUMBER_OF_TRAMS; i++) {
+		for (int i = (NUMBER_OF_TRAMS / 2)-1; i < NUMBER_OF_TRAMS; i++) {
 			final Tram newTram = new Tram(tramId, 0);
 			final ArriveWaitingPointEvent arriveWaitingPointEvent = new ArriveWaitingPointEvent(uit, newTram);
 			EventScheduler.getInstance().scheduleEventAhead(arriveWaitingPointEvent, Duration.ZERO);
