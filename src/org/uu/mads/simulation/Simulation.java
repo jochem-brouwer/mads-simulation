@@ -33,7 +33,7 @@ public class Simulation {
 	public static final LocalTime SIMULATION_START_TIME = FIRST_SCHEDULED_LEAVE_TIME_PR
 			.minus(TURN_AROUND_DURATION.plus(JUNCTION_DURATION)); // time where we start to deploy trams
 	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(21, 30); // time where we end the simulation;
-	public static final Boolean ARTIFICIAL_DATA = false;
+	public static final Boolean ARTIFICIAL_DATA = true;
 	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/artificial-input-data-passengers-01.csv";
 	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengersInPoisson.csv";
 	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengersOutPoisson.csv"; // TODO
@@ -65,7 +65,7 @@ public class Simulation {
 
 		if (ARTIFICIAL_DATA) {
 			final File file1 = new File(
-					System.getProperty("user.dir") + "\\" + "articifial-data\\artificial-input-data-passengers-01.csv");
+					System.getProperty("user.dir") + "/" + "articifial-data/artificial-input-data-passengers-01.csv");
 			final InputReader reader = new InputReader(file1);
 			reader.outPut();
 		}
