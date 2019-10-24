@@ -69,7 +69,11 @@ public class EndStation extends Platform {
 				+ passengersIn + " passengers.");
 
 		final ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this);
-		EventScheduler.getInstance().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
+		if (getName().equals("Centraal Station")) {
+			EventScheduler.getInstance().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION_CS);
+		} else {
+			EventScheduler.getInstance().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
+		}
 	}
 
 	public Tram getTramOnPlatformB() {
@@ -94,7 +98,11 @@ public class EndStation extends Platform {
 				+ passengersIn + " passengers.");
 
 		final ScheduledLeaveEndStationEvent scheduledLeave = new ScheduledLeaveEndStationEvent(this);
-		EventScheduler.getInstance().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
+		if (getName().equals("Centraal Station")) {
+			EventScheduler.getInstance().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION_CS);
+		} else {
+			EventScheduler.getInstance().scheduleEventAhead(scheduledLeave, Simulation.TURN_AROUND_DURATION);
+		}
 	}
 
 	public LocalTime getArrivalTimePlatformA() {
@@ -106,8 +114,14 @@ public class EndStation extends Platform {
 	}
 
 	public boolean isTramReadyOnPlatformA() {
-		final LocalTime lastPossibleArrivalTime = EventScheduler.getInstance().getCurrentTime()
-				.minus(Simulation.TURN_AROUND_DURATION);
+		LocalTime lastPossibleArrivalTime = null;
+		if (getName().equals("Centraal Station")) {
+			lastPossibleArrivalTime = EventScheduler.getInstance().getCurrentTime()
+					.minus(Simulation.TURN_AROUND_DURATION_CS);
+		} else {
+			lastPossibleArrivalTime = EventScheduler.getInstance().getCurrentTime()
+					.minus(Simulation.TURN_AROUND_DURATION);
+		}
 
 		if ((this.tramOnPlatformA != null) && (this.arrivalTimePlatformA.equals(lastPossibleArrivalTime)
 				|| this.arrivalTimePlatformA.isBefore(lastPossibleArrivalTime))) {
