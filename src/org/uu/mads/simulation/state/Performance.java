@@ -1,8 +1,9 @@
 package org.uu.mads.simulation.state;
 
 import java.time.Duration;
+import java.io.Serializable;
 
-public class Performance {
+public class Performance implements Serializable{
 	private final long waiting_passengers_x_minutes; // TODO: split passengers up in categories?
 
 	private final long total_passengers;

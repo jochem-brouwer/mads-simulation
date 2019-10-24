@@ -1,6 +1,12 @@
 package org.uu.mads.simulation;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 import java.time.Duration;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Formatter;
 import java.util.List;
 
 import org.uu.mads.simulation.state.Performance;
@@ -234,5 +240,29 @@ public class PerformanceTracker {
 			this.pr_average_delay = Duration.ZERO;
 		}
 		this.pr_percentage_of_delays = ((float) this.pr_total_delays / (float) this.pr_total_departures) * 100;
+	}
+
+	public static void serializePerformances(List<Performance> performanceList) {
+		// save the object to file
+		FileOutputStream fileStream = null;
+		ObjectOutputStream objectStream = null;
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
+
+		for (int i = 0; i < performanceList.size(); i++) {
+			String fileName = ("PerformanceNr" + (i+1));
+			Performance performance = performanceList.get(i);
+            File directory = new File(System.getProperty("user.dir") + "/output-data-"
+					+ LocalTime.now().format(dtf));
+            directory.mkdirs();
+			try {
+				fileStream = new FileOutputStream(directory + "/" + fileName);
+				objectStream = new ObjectOutputStream(fileStream);
+				objectStream.writeObject(performance);
+
+				objectStream.close();
+			} catch (Exception ex) {
+				ex.printStackTrace();
+			}
+		}
 	}
 }

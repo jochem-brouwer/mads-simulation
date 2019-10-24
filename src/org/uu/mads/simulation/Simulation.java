@@ -1,7 +1,9 @@
 package org.uu.mads.simulation;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -47,6 +49,7 @@ public class Simulation {
 
 	public static void main(final String[] args) throws IOException {
 		final List<Performance> performances = new ArrayList<>();
+
 		for (int i = 1; i <= NUMBER_OF_RUNS; i++) {
 			final Performance performanceOfRun = runSimulation(i);
 			performances.add(performanceOfRun);
@@ -54,6 +57,7 @@ public class Simulation {
 			PerformanceTracker.reset();
 		}
 		PerformanceTracker.printPerformanceReport(performances);
+		PerformanceTracker.serializePerformances((performances));
 	}
 
 	private static Performance runSimulation(final int run) throws IOException {
