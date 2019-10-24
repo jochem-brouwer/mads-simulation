@@ -99,9 +99,8 @@ public class PassengersInReader extends PoissonReader {
 				ratesByTime.put(timeStamp, passengerInput);
 				timeStamp = timeStamp.plusMinutes(15);
 			}
-
-			this.ratesByTimeByPlatform = ratesByTimeByPlatform;
 		}
+		this.ratesByTimeByPlatform = ratesByTimeByPlatform;
 		csvReader.close();
 	}
 }

@@ -1,7 +1,5 @@
 package org.uu.mads.simulation.input;
 
-import static java.time.temporal.ChronoUnit.HOURS;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -94,7 +92,6 @@ public class PassengersOutReader extends PoissonReader {
 				ratesByTimeByPlatform.put(name, new TreeMap<>());
 			}
 
-			final float timeInterval = (time1.until(time2, HOURS));
 			double passengersLeavingRatio = 0;
 
 			if (passOut > 0) {
@@ -122,9 +119,8 @@ public class PassengersOutReader extends PoissonReader {
 				ratesByTime.put(timeStamp, passengersLeavingRatio);
 				timeStamp = timeStamp.plusMinutes(15);
 			}
-
-			this.ratesByTimeByPlatform = ratesByTimeByPlatform;
 		}
+		this.ratesByTimeByPlatform = ratesByTimeByPlatform;
 		csvReader.close();
 	}
 }
