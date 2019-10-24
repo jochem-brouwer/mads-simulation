@@ -75,8 +75,7 @@ public class PerformanceTracker {
 	}
 
 	private void addPassengerToInstance(final Duration waitingTime) {
-		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.startTime)
-				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
+		if (isWithinTimeFrame()) {
 			this.totalPassengers += 1;
 			this.totalWaitingTime = this.totalWaitingTime.plus(waitingTime);
 			if (this.maxWaitingTime.toSeconds() < waitingTime.toSeconds()) {
@@ -92,8 +91,7 @@ public class PerformanceTracker {
 
 	private void addJunctionWaitingTimeToInstance(final Duration waitingTime, final int junction) {
 
-		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.startTime)
-				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
+		if (isWithinTimeFrame()) {
 
 			// junction denotes the junction. 0 for CS, 1 for P+R.
 			if (junction == 0) {
@@ -127,8 +125,7 @@ public class PerformanceTracker {
 
 		// endStation denotes the end station. 0 for CS, 1 for P+R.
 
-		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.startTime)
-				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
+		if (isWithinTimeFrame()) {
 			if (endStation == 0) {
 				this.csTotalDepartures += 1;
 
@@ -154,7 +151,13 @@ public class PerformanceTracker {
 		}
 	}
 
-	public Performance getPerformance() {
+	private boolean isWithinTimeFrame() {
+		final LocalTime currentTime = EventScheduler.getInstance().getCurrentTime();
+		return (currentTime.isAfter(this.startTime) || currentTime.equals(this.startTime))
+				&& (currentTime.isBefore(this.endTime) || currentTime.equals(this.endTime));
+	}
+
+	private Performance getPerformance() {
 		calculateAverageWaitingTime();
 		calculateJunctionWaitingTime();
 		calculateAveragePunctuality();
