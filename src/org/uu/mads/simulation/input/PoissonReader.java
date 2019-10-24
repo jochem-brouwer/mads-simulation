@@ -70,6 +70,10 @@ abstract class PoissonReader {
 
 		String row;
 		csvReader.readLine();
+		
+		System.out.println(csvPath);
+		
+		String[] names = new String[] {"WKZ", "UMC", "Heidelberglaan", "Padualaan", "Kromme-Rijn", "Galgenwaard", "Vaartsche-Rijn", "Centraal Station", "P+R De Uithof"};
 
 		while ((row = csvReader.readLine()) != null) {
 			final String[] data = row.split(DELIMITER_ART);
@@ -100,6 +104,19 @@ abstract class PoissonReader {
 			final float passIn = Float.parseFloat(data[4]);
 			final float passOut = Float.parseFloat(data[5]);
 
+			boolean got = false;
+			
+			for (int i = 0; i < names.length; i++) {
+				if (names[i].equals(name)) {
+					got = true;
+					break;
+				}
+			}
+			
+			if (!got) {
+				throw(new Error("Incorrect station name: " + name));
+			}
+			
 			if (direction == 0) {
 				if (!name.equals("P+R De Uithof") && !name.equals("Centraal Station")) {
 					name = name + "-A";
@@ -107,6 +124,11 @@ abstract class PoissonReader {
 			} else if (!name.equals("P+R De Uithof") && !name.equals("Centraal Station")) {
 				name = name + "-B";
 			}
+			
+			
+			
+			
+			
 
 			if (!ratesByTimeByPlatform.containsKey(name)) {
 				ratesByTimeByPlatform.put(name, new TreeMap<>());
