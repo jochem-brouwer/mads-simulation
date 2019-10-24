@@ -2,6 +2,8 @@ package org.uu.mads.simulation.state;
 
 import static java.time.temporal.ChronoUnit.SECONDS;
 
+import java.util.Random;
+
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayDeque;
@@ -56,12 +58,28 @@ public class Platform {
 	/**
 	 * @return travel duration of this platform to the next platform
 	 */
-	public Duration getTravelTimeToNextPlatform() {
-//		final Duration travelTimeToNextPlatf = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
-//		Simulation.log("Platform " + this.name + ": Travel time to next platform is "
-//				+ travelTimeToNextPlatf.toSeconds() + " seconds.");
-//		return travelTimeToNextPlatf;
-		return Duration.ofMinutes(3);
+	public Duration getTravelTimeToNextPlatform() {		
+		if (Simulation.ARTIFICIAL_DATA) {
+			Random rand = new Random();
+			int rng = rand.nextInt(10);
+			
+			if (rng < 4) {
+				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 0.8));
+			} else if (rng < 7) {
+				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1));
+			} else if (rng < 9) {
+				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1.2));
+			} else {
+				return Duration.ofSeconds((long) (this.avgTravelTimeToNextPlatf.toSeconds() * 1.4));
+			}
+			
+		} else {
+			final Duration travelTimeToNextPlatf = Duration.ofSeconds((long) this.travelTimeToNexcPlatfDist.sample());
+			Simulation.log("Platform " + this.name + ": Travel time to next platform is "
+					+ travelTimeToNextPlatf.toSeconds() + " seconds.");
+			return travelTimeToNextPlatf;
+		}
+
 	}
 
 	public WaitingPoint getNextWaitingPoint() {

@@ -6,7 +6,6 @@ import java.io.ObjectOutputStream;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Formatter;
 import java.util.List;
 
 import org.uu.mads.simulation.state.Performance;
@@ -329,25 +328,25 @@ public class PerformanceTracker {
 		this.prPercentageOfDelays = ((float) this.prTotalDelays / (float) this.prTotalDepartures) * 100;
 	}
 
-	public static void serializePerformances(List<Performance> performanceList) {
+	public static void serializePerformances(final List<Performance> performanceList) {
 		// save the object to file
 		FileOutputStream fileStream = null;
 		ObjectOutputStream objectStream = null;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
+		final DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH-mm-ss");
 
 		for (int i = 0; i < performanceList.size(); i++) {
-			String fileName = ("PerformanceNr" + (i+1));
-			Performance performance = performanceList.get(i);
-            File directory = new File(System.getProperty("user.dir") + "/output-data-"
-					+ LocalTime.now().format(dtf));
-            directory.mkdirs();
+			final String fileName = ("PerformanceNr" + (i + 1));
+			final Performance performance = performanceList.get(i);
+			final File directory = new File(
+					System.getProperty("user.dir") + "/output/output-data-" + LocalTime.now().format(dtf));
+			directory.mkdirs();
 			try {
 				fileStream = new FileOutputStream(directory + "/" + fileName);
 				objectStream = new ObjectOutputStream(fileStream);
 				objectStream.writeObject(performance);
 
 				objectStream.close();
-			} catch (Exception ex) {
+			} catch (final Exception ex) {
 				ex.printStackTrace();
 			}
 		}
