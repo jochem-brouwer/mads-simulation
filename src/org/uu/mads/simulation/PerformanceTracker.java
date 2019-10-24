@@ -65,11 +65,11 @@ public class PerformanceTracker {
 	}
 
 	public static void addPassenger(final Duration waitingTime) {
-		dayPerformanceTracker.addPassengerToInstances(waitingTime);
-		peakPerformanceTracker.addPassengerToInstances(waitingTime);
+		dayPerformanceTracker.addPassengerToInstance(waitingTime);
+		peakPerformanceTracker.addPassengerToInstance(waitingTime);
 	}
 
-	private void addPassengerToInstances(final Duration waitingTime) {
+	private void addPassengerToInstance(final Duration waitingTime) {
 		if (EventScheduler.getInstance().getCurrentTime().isAfter(this.starTime)
 				&& EventScheduler.getInstance().getCurrentTime().isBefore(this.endTime)) {
 			this.totalPassengers += 1;
