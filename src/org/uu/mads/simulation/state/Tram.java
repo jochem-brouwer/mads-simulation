@@ -89,8 +89,15 @@ public class Tram {
 		if ((platform instanceof EndStation)) {
 			rate = 1;
 		} else {
-			final Map<LocalTime, Double> ratesByTime = PassengersOutReader.getInstance()
-					.getRatesByTimeForPlatform(platform.getName(), Simulation.CSV_PATH_POISS_PASS_OUT);
+			final Map<LocalTime, Double> ratesByTime;
+			
+			if (Simulation.ARTIFICIAL_DATA) {
+				ratesByTime	= PassengersOutReader.getInstance()
+						.getRatesByTimeForPlatform(platform.getName(), Simulation.CSV_PATH_POISS_PASS_IN_ART1);				
+			} else {
+				ratesByTime	= PassengersOutReader.getInstance()
+						.getRatesByTimeForPlatform(platform.getName(), Simulation.CSV_PATH_POISS_PASS_OUT);
+			}
 
 			final LocalTime currentTime = EventScheduler.getInstance().getCurrentTime();
 			final LocalTime currentInterval = LocalTime.ofSecondOfDay(
