@@ -2,8 +2,8 @@ package org.uu.mads.simulation.state;
 
 public class DayAndPeakPerformances {
 
-	public Performance dailyPerformance;
-	public Performance peakPerformance;
+	private final Performance dailyPerformance;
+	private final Performance peakPerformance;
 
 	public DayAndPeakPerformances(final Performance dailyPerformance, final Performance peakPerformance) {
 		this.dailyPerformance = dailyPerformance;
