@@ -1,0 +1,31 @@
+public static final int NUMBER_OF_RUNS = 1000;
+
+	public static final Duration TURN_AROUND_DURATION = Duration.ofMinutes(4); // Turn around time is 4 min.
+	public static final double PASSENGER_IN_MULTIPLICATOR = 1; // 1 -> 100%
+	public static final int NUMBER_OF_TRAMS = 21; // number of trams we want to deploy
+
+	public static final boolean ARTIFICIAL_DATA = false;
+	public static final boolean ARTIFICIAL_DRIVING_TIME = false;
+	public static final String CSV_PATH_POISS_PASS_IN_ART1 = "data/PassengerPrognosisData.csv";
+
+	public static final double TRAM_PASSG_DWELL_TIME_FACTOR = 0; // 0.1 for optional feature
+
+	public static final boolean LOG = false; // flag to enable/disable logging
+	public static final boolean LOG_VERBOSE = false; // flag to enable/disable verbose logging
+	public static final boolean LOG_TRAM_POSITIONS = false; // flag to enable/disable tram position overview logging
+
+	public static final boolean SERIALIZE_PERFORMANCES = false; // flag to enable/disable performance serialization
+	public static final boolean PERSIST_PERFORMANCE_TABLE = true; // flag to enable/disable performance table generation
+
+	public static final LocalTime FIRST_SCHEDULED_LEAVE_TIME_PR = LocalTime.of(6, 0);
+	public static final LocalTime FIRST_PASSENGER_CALC = LocalTime.of(6, 0);
+	public static final int INITIAL_NUMBER_OF_TRAMS_CS = (NUMBER_OF_TRAMS % 2) == 0 ? (NUMBER_OF_TRAMS / 2) - 1
+			: NUMBER_OF_TRAMS / 2;
+	public static final Duration TRAM_LEAVE_FREQUENCY = Duration.ofSeconds(3600 / NUMBER_OF_TRAMS);
+	public static final Duration AVG_ONE_WAY_DRIVING_TIME = Duration.ofMinutes(17);
+	public static final Duration JUNCTION_DURATION = Duration.ofMinutes(1);
+	public static final LocalTime SIMULATION_START_TIME = FIRST_SCHEDULED_LEAVE_TIME_PR
+			.minus(TURN_AROUND_DURATION.plus(JUNCTION_DURATION)); // time where we start to deploy trams
+	public static final LocalTime SIMULATION_END_TIME = LocalTime.of(19, 00); // time where we end the simulation;
+	public static final String CSV_PATH_POISS_PASS_IN = "data/PassengersInPoisson.csv";
+	public static final String CSV_PATH_POISS_PASS_OUT = "data/PassengersOutPoisson.csv";
