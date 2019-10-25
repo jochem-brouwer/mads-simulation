@@ -1,5 +1,7 @@
 const csv = require('csv-parser')
 const fs = require('fs')
+const path = require('path');
+const shelljs = require('shelljs')
 
 let targs = {
   12: "output-data-21-27-58(Tram=12)",
@@ -35,6 +37,9 @@ filePeak = "./" + targs_pincrease.root + targs_pincrease[200] + "/PeakPerformanc
 
 let resultsDay = []
 let resultsPeak = []
+
+let rootDir = "./results/"
+let targetDir = "./outputObjects/"
 
 
 /*
@@ -84,127 +89,182 @@ Day csWaitJunctionAverage 244.993 0.9409790287701624
 //prTotalJunctionWaitingTime,prAverageJunctionWaitingTime,prMaximumJunctionWaitingTime,
 //prJunctionArrivals
 
-function getVar(data, key, avg) {
-  let sum = 0;
-  for (let i = 0; i < data.length; i++) {
+function getData(dir) {
+  let fileDay =  dir + "/DayPerformanceTable.csv"
+  let filePeak = dir + "/PeakPerformanceTable.csv"
 
-    sum += (data[i][key] - avg) * (data[i][key] - avg)
+
+
+  function getVar(data, key, avg) {
+    let sum = 0;
+    for (let i = 0; i < data.length; i++) {
+
+      sum += (data[i][key] - avg) * (data[i][key] - avg)
+    }
+
+    return sum / (data.length - 1);
   }
 
-  return sum / (data.length - 1);
+  let num = 0;
+
+  function write(obj, name) {
+    let mdir = targetDir + dir
+    let f = targetDir + dir + "/" + name + ".jsonstr"
+    console.log("mkdir", mdir)
+    console.log("dumpfile",  f)
+    shelljs.mkdir("-p", targetDir + dir)
+    fs.writeFileSync(f, JSON.stringify(obj))
+    //console.log(JSON.stringify(obj))
+  }
+
+  function parseData(data, name) {
+    let sumPercentageDelayCS = 0;
+    let sumPercentageDelayPR = 0;
+
+    let sumAvgDelayCS = 0;
+    let sumAvgDelayPR = 0
+
+    let sumMaxDelayCS = 0;
+    let sumMaxDelayPR = 0;
+
+    let sumAverageWaitingTime = 0;
+    let sumMaxWaitingTime = 0;
+
+    let sumCSWaitJunctionAverage = 0;
+    let sumCSWaitJunctionMax = 0;
+
+    let sumPRWaitJunctionAverage = 0;
+    let sumPRWaitJunctionMax = 0;
+
+
+
+    for (let index in data) {
+      let row = data[index]
+
+      let percentageDelayCS = parseFloat(row[10])
+      let percentageDelayPR = parseFloat(row[20])
+
+      let avgDelayCS = parseFloat(row[9])
+      let avgDelayPR = parseFloat(row[19])
+
+      let maxDelayCS = parseFloat(row[8])
+      let maxDelayPR = parseFloat(row[18])
+
+      let averageWaitingTime = parseFloat(row[3])
+      let maxWaitingTime = parseFloat(row[4])
+
+      let csWaitJunctionAverage = parseFloat(row[12])
+      let csWaitJunctionMax = parseFloat(row[13])
+
+      let prWaitJunctionAverage = parseFloat(row[22])
+      let prWaitJunctionMax = parseFloat(row[23])
+
+      sumPercentageDelayPR += percentageDelayPR;
+      sumPercentageDelayCS += percentageDelayCS;
+
+      sumAvgDelayCS += avgDelayCS;
+      sumAvgDelayPR += avgDelayPR;
+
+      sumMaxDelayCS += maxDelayCS;
+      sumMaxDelayPR += maxDelayPR;
+
+      sumAverageWaitingTime += averageWaitingTime;
+      sumMaxWaitingTime += maxWaitingTime;
+
+      sumCSWaitJunctionAverage += csWaitJunctionAverage;
+      sumCSWaitJunctionMax += csWaitJunctionMax;
+
+      sumPRWaitJunctionMax += prWaitJunctionMax;
+      sumPRWaitJunctionAverage += prWaitJunctionAverage;
+    }
+
+    let avgs = {}
+    let len = data.length;
+
+    avgs["percentageDelayCS"] = sumPercentageDelayCS / len
+    avgs["percentageDelayPR"] = sumPercentageDelayPR / len
+    avgs["avgDelayCS"] = sumAvgDelayCS / len;
+    avgs["avgDelayPR"] = sumAvgDelayPR / len; 
+    avgs["maxDelayCS"] = sumMaxDelayCS / len;
+    avgs["maxDelayPR"] = sumMaxDelayPR / len;
+    avgs["averageWaitingTime"] = sumAverageWaitingTime / len;
+    avgs["maxWaitingTime"] = sumMaxWaitingTime / len;
+    avgs["csWaitJunctionAverage"] = sumCSWaitJunctionAverage / len;
+    avgs["csWaitJunctionMax"] = sumCSWaitJunctionMax / len;
+    avgs["prWaitJunctionAverage"] = sumPRWaitJunctionAverage / len;
+    avgs["prWaitJunctionMax"] = sumPRWaitJunctionMax / len;
+
+    let variance = {}
+
+    variance["percentageDelayCS"] = getVar(data, 10, avgs["percentageDelayCS"])
+    variance["percentageDelayPR"] = getVar(data, 20, avgs["percentageDelayPR"])
+    variance["avgDelayCS"] = getVar(data, 9, avgs["avgDelayCS"])
+    variance["avgDelayPR"] = getVar(data, 19, avgs["avgDelayPR"])
+    variance["maxDelayCS"] = getVar(data, 8, avgs["maxDelayCS"])
+    variance["maxDelayPR"] = getVar(data, 18, avgs["maxDelayPR"])
+    variance["averageWaitingTime"] = getVar(data, 3, avgs["averageWaitingTime"])
+    variance["maxWaitingTime"] = getVar(data, 4, avgs["maxWaitingTime"])
+    variance["csWaitJunctionAverage"] = getVar(data, 12, avgs["csWaitJunctionAverage"])
+    variance["csWaitJunctionMax"] = getVar(data, 13, avgs["csWaitJunctionMax"])
+    variance["prWaitJunctionAverage"] = getVar(data, 22, avgs["prWaitJunctionAverage"])
+    variance["prWaitJunctionMax"] = getVar(data, 23, avgs["prWaitJunctionMax"])
+
+    let obj = {}
+
+    for (let key in variance) {
+      let avg = avgs[key];
+      let confd = 1.960 * Math.sqrt(variance[key] / (data.length - 1))
+      //console.log(name + " " + key + " " + avg + " " + confd)
+      obj[key] = {
+        variance: variance[key],
+        average: avg,
+        confidence: confd
+      }
+    }
+
+    write(obj, name)
+  }
+
+
+
+  fs.createReadStream(fileDay)
+    .pipe(csv({separator: ","}))
+    .on('data', (data) => resultsDay.push(data))
+    .on('end', () => {  
+      parseData(resultsDay, "Day")
+    })
+
+  fs.createReadStream(filePeak)
+    .pipe(csv({separator: ","}))
+    .on('data', (data) => resultsPeak.push(data))
+    .on('end', () => {  
+      parseData(resultsPeak, "Peak")
+    })
+
 }
 
-function parseData(data, name) {
-  let sumPercentageDelayCS = 0;
-  let sumPercentageDelayPR = 0;
 
-  let sumAvgDelayCS = 0;
-  let sumAvgDelayPR = 0
+function dirchk(dir) {
+  fs.readdir(dir, function (err, files) {
+     files.forEach(function (file, index) {
+        // Make one pass and make the file complete
+        var fromPath = path.join(dir, file);
 
-  let sumMaxDelayCS = 0;
-  let sumMaxDelayPR = 0;
+        fs.stat(fromPath, function (error, stat) {
+          if (stat.isFile()) {
+            if (file == "PeakPerformanceTable.csv") {
+              getData(dir)
+            } else if (file == "DayPerformanceTable.csv") {
+              // handled above 
+            }
+          }
+            
+          else if (stat.isDirectory())
+            dirchk(fromPath)
 
-  let sumAverageWaitingTime = 0;
-  let sumMaxWaitingTime = 0;
-
-  let sumCSWaitJunctionAverage = 0;
-  let sumCSWaitJunctionMax = 0;
-
-  let sumPRWaitJunctionAverage = 0;
-  let sumPRWaitJunctionMax = 0;
-
-
-
-  for (let index in data) {
-    let row = data[index]
-
-    let percentageDelayCS = parseFloat(row[10])
-    let percentageDelayPR = parseFloat(row[20])
-
-    let avgDelayCS = parseFloat(row[9])
-    let avgDelayPR = parseFloat(row[19])
-
-    let maxDelayCS = parseFloat(row[8])
-    let maxDelayPR = parseFloat(row[18])
-
-    let averageWaitingTime = parseFloat(row[3])
-    let maxWaitingTime = parseFloat(row[4])
-
-    let csWaitJunctionAverage = parseFloat(row[12])
-    let csWaitJunctionMax = parseFloat(row[13])
-
-    let prWaitJunctionAverage = parseFloat(row[22])
-    let prWaitJunctionMax = parseFloat(row[23])
-
-    sumPercentageDelayPR += percentageDelayPR;
-    sumPercentageDelayCS += percentageDelayCS;
-
-    sumAvgDelayCS += avgDelayCS;
-    sumAvgDelayPR += avgDelayPR;
-
-    sumMaxDelayCS += maxDelayCS;
-    sumMaxDelayPR += maxDelayPR;
-
-    sumAverageWaitingTime += averageWaitingTime;
-    sumMaxWaitingTime += maxWaitingTime;
-
-    sumCSWaitJunctionAverage += csWaitJunctionAverage;
-    sumCSWaitJunctionMax += csWaitJunctionMax;
-
-    sumPRWaitJunctionMax += prWaitJunctionMax;
-    sumPRWaitJunctionAverage += prWaitJunctionAverage;
-  }
-
-  let avgs = {}
-  let len = data.length;
-
-  avgs["percentageDelayCS"] = sumPercentageDelayCS / len
-  avgs["percentageDelayPR"] = sumPercentageDelayPR / len
-  avgs["avgDelayCS"] = sumAvgDelayCS / len;
-  avgs["avgDelayPR"] = sumAvgDelayPR / len; 
-  avgs["maxDelayCS"] = sumMaxDelayCS / len;
-  avgs["maxDelayPR"] = sumMaxDelayPR / len;
-  avgs["averageWaitingTime"] = sumAverageWaitingTime / len;
-  avgs["maxWaitingTime"] = sumMaxWaitingTime / len;
-  avgs["csWaitJunctionAverage"] = sumCSWaitJunctionAverage / len;
-  avgs["csWaitJunctionMax"] = sumCSWaitJunctionMax / len;
-  avgs["prWaitJunctionAverage"] = sumPRWaitJunctionAverage / len;
-  avgs["prWaitJunctionMax"] = sumPRWaitJunctionMax / len;
-
-  let variance = {}
-
-  variance["percentageDelayCS"] = getVar(data, 10, avgs["percentageDelayCS"])
-  variance["percentageDelayPR"] = getVar(data, 20, avgs["percentageDelayPR"])
-  variance["avgDelayCS"] = getVar(data, 9, avgs["avgDelayCS"])
-  variance["avgDelayPR"] = getVar(data, 19, avgs["avgDelayPR"])
-  variance["maxDelayCS"] = getVar(data, 8, avgs["maxDelayCS"])
-  variance["maxDelayPR"] = getVar(data, 18, avgs["maxDelayPR"])
-  variance["averageWaitingTime"] = getVar(data, 3, avgs["averageWaitingTime"])
-  variance["maxWaitingTime"] = getVar(data, 4, avgs["maxWaitingTime"])
-  variance["csWaitJunctionAverage"] = getVar(data, 12, avgs["csWaitJunctionAverage"])
-  variance["csWaitJunctionMax"] = getVar(data, 13, avgs["csWaitJunctionMax"])
-  variance["prWaitJunctionAverage"] = getVar(data, 22, avgs["prWaitJunctionAverage"])
-  variance["prWaitJunctionMax"] = getVar(data, 23, avgs["prWaitJunctionMax"])
-
-  for (let key in variance) {
-    let avg = avgs[key];
-    let confd = 1.960 * Math.sqrt(variance[key] / (data.length - 1))
-    console.log(name + " " + key + " " + avg + " " + confd)
-  }
+        })
+    })  
+  })
 }
 
-
-
-fs.createReadStream(fileDay)
-  .pipe(csv({separator: ","}))
-  .on('data', (data) => resultsDay.push(data))
-  .on('end', () => {  
-    parseData(resultsDay, "Day")
-  })
-
-fs.createReadStream(filePeak)
-  .pipe(csv({separator: ","}))
-  .on('data', (data) => resultsPeak.push(data))
-  .on('end', () => {  
-    parseData(resultsPeak, "Peak")
-  })
+dirchk(rootDir)
