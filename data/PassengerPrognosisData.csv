@@ -1,0 +1,91 @@
+Stop;Direction;From;To;PassIn;PassOut
+P+R De Uithof;0;6;7;0.62;0.00
+WKZ;0;6;7;38.86;0.00
+UMC;0;6;7;120.50;0.01
+Heidelberglaan;0;6;7;494.15;0.01
+Padualaan;0;6;7;373.04;11.30
+Kromme-Rijn;0;6;7;25.80;2.11
+Galgenwaard;0;6;7;22.77;14.83
+Vaartsche-Rijn;0;6;7;71.57;22.09
+Centraal Station;0;6;7;0.00;1096.94
+P+R De Uithof;0;7;9;1.00;0.00
+WKZ;0;7;9;303.00;0.00
+UMC;0;7;9;78.00;0.19
+Heidelberglaan;0;7;9;155.00;0.02
+Padualaan;0;7;9;99.00;102.84
+Kromme-Rijn;0;7;9;140.00;0.82
+Galgenwaard;0;7;9;52.00;26.54
+Vaartsche-Rijn;0;7;9;171.00;58.86
+Centraal Station;0;7;9;0.00;808.73
+P+R De Uithof;0;9;16;4.34;0.00
+WKZ;0;9;16;271.99;0.00
+UMC;0;9;16;843.51;0.06
+Heidelberglaan;0;9;16;3459.02;0.08
+Padualaan;0;9;16;2611.30;79.10
+Kromme-Rijn;0;9;16;180.57;14.80
+Galgenwaard;0;9;16;159.42;103.84
+Vaartsche-Rijn;0;9;16;500.96;154.63
+Centraal Station;0;9;16;0.00;7678.58
+P+R De Uithof;0;16;18;7.00;0.00
+WKZ;0;16;18;265.00;0.02
+UMC;0;16;18;1197.00;0.05
+Heidelberglaan;0;16;18;3300.00;0.01
+Padualaan;0;16;18;2467.00;3.25
+Kromme-Rijn;0;16;18;254.00;5.43
+Galgenwaard;0;16;18;292.00;67.47
+Vaartsche-Rijn;0;16;18;267.00;231.16
+Centraal Station;0;16;18;0.00;7740.80
+P+R De Uithof;0;18;21.5;2.17;0.00
+WKZ;0;18;21.5;135.99;0.00
+UMC;0;18;21.5;421.75;0.03
+Heidelberglaan;0;18;21.5;1729.51;0.04
+Padualaan;0;18;21.5;1305.65;39.55
+Kromme-Rijn;0;18;21.5;90.29;7.40
+Galgenwaard;0;18;21.5;79.71;51.92
+Vaartsche-Rijn;0;18;21.5;250.48;77.31
+Centraal Station;0;18;21.5;0.00;3839.29
+Centraal Station;1;6;7;846.81;0.00
+Vaartsche-Rijn;1;6;7;92.10;99.54
+Galgenwaard;1;6;7;13.33;65.67
+Kromme-Rijn;1;6;7;1.56;44.76
+Padualaan;1;6;7;0.04;382.91
+Heidelberglaan;1;6;7;0.05;239.78
+UMC;1;6;7;0.05;100.65
+WKZ;1;6;7;0.00;19.98
+P+R De Uithof;1;6;7;0.00;0.61
+Centraal Station;1;7;9;8123.00;0.00
+Vaartsche-Rijn;1;7;9;956.00;294.45
+Galgenwaard;1;7;9;180.00;304.99
+Kromme-Rijn;1;7;9;25.00;231.85
+Padualaan;1;7;9;0.00;4550.70
+Heidelberglaan;1;7;9;0.00;2530.61
+UMC;1;7;9;0.00;1098.12
+WKZ;1;7;9;0.00;267.31
+P+R De Uithof;1;7;9;0.00;6.96
+Centraal Station;1;9;16;5927.70;0.00
+Vaartsche-Rijn;1;9;16;644.73;696.81
+Galgenwaard;1;9;16;93.33;459.72
+Kromme-Rijn;1;9;16;10.91;313.31
+Padualaan;1;9;16;0.27;2680.35
+Heidelberglaan;1;9;16;0.36;1678.43
+UMC;1;9;16;0.32;704.53
+WKZ;1;9;16;0.00;139.83
+P+R De Uithof;1;9;16;0.00;4.24
+Centraal Station;1;16;18;2132.00;0.00
+Vaartsche-Rijn;1;16;18;322.00;295.50
+Galgenwaard;1;16;18;26.00;228.19
+Kromme-Rijn;1;16;18;4.00;292.77
+Padualaan;1;16;18;9.00;718.28
+Heidelberglaan;1;16;18;7.00;500.81
+UMC;1;16;18;5.00;321.72
+WKZ;1;16;18;0.00;146.88
+P+R De Uithof;1;16;18;0.00;0.70
+Centraal Station;1;18;21.5;2963.85;0.00
+Vaartsche-Rijn;1;18;21.5;322.36;348.41
+Galgenwaard;1;18;21.5;46.67;229.86
+Kromme-Rijn;1;18;21.5;5.46;156.65
+Padualaan;1;18;21.5;0.13;1340.17
+Heidelberglaan;1;18;21.5;0.18;839.21
+UMC;1;18;21.5;0.16;352.27
+WKZ;1;18;21.5;0.00;69.91
+P+R De Uithof;1;18;21.5;0.00;2.12
